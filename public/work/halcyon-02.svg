@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Halcyon placeholder artwork">
+  <defs>
+    <linearGradient id="g1006s" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6ee7ff"/>
+      <stop offset="100%" stop-color="#7c5cff"/>
+    </linearGradient>
+    <radialGradient id="g1006r" cx="0.42" cy="0.56" r="0.75">
+      <stop offset="0%" stop-color="#6ee7ff" stop-opacity="0.42"/>
+      <stop offset="55%" stop-color="#7c5cff" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#05060a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="g1006n">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="1000" fill="#080a10"/>
+  <line x1="0.0" y1="0" x2="0.0" y2="1000" stroke="#ffffff" stroke-width="0.5" opacity="0.045"/><line x1="133.3" y1="0" x2="133.3" y2="1000" stroke="#ffffff" stroke-width="0.5" opacity="0.045"/><line x1="266.7" y1="0" x2="266.7" y2="1000" stroke="#ffffff" stroke-width="0.5" opacity="0.045"/><line x1="400.0" y1="0" x2="400.0" y2="1000" stroke="#ffffff" stroke-width="0.5" opacity="0.045"/><line x1="533.3" y1="0" x2="533.3" y2="1000" stroke="#ffffff" stroke-width="0.5" opacity="0.045"/><line x1="666.7" y1="0" x2="666.7" y2="1000" stroke="#ffffff" stroke-width="0.5" opacity="0.045"/><line x1="800.0" y1="0" x2="800.0" y2="1000" stroke="#ffffff" stroke-width="0.5" opacity="0.045"/><line x1="933.3" y1="0" x2="933.3" y2="1000" stroke="#ffffff" stroke-width="0.5" opacity="0.045"/><line x1="1066.7" y1="0" x2="1066.7" y2="1000" stroke="#ffffff" stroke-width="0.5" opacity="0.045"/><line x1="1200.0" y1="0" x2="1200.0" y2="1000" stroke="#ffffff" stroke-width="0.5" opacity="0.045"/><line x1="1333.3" y1="0" x2="1333.3" y2="1000" stroke="#ffffff" stroke-width="0.5" opacity="0.045"/><line x1="1466.7" y1="0" x2="1466.7" y2="1000" stroke="#ffffff" stroke-width="0.5" opacity="0.045"/>
+  <rect width="1600" height="1000" fill="url(#g1006r)"/>
+  <g><rect x="30.8" y="756.7" width="2" height="243.3" fill="url(#g1006s)" opacity="0.166"/><rect x="92.3" y="454.9" width="2" height="545.1" fill="url(#g1006s)" opacity="0.390"/><rect x="153.8" y="481.5" width="2" height="518.5" fill="url(#g1006s)" opacity="0.390"/><rect x="215.4" y="838.3" width="2" height="161.7" fill="url(#g1006s)" opacity="0.218"/><rect x="276.9" y="713.0" width="2" height="287.0" fill="url(#g1006s)" opacity="0.179"/><rect x="338.5" y="752.3" width="2" height="247.7" fill="url(#g1006s)" opacity="0.358"/><rect x="400.0" y="880.4" width="2" height="119.6" fill="url(#g1006s)" opacity="0.319"/><rect x="461.5" y="433.2" width="2" height="566.8" fill="url(#g1006s)" opacity="0.280"/><rect x="523.1" y="890.8" width="2" height="109.2" fill="url(#g1006s)" opacity="0.275"/><rect x="584.6" y="858.9" width="2" height="141.1" fill="url(#g1006s)" opacity="0.382"/><rect x="646.2" y="647.7" width="2" height="352.3" fill="url(#g1006s)" opacity="0.312"/><rect x="707.7" y="636.1" width="2" height="363.9" fill="url(#g1006s)" opacity="0.316"/><rect x="769.2" y="851.8" width="2" height="148.2" fill="url(#g1006s)" opacity="0.317"/><rect x="830.8" y="933.7" width="2" height="66.3" fill="url(#g1006s)" opacity="0.125"/><rect x="892.3" y="420.2" width="2" height="579.8" fill="url(#g1006s)" opacity="0.276"/><rect x="953.8" y="908.3" width="2" height="91.7" fill="url(#g1006s)" opacity="0.113"/><rect x="1015.4" y="484.2" width="2" height="515.8" fill="url(#g1006s)" opacity="0.154"/><rect x="1076.9" y="540.0" width="2" height="460.0" fill="url(#g1006s)" opacity="0.109"/><rect x="1138.5" y="809.2" width="2" height="190.8" fill="url(#g1006s)" opacity="0.396"/><rect x="1200.0" y="498.3" width="2" height="501.7" fill="url(#g1006s)" opacity="0.383"/><rect x="1261.5" y="455.3" width="2" height="544.7" fill="url(#g1006s)" opacity="0.324"/><rect x="1323.1" y="625.2" width="2" height="374.8" fill="url(#g1006s)" opacity="0.236"/><rect x="1384.6" y="461.3" width="2" height="538.7" fill="url(#g1006s)" opacity="0.371"/><rect x="1446.2" y="829.4" width="2" height="170.6" fill="url(#g1006s)" opacity="0.324"/><rect x="1507.7" y="680.5" width="2" height="319.5" fill="url(#g1006s)" opacity="0.126"/><rect x="1569.2" y="541.0" width="2" height="459.0" fill="url(#g1006s)" opacity="0.254"/></g>
+  <rect width="1600" height="1000" filter="url(#g1006n)" opacity="0.06"/>
+
+  <!-- No baked-in label: project titles are rendered as HTML over the image. -->
+</svg>

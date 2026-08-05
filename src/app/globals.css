@@ -1,0 +1,353 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   Design tokens
+   One place for colour, type, easing and rhythm. Everything else in the app
+   composes from these, so a palette or type change never requires touching a
+   component.
+   ========================================================================= */
+@theme {
+  /* Neutral scale — cool, near-black. `ink-950` is the page ground. */
+  --color-ink-950: #050609;
+  --color-ink-900: #0a0c12;
+  --color-ink-850: #0f1219;
+  --color-ink-800: #151922;
+  --color-ink-700: #1e2430;
+  --color-ink-600: #2b3342;
+  --color-ink-400: #6a7385;
+  --color-ink-200: #b6bccb;
+  --color-ink-050: #edeff4;
+
+  /* Primary accent — periwinkle. Used for focus, links and WebGL highlights. */
+  --color-accent-600: #4055ff;
+  --color-accent-500: #5b74ff;
+  --color-accent-400: #8296ff;
+  --color-accent-300: #a8b6ff;
+
+  /* Secondary accent — warm, for contrast in badges and gradients. */
+  --color-ember-500: #ff8a5c;
+  --color-ember-400: #ffab84;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-sora), var(--font-inter), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-mono-code), ui-monospace, monospace;
+
+  /* Shared easing curve — the site's single "voice" for motion. */
+  --ease-silk: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-drift: drift 9s ease-in-out infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes drift {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -10px, 0);
+    }
+  }
+
+  @keyframes logo-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+}
+
+/* ============================================================================
+   Base
+   ========================================================================= */
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    /* Native smooth scrolling must stay off: Lenis owns the scroll. Leaving it
+       on makes anchor jumps fight the smooth-scroll animation. */
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink-950);
+    color: var(--color-ink-050);
+    font-family: var(--font-sans);
+    font-feature-settings: "kern", "liga", "calt";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-accent-500);
+    color: white;
+  }
+
+  /* A visible, on-brand focus ring — never removed, only styled. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent-400);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* The custom cursor replaces the native one, but only while it is mounted —
+     if the component fails to load, the native cursor stays. */
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none !important;
+  }
+
+  /* Thin, unobtrusive scrollbar. */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-700);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-ink-600);
+  }
+}
+
+/* ============================================================================
+   Utilities
+   ========================================================================= */
+@utility container-wide {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1600px;
+  padding-inline: 1.25rem;
+
+  @media (width >= 640px) {
+    padding-inline: 2rem;
+  }
+  @media (width >= 1024px) {
+    padding-inline: 3rem;
+  }
+}
+
+@utility text-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+}
+
+/* Editorial eyebrow label: 01 — SECTION */
+@utility label-meta {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ink-400);
+}
+
+@utility glass {
+  background-color: color-mix(in oklab, var(--color-ink-900) 55%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid color-mix(in oklab, white 8%, transparent);
+}
+
+/* Soft radial glow used behind headings and cards. */
+@utility glow-accent {
+  background-image: radial-gradient(
+    60% 60% at 50% 40%,
+    color-mix(in oklab, var(--color-accent-500) 22%, transparent) 0%,
+    transparent 100%
+  );
+}
+
+/* ============================================================================
+   Components
+   ========================================================================= */
+@layer components {
+  /* Monogram stroke-on animation. The paths declare pathLength="1", so the dash
+     values are expressed as fractions rather than raw path lengths. */
+  .logo-draw circle,
+  .logo-draw path {
+    stroke-dasharray: 1;
+    animation: logo-draw 1.6s var(--ease-out-expo) forwards;
+  }
+  .logo-draw path:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  .logo-draw path:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  /* Film grain overlay. A single inline SVG turbulence, so it costs no network
+     request and no image decode. */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Hairline divider that fades at both ends. */
+  .rule-fade {
+    height: 1px;
+    background-image: linear-gradient(
+      to right,
+      transparent,
+      color-mix(in oklab, white 12%, transparent) 20%,
+      color-mix(in oklab, white 12%, transparent) 80%,
+      transparent
+    );
+  }
+
+  /* Link with an underline that wipes in from the left. */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s var(--ease-silk);
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* Split-line masks created by SplitType. */
+  .split-line {
+    will-change: transform;
+  }
+}
+
+/* ============================================================================
+   Print
+   The résumé has to survive being printed or saved as PDF — a résumé page that
+   can't be printed is missing a feature. Everything decorative is dropped and
+   the palette inverts to ink on paper.
+   ========================================================================= */
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+  }
+
+  /* The WebGL canvas, grain, cursor, preloader, progress bar and nav are all
+     screen-only chrome. */
+  [data-webgl-root],
+  header.site-header,
+  header[class*="fixed"],
+  footer,
+  .grain::after {
+    display: none !important;
+  }
+
+  .resume-page {
+    padding-top: 0 !important;
+  }
+
+  .resume-page * {
+    color: #111111 !important;
+    background: transparent !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Hairlines need real ink to survive a printer. */
+  .resume-page [class*="border"] {
+    border-color: #cccccc !important;
+  }
+
+  .resume-page a {
+    text-decoration: underline;
+  }
+
+  /* Keep a role and its bullets together where the paper allows. */
+  .resume-page article,
+  .resume-page li {
+    break-inside: avoid;
+  }
+
+  .resume-page h1 {
+    font-size: 30pt !important;
+  }
+  .resume-page h2 {
+    font-size: 15pt !important;
+  }
+  .resume-page h3 {
+    font-size: 11pt !important;
+  }
+  .resume-page p,
+  .resume-page li,
+  .resume-page span {
+    font-size: 9.5pt !important;
+    line-height: 1.45 !important;
+  }
+}
+
+/* ============================================================================
+   Reduced motion
+   Decorative motion stops entirely; state changes keep a short fade so the UI
+   never feels broken.
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.15s !important;
+    scroll-behavior: auto !important;
+  }
+
+  .grain::after {
+    display: none;
+  }
+}

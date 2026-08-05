@@ -1,0 +1,2038 @@
+/* ============================================================================
+   Ashish Ranjan portfolio — exact rebuild of the reference build
+   ----------------------------------------------------------------------------
+   Values here are transcribed from the reference stylesheet rather than
+   re-derived, so type sizes, spacing and easing match it to the pixel.
+
+   Every selector is prefixed with `.a2-shell` so this sheet can never leak into
+   the rest of the site. The page owns its palette outright: the reference is
+   warm cream and amber on near-black, where the app's tokens are cool.
+   ========================================================================= */
+
+.a2-shell {
+  /* Reference tokens, in the same oklch the reference authored them in. */
+  --ink: oklch(95% 0.018 82);
+  --muted: oklch(74% 0.028 78);
+  --paper: oklch(91% 0.024 82);
+  --charcoal: oklch(11% 0.01 260);
+  --charcoal-2: oklch(16% 0.012 260);
+  --line: #f5f1e824;
+  --accent: oklch(78% 0.086 78);
+  --accent-strong: oklch(84% 0.09 76);
+  --blue: oklch(76% 0.06 255);
+  --wine: oklch(40% 0.08 18);
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* Where the hero grid fades to. The reference sets this inline; as a token it
+     stays overridable per section. */
+  --fade-stop: #030508;
+
+  /* Neue Haas Grotesk Display is served from Adobe Fonts on the reference and
+     cannot be self-hosted here, so the stack falls through to Helvetica Neue —
+     which is what the reference itself falls back to. */
+  --font-display-a2:
+    "neue-haas-grotesk-display-pro-mrz1wm", "neue-haas-grotesk-display",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  position: relative;
+  display: block;
+  background: var(--charcoal);
+  color: var(--ink);
+  font-family: var(--font-display-a2);
+  font-synthesis: none;
+  letter-spacing: 0;
+  /* The reference uses a crosshair sitewide; scoped so it ends at this page. */
+  cursor: crosshair;
+  overflow-x: clip;
+}
+
+.a2-shell h1,
+.a2-shell h2,
+.a2-shell h3,
+.a2-shell h4 {
+  font-family: var(--font-display-a2);
+}
+
+/* ============================================================================
+   Header
+   `mix-blend-mode: difference` is what makes the nav invert against whatever
+   scrolls under it. It animates in from `normal` so the first paint is not a
+   flash of inverted colour.
+   ========================================================================= */
+.a2-shell .site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+  padding: 0.4vw 0;
+  color: #f7f7f7;
+  background: 0 0;
+  mix-blend-mode: difference;
+  animation: a2-header-invert 2.2s both;
+}
+
+@keyframes a2-header-invert {
+  0% {
+    mix-blend-mode: normal;
+  }
+  to {
+    mix-blend-mode: difference;
+  }
+}
+
+.a2-shell .site-nav {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  width: calc(100% - 4vw);
+  max-width: 1900px;
+  min-height: 64px;
+  margin: 1.2em auto;
+  padding: 0;
+}
+
+.a2-shell .brand {
+  display: inline-block;
+  color: #f7f7f7;
+  font-size: clamp(20px, 1.532vw, 30px);
+  font-weight: 600;
+  line-height: 1.17;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.a2-shell .nav-links {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 5px;
+  text-align: right;
+}
+
+.a2-shell .nav-links a {
+  display: block;
+  position: relative;
+  padding: 0.1em 0;
+  color: #f7f7f7;
+  font-size: clamp(15px, 1.184vw, 23px);
+  font-weight: 600;
+  line-height: 1.17;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    opacity 0.16s ease,
+    transform 0.14s var(--ease-out);
+}
+
+/* The dot that marks the hovered or current link. */
+.a2-shell .nav-links a::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 8px);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  transform: translate(4px, -50%) scale(0.72);
+  transition:
+    opacity 0.14s ease,
+    transform 0.18s var(--ease-out);
+}
+
+.a2-shell .nav-links a:hover,
+.a2-shell .nav-links a[aria-current="location"] {
+  opacity: 1;
+  transform: translate(-10px);
+}
+
+.a2-shell .nav-links a:hover::before,
+.a2-shell .nav-links a[aria-current="location"]::before {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+/* Hovering one link recedes the others. */
+.a2-shell .nav-links:has(a:hover)
+  a:not(:hover):not([aria-current="location"]) {
+  opacity: 0.38;
+}
+
+/* ============================================================================
+   Buttons
+   ========================================================================= */
+.a2-shell .button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 20px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color 0.16s ease,
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    transform 0.14s var(--ease-out);
+}
+
+/* Three stacked backgrounds: a cursor-tracked highlight, the cream fill, and a
+   gradient border drawn in border-box. */
+.a2-shell .button.primary {
+  border-color: #0000;
+  color: var(--charcoal);
+  background:
+    radial-gradient(
+      120px circle at var(--button-x, 50%) var(--button-y, 50%),
+      oklch(98% 0.026 86),
+      transparent 68%
+    ),
+    linear-gradient(180deg, oklch(95% 0.018 82), oklch(88% 0.038 80))
+      padding-box,
+    linear-gradient(
+        110deg,
+        oklch(88% 0.1 88),
+        oklch(72% 0.09 250),
+        oklch(88% 0.1 88)
+      )
+      border-box;
+  box-shadow:
+    0 0 0 1px #f5f1e814,
+    0 10px 34px #dab8761f;
+  transition:
+    color 0.16s ease,
+    box-shadow 0.22s ease,
+    transform 0.14s var(--ease-out);
+}
+
+.a2-shell .button.secondary {
+  color: var(--ink);
+}
+
+/* ============================================================================
+   Perspective grid
+   A real 40 × 40 tile grid rather than painted gradient lines: each tile is an
+   independent hover target that flashes its own colour, which gradients cannot
+   do. That interaction is the reason for the DOM cost.
+   ========================================================================= */
+.a2-shell .perspective-grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--fade-stop, #030508);
+  overflow: hidden;
+  perspective: 2000px;
+}
+
+.a2-shell .hero-perspective-grid,
+.a2-shell .contact-perspective-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transform-origin: 50%;
+}
+
+.a2-shell .perspective-grid-tiles {
+  display: grid;
+  grid-template-columns: repeat(40, 1fr);
+  grid-template-rows: repeat(40, 1fr);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80rem;
+  aspect-ratio: 1;
+  transform-style: preserve-3d;
+  transform-origin: 50%;
+  transform: translate(-50%, -50%) rotateX(30deg) rotateY(-5deg) rotate(20deg)
+    scale(2);
+}
+
+.a2-shell .perspective-grid-tile {
+  --tile-color: #ef6461;
+  min-width: 1px;
+  min-height: 1px;
+  border: 1px solid #9ca3af38;
+  background: 0 0;
+  transition:
+    background-color 1.5s,
+    border-color 1.5s;
+}
+
+/* Four colours cycled across the grid. */
+.a2-shell .perspective-grid-tile:nth-child(4n + 2) {
+  --tile-color: #2aa9df;
+}
+.a2-shell .perspective-grid-tile:nth-child(4n + 3) {
+  --tile-color: #35ad62;
+}
+.a2-shell .perspective-grid-tile:nth-child(4n) {
+  --tile-color: #f4d62c;
+}
+
+/* Touch devices have no hover to give, and would only pay the cost. */
+@media (hover: hover) and (pointer: fine) {
+  .a2-shell .perspective-grid-tile:hover {
+    /* Lights instantly, then fades back over the 1.5s base transition. */
+    background-color: var(--tile-color);
+    border-color: var(--tile-color);
+    transition-duration: 0s;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .a2-shell .perspective-grid-tile:hover {
+      border-color: color-mix(in srgb, var(--tile-color) 78%, white);
+    }
+  }
+}
+
+.a2-shell .perspective-grid-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  /* Fades the grid out behind the copy so text always sits on flat ground.
+     `pointer-events: none` keeps tile hover reachable through it. */
+  background: radial-gradient(
+    circle,
+    transparent 25%,
+    var(--fade-stop) 80%
+  );
+}
+
+/* ============================================================================
+   Hero
+   ========================================================================= */
+.a2-shell .hero {
+  display: grid;
+  place-items: center;
+  position: relative;
+  min-height: 100svh;
+  /* The horizontal value centres a 1120px measure without a wrapper element. */
+  padding: 168px max(20px, 50vw - 560px) 86px;
+  background: linear-gradient(#030508 0%, #070b12 56%, #11141a 100%);
+  text-align: center;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.a2-shell .hero-copy {
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 2;
+  width: min(760px, 100%);
+}
+
+.a2-shell .eyebrow {
+  margin: 0;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 760;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.a2-shell .hero h1 {
+  max-width: 980px;
+  margin: 0;
+  font-size: clamp(56px, 9vw, 132px);
+  font-weight: 600;
+  line-height: 0.88;
+  letter-spacing: 0;
+}
+
+.a2-shell .hero-text {
+  max-width: 620px;
+  margin: 28px 0 0;
+  color: var(--muted);
+  font-size: clamp(18px, 1.8vw, 22px);
+  line-height: 1.35;
+}
+
+.a2-shell .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+/* ============================================================================
+   Design MCP panel
+   The section carries its own `--mcp-*` ramp: it sits on a lighter ground than
+   the hero and needs panel/surface steps the page palette does not define.
+   ========================================================================= */
+.a2-shell .design-mcp-section {
+  --mcp-ink: oklch(95% 0.018 82);
+  --mcp-muted: oklch(72% 0.022 78);
+  --mcp-panel: oklch(20% 0.012 260);
+  --mcp-surface: oklch(14.5% 0.009 260);
+  --mcp-line: oklch(95% 0.018 82 / 0.1);
+  --mcp-warm: oklch(68% 0.14 40);
+  --mcp-link: oklch(87% 0.17 121);
+
+  display: grid;
+  justify-items: center;
+  position: relative;
+  gap: 48px;
+  padding: 112px max(24px, 50vw - 620px) 104px;
+  color: var(--mcp-ink);
+  background:
+    radial-gradient(circle at 50% 4%, oklch(78% 0.086 78 / 0.09), #0000 34%),
+    linear-gradient(oklch(10.5% 0.01 260) 0%, oklch(13% 0.012 260) 100%);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* A 72px graph-paper grid, masked to fade at the top and bottom edges. */
+.a2-shell .design-mcp-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(oklch(95% 0.018 82 / 0.025) 1px, #0000 1px),
+    linear-gradient(90deg, oklch(95% 0.018 82 / 0.025) 1px, #0000 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(#0000, #000 18% 82%, #0000);
+  -webkit-mask-image: linear-gradient(#0000, #000 18% 82%, #0000);
+}
+
+.a2-shell .design-mcp-copy {
+  display: grid;
+  justify-items: center;
+  gap: 20px;
+  width: min(1120px, 100%);
+  text-align: center;
+}
+
+.a2-shell .design-mcp-copy h2 {
+  max-width: 1120px;
+  margin: 0;
+  font-size: clamp(44px, 5.2vw, 78px);
+  font-weight: 760;
+  line-height: 0.96;
+  letter-spacing: -0.055em;
+}
+
+.a2-shell .design-mcp-copy p {
+  max-width: 620px;
+  margin: 0;
+  color: var(--mcp-muted);
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.45;
+}
+
+.a2-shell .design-mcp-panel {
+  width: min(1220px, 100%);
+  padding: 12px;
+  border: 1px solid var(--mcp-line);
+  border-radius: 28px;
+  background: linear-gradient(
+    180deg,
+    oklch(23% 0.012 260 / 0.98),
+    var(--mcp-panel)
+  );
+  box-shadow:
+    inset 0 1px oklch(100% 0 0 / 0.06),
+    0 34px 100px oklch(3% 0.01 260 / 0.34);
+}
+
+.a2-shell .design-mcp-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  min-height: 68px;
+  padding: 0 6px 12px;
+}
+
+.a2-shell .design-mcp-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.a2-shell .design-mcp-tab,
+.a2-shell .design-mcp-action,
+.a2-shell .design-mcp-shortcut,
+.a2-shell .design-mcp-copy-button {
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.a2-shell .design-mcp-tab {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  width: auto;
+  min-height: 46px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 999px;
+  background: 0 0;
+  color: oklch(87% 0.018 82);
+  font-size: 16px;
+  font-weight: 660;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color 0.16s var(--ease-out),
+    background-color 0.16s var(--ease-out),
+    box-shadow 0.18s var(--ease-out),
+    transform 0.14s var(--ease-out);
+}
+
+.a2-shell .design-mcp-tab[data-active="true"] {
+  color: oklch(18% 0.01 260);
+  background: oklch(95% 0.01 82);
+  box-shadow:
+    inset 0 1px oklch(100% 0 0 / 0.55),
+    0 8px 24px oklch(3% 0.01 260 / 0.2);
+}
+
+.a2-shell .design-mcp-tab:active,
+.a2-shell .design-mcp-action:active,
+.a2-shell .design-mcp-shortcut button:active,
+.a2-shell .design-mcp-shortcut a:active,
+.a2-shell .design-mcp-copy-button:active {
+  transform: scale(0.97);
+}
+
+.a2-shell .design-mcp-tab:focus-visible,
+.a2-shell .design-mcp-action:focus-visible,
+.a2-shell .design-mcp-shortcut button:focus-visible,
+.a2-shell .design-mcp-shortcut a:focus-visible,
+.a2-shell .design-mcp-copy-button:focus-visible {
+  outline: 2px solid oklch(85% 0.07 78);
+  outline-offset: 3px;
+}
+
+.a2-shell .design-mcp-agent-logo {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex: none;
+  width: 27px;
+  height: 27px;
+  border: 1px solid oklch(16% 0.01 260 / 0.12);
+  border-radius: 8px;
+  background: oklch(94% 0.008 82);
+  box-shadow: 0 2px 8px oklch(3% 0.01 260 / 0.16);
+}
+
+.a2-shell .design-mcp-agent-logo img {
+  width: 19px;
+  height: 19px;
+  object-fit: contain;
+}
+
+.a2-shell .design-mcp-mode-tab {
+  min-height: 48px;
+  padding-inline: 16px;
+  color: oklch(72% 0.018 82);
+}
+
+.a2-shell .design-mcp-mode-tab .material-symbols-rounded {
+  font-size: 20px;
+}
+
+.a2-shell .design-mcp-mode-tab[data-active="true"] {
+  color: var(--mcp-ink);
+  background: linear-gradient(
+    oklch(100% 0 0 / 0.13),
+    oklch(100% 0 0 / 0.055)
+  );
+  box-shadow:
+    inset 0 1px oklch(100% 0 0 / 0.08),
+    0 8px 20px oklch(3% 0.01 260 / 0.22);
+}
+
+.a2-shell .design-mcp-steps {
+  display: grid;
+  grid-template-columns: 1.06fr 1fr 1fr;
+  border: 1px solid oklch(95% 0.018 82 / 0.07);
+  border-radius: 21px;
+  background:
+    radial-gradient(
+      circle at 12% 0%,
+      oklch(78% 0.086 78 / 0.035),
+      transparent 30%
+    ),
+    var(--mcp-surface);
+  overflow: hidden;
+}
+
+.a2-shell .design-mcp-step {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  min-height: 344px;
+  padding: 28px 26px 26px;
+}
+
+.a2-shell .design-mcp-step + .design-mcp-step {
+  border-left: 1px solid oklch(95% 0.018 82 / 0.08);
+}
+
+.a2-shell .design-mcp-number {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid oklch(95% 0.018 82 / 0.11);
+  border-radius: 999px;
+  background: oklch(100% 0 0 / 0.04);
+  color: oklch(86% 0.018 82);
+  font-size: 13px;
+  font-weight: 760;
+  line-height: 1;
+  text-align: center;
+}
+
+.a2-shell .design-mcp-step-copy {
+  margin-top: 46px;
+}
+
+.a2-shell .design-mcp-step h3 {
+  margin: 0;
+  color: var(--mcp-ink);
+  font-size: clamp(20px, 1.75vw, 27px);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.a2-shell .design-mcp-step p {
+  max-width: 34ch;
+  margin: 12px 0 0;
+  color: oklch(69% 0.02 82);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* `margin-top: auto` pins every action to the bottom of its column, so the
+   three line up even though the copy above them differs in length. */
+.a2-shell .design-mcp-action {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: auto;
+  max-width: 100%;
+  min-height: 48px;
+  margin-top: auto;
+  padding: 0 16px;
+  border: 1px solid oklch(95% 0.018 82 / 0.1);
+  border-radius: 13px;
+  background: oklch(100% 0 0 / 0.085);
+  color: var(--mcp-ink);
+  font-size: 15px;
+  font-weight: 680;
+  line-height: 1.15;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px oklch(100% 0 0 / 0.07),
+    0 6px oklch(3% 0.01 260 / 0.24);
+  transition:
+    color 0.16s ease,
+    background-color 0.16s ease,
+    border-color 0.16s ease,
+    transform 0.14s var(--ease-out),
+    box-shadow 0.16s var(--ease-out);
+}
+
+.a2-shell .design-mcp-action-copy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 50px;
+  margin-top: auto;
+  padding: 2px 3px 2px 16px;
+  border: 1px solid oklch(87% 0.17 121 / 0.16);
+  border-radius: 13px;
+  background: oklch(52% 0.1 121 / 0.15);
+  color: var(--mcp-link);
+  text-align: left;
+  overflow: hidden;
+  box-shadow: inset 0 1px oklch(87% 0.17 121 / 0.04);
+}
+
+.a2-shell .design-mcp-copy-value {
+  overflow: hidden;
+  font-family: var(--font-courier-prime), "Courier New", Courier, monospace;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.a2-shell .design-mcp-copy-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: oklch(87% 0.17 121 / 0.08);
+  color: var(--mcp-link);
+  cursor: pointer;
+  transition:
+    color 0.16s ease,
+    background-color 0.16s ease,
+    transform 0.14s var(--ease-out);
+}
+
+.a2-shell .design-mcp-copy-button .material-symbols-rounded {
+  font-size: 21px;
+}
+
+.a2-shell .design-mcp-action-primary {
+  border-color: oklch(72% 0.14 40);
+  background: var(--mcp-warm);
+  color: oklch(98% 0.006 82);
+  box-shadow:
+    inset 0 -3px oklch(35% 0.12 40 / 0.28),
+    0 7px oklch(3% 0.01 260 / 0.28),
+    0 16px 28px oklch(3% 0.01 260 / 0.18);
+}
+
+.a2-shell .design-mcp-chevron {
+  font-size: 22px;
+  transition: transform 0.18s var(--ease-out);
+}
+
+.a2-shell .design-mcp-shortcut {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 58px;
+  padding: 12px 16px 0;
+  border: 0;
+  background: radial-gradient(
+    at 50% 100%,
+    oklch(78% 0.086 78 / 0.08),
+    #0000 52%
+  );
+  color: oklch(69% 0.018 82);
+  font-size: 14px;
+  line-height: 1.25;
+  text-align: center;
+  transition:
+    color 0.16s ease,
+    transform 0.14s var(--ease-out);
+}
+
+.a2-shell .design-mcp-shortcut button,
+.a2-shell .design-mcp-shortcut a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  padding: 4px 0;
+  border: 0;
+  background: 0 0;
+  color: var(--mcp-ink);
+  font: inherit;
+  font-weight: 680;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 0.16s ease,
+    transform 0.14s var(--ease-out);
+}
+
+.a2-shell .design-mcp-shortcut > button {
+  max-width: 100%;
+}
+
+.a2-shell .design-mcp-shortcut strong {
+  color: var(--mcp-ink);
+  font-weight: 680;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .a2-shell .design-mcp-tab:not([data-active="true"]):hover {
+    color: var(--mcp-ink);
+    background: oklch(100% 0 0 / 0.055);
+  }
+
+  .a2-shell .design-mcp-action-secondary:hover {
+    background: oklch(100% 0 0 / 0.13);
+    border-color: oklch(95% 0.018 82 / 0.18);
+  }
+
+  /* The whole field reacts when the button inside it is hovered. */
+  .a2-shell .design-mcp-action-copy:has(.design-mcp-copy-button:hover) {
+    background: oklch(52% 0.1 121 / 0.19);
+    border-color: oklch(87% 0.17 121 / 0.26);
+  }
+
+  .a2-shell .design-mcp-copy-button:hover {
+    background: oklch(87% 0.17 121 / 0.15);
+  }
+
+  .a2-shell .design-mcp-action-primary:hover {
+    background: oklch(72% 0.14 40);
+    border-color: oklch(77% 0.13 40);
+  }
+
+  .a2-shell .design-mcp-action:hover .design-mcp-chevron,
+  .a2-shell .design-mcp-shortcut button:hover .design-mcp-chevron,
+  .a2-shell .design-mcp-shortcut a:hover .design-mcp-chevron {
+    transform: translate(3px);
+  }
+
+  .a2-shell .design-mcp-shortcut button:hover,
+  .a2-shell .design-mcp-shortcut a:hover {
+    color: oklch(79% 0.018 82);
+  }
+}
+
+/* ============================================================================
+   Breakpoints — the reference's own, at its own widths
+   ========================================================================= */
+@media (width <= 980px) {
+  .a2-shell .hero {
+    grid-template-columns: 1fr;
+    min-height: 92vh;
+  }
+
+  .a2-shell .story-bento {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  /* Every card becomes a half-width tile, so the bento reads as a simple pair
+     of columns instead of a broken twelve-column layout. */
+  .a2-shell .story-card.wide,
+  .a2-shell .story-card.mid,
+  .a2-shell .story-card.small,
+  .a2-shell .story-card.long,
+  .a2-shell .story-card.tall {
+    grid-column: span 3;
+  }
+
+  .a2-shell .project {
+    gap: 44px;
+  }
+
+  .a2-shell .project-visual {
+    aspect-ratio: 16 / 9;
+  }
+
+  .a2-shell .project-brief {
+    grid-template-columns: 1fr;
+  }
+
+  .a2-shell .metric-row,
+  .a2-shell .capability-list {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .a2-shell .experience-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================================
+   Sections and depth backdrops
+   ========================================================================= */
+.a2-shell .section,
+.a2-shell .capabilities,
+.a2-shell .experience,
+.a2-shell .perspective,
+.a2-shell .contact {
+  padding: 120px max(24px, 50vw - 590px);
+}
+
+.a2-shell .section h2,
+.a2-shell .section-heading h2,
+.a2-shell .perspective h2,
+.a2-shell .contact h2 {
+  max-width: 860px;
+  margin: 0;
+  font-size: clamp(48px, 7vw, 104px);
+  font-weight: 600;
+  line-height: 0.94;
+  letter-spacing: 0;
+}
+
+.a2-shell .section-kicker {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 760;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* A light section: cream paper with dark ink, inverting the page. The fixed
+   header survives the switch because it blends in `difference`. */
+.a2-shell .intro-section {
+  background: var(--paper);
+  color: oklch(15% 0.012 260);
+}
+
+.a2-shell .intro-section .section-kicker,
+.a2-shell .experience .section-kicker,
+.a2-shell .perspective .section-kicker {
+  color: oklch(44% 0.055 72);
+}
+
+.a2-shell .intro-section p,
+.a2-shell .perspective p,
+.a2-shell .contact p {
+  max-width: 760px;
+  margin: 28px 0 0;
+  color: oklch(39% 0.022 76);
+  font-size: 21px;
+  line-height: 1.5;
+}
+
+.a2-shell .depth-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Everything except the backdrop rides above it. */
+.a2-shell .depth-section > :not(.depth-backdrop) {
+  position: relative;
+  z-index: 1;
+}
+
+.a2-shell .depth-backdrop {
+  position: absolute;
+  /* Bled well past the section so the parallax drift never exposes an edge. */
+  inset: -18%;
+  z-index: 0;
+  pointer-events: none;
+  transform-origin: 50%;
+  transform: translate(0) scale(1.08);
+}
+
+/* Two concentric rings, drawn in `currentColor` so each backdrop variant tints
+   them by setting `color` alone. */
+.a2-shell .depth-backdrop::before,
+.a2-shell .depth-backdrop::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  aspect-ratio: 1;
+  border: 1px solid;
+  border-radius: 50%;
+}
+
+.a2-shell .depth-backdrop::before {
+  width: min(58vw, 820px);
+  opacity: 0.14;
+}
+
+.a2-shell .depth-backdrop::after {
+  width: min(22vw, 320px);
+  opacity: 0.18;
+}
+
+.a2-shell .depth-backdrop-intro {
+  color: #704e207a;
+  background:
+    radial-gradient(circle at 17% 24%, #d2973d33, #0000 24%),
+    radial-gradient(circle at 82% 76%, #4269a924, #0000 25%),
+    repeating-linear-gradient(118deg, #15140f0a 0 1px, #0000 1px 92px);
+  mask-image: linear-gradient(#0000, #000 22% 78%, #0000);
+  -webkit-mask-image: linear-gradient(#0000, #000 22% 78%, #0000);
+}
+
+.a2-shell .depth-backdrop-intro::before {
+  top: 8%;
+  left: 4%;
+}
+
+.a2-shell .depth-backdrop-intro::after {
+  bottom: 8%;
+  right: 13%;
+}
+
+.a2-shell .depth-backdrop-story {
+  color: #dab87680;
+  background:
+    radial-gradient(circle at 76% 20%, #4675cc2e, #0000 25%),
+    radial-gradient(circle at 16% 78%, #dab87621, #0000 28%),
+    linear-gradient(#f5f1e80a 1px, #0000 1px) 0 0 / 88px 88px,
+    linear-gradient(90deg, #f5f1e80a 1px, #0000 1px) 0 0 / 88px 88px;
+  mask-image: radial-gradient(circle at 50% 48%, #000 25%, #0000 78%);
+  -webkit-mask-image: radial-gradient(circle at 50% 48%, #000 25%, #0000 78%);
+}
+
+.a2-shell .depth-backdrop-story::before {
+  top: 18%;
+  right: 3%;
+}
+
+.a2-shell .depth-backdrop-story::after {
+  bottom: 13%;
+  left: 16%;
+}
+
+/* Safety net: if a scroll tween never runs — script blocked, ScrollTrigger
+   mis-measuring, reduced motion — the content must still be visible. The
+   reference carries the same rule for the same reason. */
+.a2-shell .intro-section > :not(.depth-backdrop),
+.a2-shell .story-card,
+.a2-shell .project-heading,
+.a2-shell .project-visual,
+.a2-shell .project .case-link,
+.a2-shell .project .metric,
+.a2-shell .project-brief > div,
+.a2-shell .capabilities .section-heading > *,
+.a2-shell .capability,
+.a2-shell .experience > .section-kicker,
+.a2-shell .experience-row,
+.a2-shell .perspective-copy > *,
+.a2-shell .contact-copy,
+.a2-shell .contact-actions {
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+}
+
+/* ============================================================================
+   Story
+   ========================================================================= */
+.a2-shell .story-section {
+  position: relative;
+  padding: 118px max(20px, 50vw - 560px) 132px;
+  background:
+    radial-gradient(circle at 18% 10%, #dab87614, #0000 28%),
+    oklch(15% 0.012 260);
+  overflow: hidden;
+}
+
+/* Breaks the content rail to run the full viewport width. */
+.a2-shell .signal-marquee {
+  width: 100vw;
+  margin: -36px 0 58px calc(50% - 50vw);
+  border-block: 1px solid #f5f1e814;
+  color: #f5f1e86b;
+  font-size: clamp(22px, 4vw, 56px);
+  font-weight: 780;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Translating -50% works only because the track holds the words twice — the
+   seam always lands on an identical copy. */
+.a2-shell .signal-marquee div {
+  display: flex;
+  gap: clamp(22px, 4vw, 56px);
+  width: max-content;
+  padding: 12px 0 14px;
+  animation: a2-marquee-slide 34s linear infinite;
+  will-change: transform;
+}
+
+@keyframes a2-marquee-slide {
+  0% {
+    transform: translate(0);
+  }
+  to {
+    transform: translate(-50%);
+  }
+}
+
+.a2-shell .signal-marquee span {
+  display: inline-flex;
+}
+
+/* A 12-column bento. `dense` lets the five cards backfill rather than leaving
+   a hole when a span does not divide evenly. */
+.a2-shell .story-bento {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: 1px;
+  border: 1px solid var(--line);
+  /* The 1px gaps show this through, so the grid lines cost no extra elements. */
+  background: #f5f1e81a;
+}
+
+.a2-shell .story-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 230px;
+  padding: clamp(24px, 3vw, 36px);
+  background: linear-gradient(135deg, #f5f1e80d, #f5f1e805),
+    oklch(15% 0.012 260);
+  transition:
+    background-color 0.18s ease,
+    transform 0.18s var(--ease-out);
+}
+
+.a2-shell .story-card.wide {
+  grid-column: span 5;
+}
+.a2-shell .story-card.mid {
+  grid-column: span 4;
+}
+.a2-shell .story-card.small {
+  grid-column: span 3;
+}
+.a2-shell .story-card.long {
+  grid-column: span 7;
+}
+.a2-shell .story-card.tall {
+  grid-column: span 5;
+}
+
+.a2-shell .story-card h3 {
+  max-width: 12ch;
+  margin: 0;
+  font-size: clamp(30px, 3.5vw, 58px);
+  line-height: 0.94;
+}
+
+.a2-shell .story-card p {
+  max-width: 280px;
+  margin: 36px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .a2-shell .story-card:hover {
+    background-color: oklch(18% 0.012 260);
+    transform: translateY(-2px);
+  }
+}
+
+.a2-shell .scrub-line {
+  max-width: 1120px;
+  margin: clamp(88px, 12vw, 150px) 0 0;
+  color: var(--ink);
+  font-size: clamp(42px, 6.5vw, 96px);
+  font-weight: 760;
+  line-height: 0.98;
+}
+
+.a2-shell .scrub-word {
+  display: inline-block;
+  margin-right: 0.26em;
+  color: currentColor;
+}
+
+/* ============================================================================
+   Work
+   The second light section. Projects alternate ground tone, and each one owns a
+   cursor-tracked aura plus a tilting cover.
+   ========================================================================= */
+.a2-shell .work {
+  background: oklch(94% 0.012 88);
+  color: oklch(11% 0.01 260);
+}
+
+.a2-shell .section-heading {
+  padding: 132px max(24px, 50vw - 590px) 64px;
+}
+
+.a2-shell .work .section-heading {
+  text-align: center;
+}
+
+.a2-shell .work .section-heading h2 {
+  margin-inline: auto;
+}
+
+.a2-shell .work .section-kicker,
+.a2-shell .work .project-index {
+  color: oklch(54% 0.03 260);
+}
+
+.a2-shell .project-index {
+  margin: 0;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 760;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.a2-shell .project {
+  display: grid;
+  grid-template-columns: 1fr;
+  position: relative;
+  gap: 54px;
+  padding: 104px max(24px, 50vw - 590px) 116px;
+  border-top: 1px solid #15140f14;
+  text-align: center;
+  /* `clip` not `hidden`: the aura is bled past the edges but must not create a
+     scroll container. */
+  overflow: clip;
+}
+
+.a2-shell .project:nth-child(odd) {
+  background: oklch(96% 0.01 88);
+}
+
+/* A second, static wash that only appears on hover — separate from the aura,
+   which follows the pointer. */
+.a2-shell .project::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 78% 18%, #dab87614, #0000 24%),
+    radial-gradient(circle at 12% 76%, #b0c4e012, #0000 28%);
+  transition: opacity 0.26s;
+}
+
+.a2-shell .project:hover::before {
+  opacity: 1;
+}
+
+.a2-shell .project-aura {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  width: min(52vw, 720px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #dab87629, #b0c4e012 34%, #0000 68%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
+.a2-shell .project > :not(.project-aura) {
+  position: relative;
+  z-index: 1;
+}
+
+.a2-shell .project-heading {
+  display: grid;
+  justify-items: center;
+}
+
+.a2-shell .project-heading h3 {
+  max-width: 960px;
+  margin: 18px 0 0;
+  font-size: clamp(58px, 7vw, 112px);
+  font-weight: 520;
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.a2-shell .project-challenge {
+  max-width: 640px;
+  margin: 22px 0 0;
+  color: oklch(45% 0.022 260);
+  font-size: clamp(17px, 1.6vw, 21px);
+  line-height: 1.45;
+  text-wrap: balance;
+}
+
+.a2-shell .tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.a2-shell .tag-row span {
+  padding: 8px 12px;
+  border: 1px solid #15140f1f;
+  border-radius: 999px;
+  color: oklch(42% 0.018 260);
+  font-size: 13px;
+  transition:
+    color 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.16s var(--ease-out);
+}
+
+/* ------------------------------------------------------------- Cover visual */
+.a2-shell .project-visual {
+  display: grid;
+  place-items: center;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  border: 0;
+  border-radius: clamp(22px, 3vw, 36px);
+  background: oklch(90% 0.006 260);
+  overflow: hidden;
+}
+
+.a2-shell .project-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transition:
+    transform 0.26s var(--ease-out),
+    filter 0.22s ease;
+  will-change: transform;
+}
+
+/* The pointer handler writes these six variables; every visual effect below
+   reads them, so the JS never touches a style property directly. */
+.a2-shell .project-visual-link {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --image-x: 0px;
+  --image-y: 0px;
+  --cover-x: 50%;
+  --cover-y: 50%;
+
+  perspective: 1100px;
+  transform-style: preserve-3d;
+  outline: 1px solid #15140f14;
+  outline-offset: -1px;
+  transition:
+    box-shadow 0.24s,
+    outline-color 0.18s;
+}
+
+.a2-shell .project-visual-link::before,
+.a2-shell .project-visual-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Bottom scrim, wiped up from the bottom edge on hover. */
+.a2-shell .project-visual-link::before {
+  background: linear-gradient(#0000 48%, #05070a33 70%, #05070aa8 100%);
+  clip-path: inset(100% 0 0);
+  transition: clip-path 0.24s var(--ease-out);
+}
+
+/* Cursor-tracked sheen. */
+.a2-shell .project-visual-link::after {
+  background: radial-gradient(
+    360px circle at var(--cover-x) var(--cover-y),
+    #fff3,
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+
+/* Keyboard users get the same scrim reveal as a hover. */
+.a2-shell .project-visual-link:focus-visible::before,
+.a2-shell .project-visual-link:active::before {
+  clip-path: inset(48% 0 0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .a2-shell .tag-row span:hover {
+    color: var(--ink);
+    background: oklch(13% 0.012 260);
+    border-color: oklch(13% 0.012 260);
+    transform: translateY(-1px);
+  }
+
+  .a2-shell .project-visual-link:hover {
+    outline-color: #05070a70;
+    box-shadow: 0 30px 70px #05070a33;
+  }
+
+  .a2-shell .project-visual-link:hover::before {
+    clip-path: inset(48% 0 0);
+  }
+
+  .a2-shell .project-visual-link:hover::after {
+    opacity: 1;
+  }
+
+  .a2-shell .project-visual-link img {
+    transform: translate3d(var(--image-x), var(--image-y), 0)
+      rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale(1.01);
+  }
+
+  .a2-shell .project-visual-link:hover img {
+    transform: translate3d(var(--image-x), var(--image-y), 0)
+      rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale(1.065);
+    filter: saturate(1.08) contrast(1.03);
+  }
+
+  .a2-shell .case-link:hover::after {
+    transform: translate(3px);
+  }
+}
+
+/* ------------------------------------------------------------ Metrics/brief */
+.a2-shell .metric-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-column: 1 / -1;
+  gap: 1px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.a2-shell .work .metric-row {
+  width: min(960px, 100%);
+  margin: -14px auto 0;
+  border: 0;
+  background: 0 0;
+}
+
+.a2-shell .metric {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  min-height: 176px;
+  padding: 28px 24px;
+}
+
+.a2-shell .work .metric {
+  border-right: 0;
+  background: 0 0;
+}
+
+.a2-shell .metric strong {
+  display: block;
+  color: var(--accent);
+  font-size: clamp(40px, 5vw, 76px);
+  line-height: 0.92;
+}
+
+.a2-shell .metric span {
+  display: block;
+  margin-top: 14px;
+  color: var(--ink);
+  font-weight: 740;
+}
+
+.a2-shell .work .metric strong {
+  color: oklch(13% 0.012 260);
+  font-size: clamp(48px, 6vw, 86px);
+  font-weight: 480;
+  line-height: 0.95;
+}
+
+.a2-shell .work .metric span {
+  color: oklch(45% 0.022 260);
+  font-weight: 500;
+}
+
+.a2-shell .project-brief {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(36px, 7vw, 96px);
+  width: min(880px, 100%);
+  margin: -10px auto 0;
+  text-align: left;
+}
+
+.a2-shell .project-brief h4 {
+  margin: 0;
+  color: oklch(13% 0.012 260);
+  font-size: clamp(22px, 2.2vw, 30px);
+  font-weight: 560;
+  line-height: 1.1;
+}
+
+.a2-shell .project-brief p {
+  margin: 18px 0 0;
+  color: oklch(42% 0.018 260);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------------------- Case link */
+.a2-shell .case-link {
+  width: fit-content;
+  margin: -18px auto 0;
+  border-color: #15140f2e;
+  background: oklch(13% 0.012 260);
+  color: var(--ink);
+}
+
+.a2-shell .case-link:hover {
+  color: var(--ink);
+}
+
+/* The chevron is a Material Symbols ligature drawn by CSS rather than a span,
+   so the link's text content stays exactly the label. */
+.a2-shell .case-link::after {
+  content: "expand_circle_right";
+  display: inline-block;
+  margin-left: 10px;
+  font-family: "Material Symbols Rounded";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 600,
+    "GRAD" 0,
+    "opsz" 48;
+  transition: transform 0.18s var(--ease-out);
+}
+
+/* ============================================================================
+   Capabilities
+   ========================================================================= */
+.a2-shell .capabilities {
+  background: var(--paper);
+  color: oklch(15% 0.012 260);
+}
+
+.a2-shell .depth-backdrop-capabilities {
+  color: #3454846b;
+  background:
+    radial-gradient(circle at 84% 28%, #4269a929, #0000 24%),
+    repeating-linear-gradient(132deg, #15140f0a 0 1px, #0000 1px 84px);
+  mask-image: linear-gradient(90deg, #0000, #000 18% 86%, #0000);
+  -webkit-mask-image: linear-gradient(90deg, #0000, #000 18% 86%, #0000);
+}
+
+.a2-shell .depth-backdrop-capabilities::before {
+  top: 4%;
+  right: 8%;
+}
+
+.a2-shell .depth-backdrop-capabilities::after {
+  bottom: 8%;
+  left: 8%;
+}
+
+/* The dark ground shows through the 1px gaps as hairlines, so the four cards
+   need no borders of their own. */
+.a2-shell .capability-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 56px;
+  background: #15140f29;
+}
+
+.a2-shell .capability {
+  min-height: 210px;
+  padding: 28px;
+  background: var(--paper);
+  transition:
+    transform 0.18s var(--ease-out),
+    background-color 0.18s ease;
+}
+
+.a2-shell .capability h3 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.a2-shell .capability p {
+  color: oklch(39% 0.022 76);
+  line-height: 1.5;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .a2-shell .capability:hover {
+    background: oklch(93% 0.024 82);
+    transform: translateY(-2px);
+  }
+}
+
+/* ============================================================================
+   Experience
+   ========================================================================= */
+.a2-shell .experience,
+.a2-shell .perspective {
+  background: oklch(94% 0.022 82);
+  color: oklch(15% 0.012 260);
+}
+
+.a2-shell .depth-backdrop-experience {
+  color: #71491e6b;
+  background:
+    radial-gradient(circle at 18% 36%, #c5843026, #0000 24%),
+    repeating-radial-gradient(
+      circle at 84% 52%,
+      #0000 0 74px,
+      #15140f0a 75px 76px
+    );
+  mask-image: linear-gradient(#0000, #000 18% 82%, #0000);
+  -webkit-mask-image: linear-gradient(#0000, #000 18% 82%, #0000);
+}
+
+.a2-shell .depth-backdrop-experience::before {
+  bottom: 1%;
+  left: 7%;
+}
+
+.a2-shell .depth-backdrop-experience::after {
+  top: 18%;
+  right: 12%;
+}
+
+/* Company / role / detail, as three columns sharing one hairline rule. */
+.a2-shell .experience-row {
+  display: grid;
+  grid-template-columns: 0.7fr 0.55fr 1fr;
+  gap: 34px;
+  padding: 34px 0;
+  border-top: 1px solid #15140f24;
+}
+
+.a2-shell .experience-row h2,
+.a2-shell .experience-row p {
+  margin: 0;
+}
+
+.a2-shell .experience-row h2 {
+  font-size: clamp(30px, 4vw, 52px);
+  line-height: 1;
+}
+
+.a2-shell .experience-row p {
+  font-weight: 720;
+}
+
+.a2-shell .experience-row span,
+.a2-shell .perspective p {
+  color: oklch(39% 0.022 76);
+  line-height: 1.5;
+}
+
+/* ============================================================================
+   Perspective
+   ========================================================================= */
+.a2-shell .depth-backdrop-perspective {
+  color: #3252846b;
+  background:
+    radial-gradient(circle at 74% 24%, #436cb029, #0000 24%),
+    radial-gradient(circle at 22% 82%, #c3843421, #0000 26%),
+    repeating-linear-gradient(42deg, #15140f0a 0 1px, #0000 1px 96px);
+  mask-image: radial-gradient(#000 24%, #0000 78%);
+  -webkit-mask-image: radial-gradient(#000 24%, #0000 78%);
+}
+
+.a2-shell .depth-backdrop-perspective::before {
+  bottom: 8%;
+  right: 5%;
+}
+
+.a2-shell .depth-backdrop-perspective::after {
+  top: 8%;
+  left: 14%;
+}
+
+/* Left-aligned, unlike every other centred section on the page. */
+.a2-shell .perspective-copy {
+  display: grid;
+  justify-items: start;
+  gap: clamp(20px, 2vw, 30px);
+  width: min(980px, 100%);
+}
+
+.a2-shell .perspective-copy h2 {
+  max-width: 940px;
+  text-wrap: balance;
+}
+
+.a2-shell .perspective-copy p {
+  margin: 4px 0 0;
+  text-wrap: pretty;
+}
+
+.a2-shell .perspective .section-kicker {
+  color: oklch(44% 0.055 72);
+}
+
+.a2-shell .perspective p {
+  max-width: 760px;
+  font-size: 21px;
+}
+
+/* ============================================================================
+   Contact
+   Back to the dark ground, with the same tile grid as the hero — flatter and
+   quieter, per the contact variant.
+   ========================================================================= */
+.a2-shell .contact {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  gap: 34px;
+  min-height: 100svh;
+  background: oklch(9% 0.012 260);
+  text-align: center;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.a2-shell .contact-copy,
+.a2-shell .contact-actions {
+  position: relative;
+  z-index: 2;
+}
+
+.a2-shell .contact-copy {
+  display: grid;
+  justify-items: center;
+  width: 100%;
+}
+
+.a2-shell .contact h2 {
+  width: min(1040px, 100%);
+  margin-top: clamp(30px, 3vw, 44px);
+  margin-inline: auto;
+  text-wrap: balance;
+}
+
+.a2-shell .contact p {
+  max-width: 760px;
+  margin: 28px 0 0;
+  color: var(--muted);
+  font-size: 21px;
+  line-height: 1.5;
+}
+
+.a2-shell .contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-self: center;
+  gap: 12px;
+  width: 100%;
+}
+
+/* `flex-basis: 100%` drops the row below the two buttons. */
+.a2-shell .social-links {
+  display: flex;
+  flex-basis: 100%;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.a2-shell .social-icon {
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink);
+  font-weight: 780;
+  letter-spacing: 0;
+  text-decoration: none;
+  transition:
+    transform 0.16s var(--ease-out),
+    border-color 0.16s ease,
+    background-color 0.16s ease;
+}
+
+/* Tooltip drawn from the element's own data attribute — no extra markup. */
+.a2-shell .social-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  width: max-content;
+  max-width: 180px;
+  padding: 7px 10px;
+  border: 1px solid #f5f1e824;
+  border-radius: 999px;
+  background: oklch(14% 0.012 260);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px) scale(0.97);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 0.15s var(--ease-out),
+    transform 0.15s var(--ease-out);
+}
+
+/* Keyboard focus gets the tooltip too, not just hover. */
+.a2-shell .social-icon:hover::after,
+.a2-shell .social-icon:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%) scale(1);
+}
+
+.a2-shell .social-icon:hover {
+  border-color: #dab8769e;
+  background: #dab87614;
+  transform: translateY(-2px);
+}
+
+/* The fixed header would otherwise cover the top of an anchored section. */
+.a2-shell #work,
+.a2-shell #capabilities,
+.a2-shell #contact {
+  scroll-margin-top: 120px;
+}
+
+/* The toolbar's two tablists stop fitting side by side well before the page
+   does, so this breakpoint is the panel's alone. */
+@media (width <= 860px) {
+  .a2-shell .design-mcp-toolbar {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .a2-shell .design-mcp-tabs {
+    justify-content: flex-start;
+    padding: 3px 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .a2-shell .design-mcp-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .a2-shell .design-mcp-mode-tabs {
+    border-top: 1px solid oklch(95% 0.018 82 / 0.06);
+    padding-top: 8px;
+  }
+}
+
+@media (width <= 640px) {
+  .a2-shell .site-header {
+    padding: 1vw 0;
+  }
+
+  .a2-shell .site-nav {
+    gap: 10px;
+    width: calc(100% - 28px);
+    min-height: 54px;
+    margin: 12px auto;
+    padding: 0;
+  }
+
+  .a2-shell .brand {
+    font-size: 20px;
+  }
+
+  .a2-shell .nav-links {
+    gap: 4px;
+  }
+
+  .a2-shell .nav-links a {
+    padding: 1px 0;
+    font-size: 14px;
+  }
+
+  .a2-shell .hero {
+    padding-top: 132px;
+  }
+
+  .a2-shell .design-mcp-section {
+    gap: 34px;
+    padding: 72px 16px 64px;
+  }
+
+  .a2-shell .design-mcp-copy {
+    gap: 14px;
+  }
+
+  .a2-shell .design-mcp-copy h2 {
+    width: 100%;
+    max-width: 100%;
+    font-size: clamp(38px, 11vw, 48px);
+    text-wrap: balance;
+  }
+
+  .a2-shell .design-mcp-copy p {
+    max-width: 31ch;
+    font-size: 16px;
+  }
+
+  .a2-shell .design-mcp-panel {
+    width: 100%;
+    padding: 8px;
+    border-radius: 22px;
+  }
+
+  .a2-shell .design-mcp-toolbar {
+    display: grid;
+    justify-content: stretch;
+    gap: 7px;
+    min-height: auto;
+    padding: 0 0 8px;
+  }
+
+  /* Five agents wrap onto two rows instead of scrolling horizontally. */
+  .a2-shell .design-mcp-agent-tabs {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+
+  .a2-shell .design-mcp-mode-tabs {
+    border-top: 1px solid #f3efe70f;
+    padding-top: 8px;
+  }
+
+  .a2-shell .design-mcp-tab {
+    min-height: 42px;
+    padding-inline: 13px;
+    font-size: 14px;
+  }
+
+  .a2-shell .design-mcp-mode-tab {
+    min-height: 40px;
+  }
+
+  .a2-shell .design-mcp-steps {
+    grid-template-columns: 1fr;
+    border-radius: 16px;
+  }
+
+  .a2-shell .design-mcp-step {
+    min-height: auto;
+    padding: 22px 20px 24px;
+  }
+
+  .a2-shell .design-mcp-step + .design-mcp-step {
+    border-top: 1px solid #f3efe714;
+    border-left: 0;
+  }
+
+  .a2-shell .design-mcp-step-copy {
+    margin-top: 24px;
+  }
+
+  .a2-shell .design-mcp-action,
+  .a2-shell .design-mcp-action-copy {
+    margin-top: 28px;
+  }
+
+  .a2-shell .design-mcp-shortcut {
+    flex-wrap: wrap;
+    min-height: 52px;
+    padding: 12px 10px 2px;
+    font-size: 12px;
+  }
+
+  .a2-shell .section h2,
+  .a2-shell .section-heading h2,
+  .a2-shell .perspective h2,
+  .a2-shell .contact h2 {
+    font-size: clamp(42px, 13vw, 64px);
+  }
+
+  .a2-shell .signal-marquee {
+    margin-bottom: 52px;
+  }
+
+  .a2-shell .story-bento {
+    grid-template-columns: 1fr;
+  }
+
+  .a2-shell .story-card.wide,
+  .a2-shell .story-card.mid,
+  .a2-shell .story-card.small,
+  .a2-shell .story-card.long,
+  .a2-shell .story-card.tall {
+    grid-column: auto;
+  }
+
+  .a2-shell .story-card {
+    min-height: 190px;
+  }
+
+  .a2-shell .project-visual {
+    aspect-ratio: 4 / 3;
+    min-height: auto;
+  }
+
+  .a2-shell .metric-row,
+  .a2-shell .capability-list {
+    grid-template-columns: 1fr;
+  }
+
+  .a2-shell .section,
+  .a2-shell .section-heading,
+  .a2-shell .story-section,
+  .a2-shell .project,
+  .a2-shell .capabilities,
+  .a2-shell .experience,
+  .a2-shell .perspective,
+  .a2-shell .contact {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* ============================================================================
+   Reduced motion
+   The header's blend-mode animation and the tile flashes are decorative.
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .a2-shell .site-header {
+    animation: none;
+    mix-blend-mode: difference;
+  }
+
+  .a2-shell .perspective-grid-tile {
+    transition: none;
+  }
+
+  .a2-shell .signal-marquee div {
+    animation: none;
+  }
+
+  .a2-shell .nav-links a,
+  .a2-shell .button {
+    transition-duration: 0.15s;
+  }
+}

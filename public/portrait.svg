@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200" role="img" aria-label="Portrait placeholder">
+  <defs>
+    <linearGradient id="pta" x1="0" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#5b74ff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ff8a5c" stop-opacity="0.28"/>
+    </linearGradient>
+    <radialGradient id="ptb" cx="0.5" cy="0.34" r="0.62">
+      <stop offset="0%" stop-color="#a8b6ff" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="#05060a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="ptn"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3"/><feColorMatrix type="saturate" values="0"/></filter>
+  </defs>
+  <rect width="900" height="1200" fill="#0a0c12"/>
+  <rect width="900" height="1200" fill="url(#ptb)"/>
+  <g fill="none" stroke="url(#pta)" stroke-width="1.2">
+    <circle cx="450" cy="432" r="234" opacity="0.7"/>
+    <path d="M144 1200 C 144 816.0000000000001, 306 720, 450 720 C 594 720, 756 816.0000000000001, 756 1200" opacity="0.7"/>
+    <circle cx="450" cy="432" r="306" opacity="0.22"/>
+  </g>
+  <rect width="900" height="1200" filter="url(#ptn)" opacity="0.07"/>
+  <text x="450" y="1166" display="none" text-anchor="middle" font-family="ui-monospace, monospace" font-size="30" letter-spacing="6" fill="#ffffff" opacity="0.4">PORTRAIT</text>
+</svg>
