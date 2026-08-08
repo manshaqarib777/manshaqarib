@@ -3,34 +3,32 @@
 import Lenis from "lenis";
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
-  useState,
   type ReactNode,
 } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { useReducedMotion } from "@/hooks/useMediaQuery";
-import { clamp } from "@/lib/utils";
 
 interface SmoothScrollContextValue {
-  /** 0 → 1 progress through the whole document. */
-  progress: number;
-  /** Scroll velocity in px/frame; negative when scrolling up. */
-  velocityRef: React.RefObject<number>;
-  scrollTo: (target: string | number | HTMLElement, offset?: number) => void;
+  /** Pause the scroll — used while a full-screen overlay is up. */
   stop: () => void;
+  /** Resume it. */
   start: () => void;
 }
 
-const SmoothScrollContext = createContext<SmoothScrollContextValue | null>(null);
+const SmoothScrollContext = createContext<SmoothScrollContextValue | null>(
+  null,
+);
 
 export function useSmoothScroll() {
   const context = useContext(SmoothScrollContext);
   if (!context) {
-    throw new Error("useSmoothScroll must be used inside <SmoothScrollProvider>");
+    throw new Error(
+      "useSmoothScroll must be used inside <SmoothScrollProvider>",
+    );
   }
   return context;
 }
@@ -44,26 +42,27 @@ export function useSmoothScroll() {
  *     loops would produce sub-frame drift and visible jitter on pinned sections.
  *  2. With `prefers-reduced-motion` we never construct Lenis at all — the user
  *     gets native scrolling, and ScrollTrigger keeps working untouched.
+ *
+ * The context deliberately exposes nothing but `stop`/`start`. It used to also
+ * publish scroll progress and velocity, which meant a React state update on
+ * every scroll frame — a re-render of the provider and every consumer, once per
+ * frame, for values that had no readers left. Anything that needs the scroll
+ * position reads it from ScrollTrigger, which is already measuring it.
  */
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
-  const velocityRef = useRef(0);
-  const [progress, setProgress] = useState(0);
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (prefersReducedMotion) {
-      const onScroll = () => {
-        const max = document.documentElement.scrollHeight - window.innerHeight;
-        setProgress(max > 0 ? clamp(window.scrollY / max) : 0);
-      };
-      onScroll();
-      window.addEventListener("scroll", onScroll, { passive: true });
-      return () => window.removeEventListener("scroll", onScroll);
-    }
+    if (prefersReducedMotion) return;
 
     const lenis = new Lenis({
-      duration: 1.15,
+      // 0.7, down from 1.15. Every frame of the glide costs a `window.scrollTo`
+      // and a `ScrollTrigger.update()`, so a long tail keeps the whole page
+      // painting well after the gesture ends — measured at ~40% of frames over
+      // 32ms while scrolling, against 27% with Lenis out entirely. Shortening
+      // the tail keeps the smoothing but stops paying for it as long.
+      duration: 0.7,
       // Exponential ease-out: immediate response, long soft tail.
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
@@ -74,18 +73,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     });
     lenisRef.current = lenis;
 
-    const onLenisScroll = ({
-      progress: p,
-      velocity,
-    }: {
-      progress: number;
-      velocity: number;
-    }) => {
-      velocityRef.current = velocity;
-      setProgress(clamp(p));
-      ScrollTrigger.update();
-    };
-
+    const onLenisScroll = () => ScrollTrigger.update();
     lenis.on("scroll", onLenisScroll);
 
     const raf = (time: number) => lenis.raf(time * 1000);
@@ -103,35 +91,13 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     };
   }, [prefersReducedMotion]);
 
-  const scrollTo = useCallback(
-    (target: string | number | HTMLElement, offset = 0) => {
-      if (lenisRef.current) {
-        lenisRef.current.scrollTo(target, {
-          offset,
-          duration: 1.4,
-          easing: (t) => 1 - Math.pow(1 - t, 4),
-        });
-        return;
-      }
-
-      // Reduced-motion / no-Lenis fallback.
-      const node =
-        typeof target === "string" ? document.querySelector(target) : target;
-      if (typeof target === "number") {
-        window.scrollTo({ top: target + offset });
-      } else if (node instanceof HTMLElement) {
-        window.scrollTo({ top: node.offsetTop + offset });
-      }
-    },
-    [],
-  );
-
-  const stop = useCallback(() => lenisRef.current?.stop(), []);
-  const start = useCallback(() => lenisRef.current?.start(), []);
-
+  // Stable across the provider's life, so consumers never re-render for this.
   const value = useMemo<SmoothScrollContextValue>(
-    () => ({ progress, velocityRef, scrollTo, stop, start }),
-    [progress, scrollTo, stop, start],
+    () => ({
+      stop: () => lenisRef.current?.stop(),
+      start: () => lenisRef.current?.start(),
+    }),
+    [],
   );
 
   return (

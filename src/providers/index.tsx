@@ -2,23 +2,19 @@
 
 import type { ReactNode } from "react";
 import { SmoothScrollProvider } from "./SmoothScrollProvider";
-import { CursorProvider } from "./CursorProvider";
-import { LoadingProvider } from "./LoadingProvider";
 
 /**
- * Provider order matters: smooth scroll is the outermost because the preloader
- * (inside LoadingProvider's tree) needs to lock and release it.
+ * App-wide providers.
+ *
+ * Only one survives: smooth scroll. A cursor provider and a loading provider
+ * used to sit alongside it, both belonging to the design this site replaced —
+ * the cursor context had no consumers left at all, and the loading flags were
+ * never flipped by anything, so `isLoading` was permanently `true`. Neither was
+ * doing work; both are gone rather than kept as shapes something might one day
+ * fill.
  */
 export function Providers({ children }: { children: ReactNode }) {
-  return (
-    <SmoothScrollProvider>
-      <LoadingProvider>
-        <CursorProvider>{children}</CursorProvider>
-      </LoadingProvider>
-    </SmoothScrollProvider>
-  );
+  return <SmoothScrollProvider>{children}</SmoothScrollProvider>;
 }
 
 export { useSmoothScroll } from "./SmoothScrollProvider";
-export { useCursor, useCursorProps } from "./CursorProvider";
-export { useLoading } from "./LoadingProvider";

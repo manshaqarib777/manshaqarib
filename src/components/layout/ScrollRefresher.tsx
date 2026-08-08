@@ -3,25 +3,27 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { ScrollTrigger } from "@/lib/gsap";
-import { useLoading } from "@/providers";
 
 /**
  * Keeps ScrollTrigger's cached measurements honest.
  *
- * ScrollTrigger measures element positions once and caches them. Three things
- * invalidate those measurements without triggering a resize event, and each one
+ * ScrollTrigger measures element positions once and caches them. Two things
+ * invalidate those measurements without firing a resize event, and each one
  * silently breaks every trigger below the change:
  *
  *  1. Web fonts swapping in — line counts change, so everything below reflows.
- *  2. The preloader unmounting — the page's height changes when scroll unlocks.
- *  3. Client-side navigation — an entirely new document height.
+ *  2. Client-side navigation — an entirely new document height.
  *
  * Refreshing on each is far cheaper than the alternative of never trusting the
  * cache (`ScrollTrigger.config({ autoRefreshEvents })` would rerun on far more).
+ *
+ * A third trigger used to be listed here — a full-page loader unmounting — keyed
+ * off a `LoadingProvider` flag that nothing ever flipped. The home page's
+ * `SiteLoader` owns its own timing and releases the scroll itself, and its
+ * unmount does not change document height, so the dependency was dead weight.
  */
 export function ScrollRefresher() {
   const pathname = usePathname();
-  const { isLoading } = useLoading();
 
   // Fonts.
   useEffect(() => {
@@ -37,15 +39,15 @@ export function ScrollRefresher() {
     };
   }, []);
 
-  // Preloader hand-off and route changes. A double rAF lets the browser finish
-  // layout for the new content before positions are re-measured.
+  // Route changes. A double rAF lets the browser finish layout for the new
+  // content before positions are re-measured.
   useEffect(() => {
     let frame = 0;
     frame = requestAnimationFrame(() => {
       frame = requestAnimationFrame(() => ScrollTrigger.refresh());
     });
     return () => cancelAnimationFrame(frame);
-  }, [pathname, isLoading]);
+  }, [pathname]);
 
   return null;
 }

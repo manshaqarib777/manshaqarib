@@ -1,0 +1,767 @@
+/* ============================================================================
+   Home route
+   ----------------------------------------------------------------------------
+   Everything on the home page that a Tailwind utility genuinely cannot express:
+   `nth-child` cycles, pseudo-element content, `mask-image`, `:has()`, and the
+   handful of rules driven by custom properties that JavaScript writes.
+
+   Presentation that *can* be a utility is one, and lives with the markup —
+   `src/components/home/styles.ts` holds the shared class combinations.
+
+   Scoped under `.portfolio` so nothing here can leak into another route.
+   ========================================================================= */
+
+/* ============================================================================
+   Cursor lens
+   A cream disc that follows the pointer and blends in `difference`, so it
+   inverts whatever it crosses. Over the header — which also blends in
+   `difference` — the two compose, which is where the inversion comes from.
+
+   The disc itself is utilities on the element; only the swell stays, because it
+   keys off a class on <body>.
+   ========================================================================= */
+body.cursor-expanded .portfolio .cursor-lens {
+  transform: scale(0.5);
+}
+
+/* ============================================================================
+   Perspective grid
+   A real 40 × 40 tile grid rather than painted gradient lines: each tile is an
+   independent hover target that flashes its own colour, which gradients cannot
+   do. That interaction is the reason for the DOM cost.
+
+   The grid's three containers carry utilities; only the tile stays here. Two
+   reasons, both binding: the four-colour cycle needs `nth-child`, and at 3200
+   tiles across the two grids a utility list per element would add hundreds of
+   kilobytes of HTML.
+   ========================================================================= */
+.portfolio .perspective-grid-tile {
+  --tile-color: #ef6461;
+  min-width: 1px;
+  min-height: 1px;
+  border: 1px solid #9ca3af38;
+  background: 0 0;
+  transition:
+    background-color 1.5s,
+    border-color 1.5s;
+}
+
+/* Four colours cycled across the grid. */
+.portfolio .perspective-grid-tile:nth-child(4n + 2) {
+  --tile-color: #2aa9df;
+}
+.portfolio .perspective-grid-tile:nth-child(4n + 3) {
+  --tile-color: #35ad62;
+}
+.portfolio .perspective-grid-tile:nth-child(4n) {
+  --tile-color: #f4d62c;
+}
+
+/* Touch devices have no hover to give, and would only pay the cost. */
+@media (hover: hover) and (pointer: fine) {
+  .portfolio .perspective-grid-tile:hover {
+    /* Lights instantly, then fades back over the 1.5s base transition. */
+    background-color: var(--tile-color);
+    border-color: var(--tile-color);
+    transition-duration: 0s;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .portfolio .perspective-grid-tile:hover {
+      border-color: color-mix(in srgb, var(--tile-color) 78%, white);
+    }
+  }
+}
+
+/* A 72px graph-paper grid, masked to fade at the top and bottom edges. */
+.portfolio .design-mcp-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(oklch(95% 0.018 82 / 0.025) 1px, #0000 1px),
+    linear-gradient(90deg, oklch(95% 0.018 82 / 0.025) 1px, #0000 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(#0000, #000 18% 82%, #0000);
+  -webkit-mask-image: linear-gradient(#0000, #000 18% 82%, #0000);
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+  /* The whole field reacts when the button inside it is hovered. */
+  .portfolio .design-mcp-action-copy:has(.design-mcp-copy-button:hover) {
+    background: oklch(52% 0.1 121 / 0.19);
+    border-color: oklch(87% 0.17 121 / 0.26);
+  }
+}
+
+/* ============================================================================
+   Depth backdrops
+   ========================================================================= */
+/* Two concentric rings, drawn in `currentColor` so each backdrop variant tints
+   them by setting `color` alone. */
+.portfolio .depth-backdrop::before,
+.portfolio .depth-backdrop::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  aspect-ratio: 1;
+  border: 1px solid;
+  border-radius: 50%;
+}
+
+.portfolio .depth-backdrop::before {
+  width: min(58vw, 820px);
+  opacity: 0.14;
+}
+
+.portfolio .depth-backdrop::after {
+  width: min(22vw, 320px);
+  opacity: 0.18;
+}
+
+.portfolio .depth-backdrop-intro {
+  color: #704e207a;
+  background:
+    radial-gradient(circle at 17% 24%, #d2973d33, #0000 24%),
+    radial-gradient(circle at 82% 76%, #4269a924, #0000 25%),
+    repeating-linear-gradient(118deg, #15140f0a 0 1px, #0000 1px 92px);
+  mask-image: linear-gradient(#0000, #000 22% 78%, #0000);
+  -webkit-mask-image: linear-gradient(#0000, #000 22% 78%, #0000);
+}
+
+.portfolio .depth-backdrop-intro::before {
+  top: 8%;
+  left: 4%;
+}
+
+.portfolio .depth-backdrop-intro::after {
+  bottom: 8%;
+  right: 13%;
+}
+
+.portfolio .depth-backdrop-story {
+  color: #dab87680;
+  background:
+    radial-gradient(circle at 76% 20%, #4675cc2e, #0000 25%),
+    radial-gradient(circle at 16% 78%, #dab87621, #0000 28%),
+    linear-gradient(#f5f1e80a 1px, #0000 1px) 0 0 / 88px 88px,
+    linear-gradient(90deg, #f5f1e80a 1px, #0000 1px) 0 0 / 88px 88px;
+  mask-image: radial-gradient(circle at 50% 48%, #000 25%, #0000 78%);
+  -webkit-mask-image: radial-gradient(circle at 50% 48%, #000 25%, #0000 78%);
+}
+
+.portfolio .depth-backdrop-story::before {
+  top: 18%;
+  right: 3%;
+}
+
+.portfolio .depth-backdrop-story::after {
+  bottom: 13%;
+  left: 16%;
+}
+
+/* Safety net: if a scroll tween never runs — script blocked, ScrollTrigger
+   mis-measuring, reduced motion — the content must still be visible. The
+   reference carries the same rule for the same reason. */
+.portfolio .intro-section > :not(.depth-backdrop),
+.portfolio .story-card,
+.portfolio .project-heading,
+.portfolio .project-visual,
+.portfolio .project .case-link,
+.portfolio .project .metric,
+.portfolio .project-brief > div,
+.portfolio .capabilities .section-heading > *,
+.portfolio .capability,
+.portfolio .experience > .section-kicker,
+.portfolio .experience-row,
+.portfolio .perspective-copy > *,
+.portfolio .contact-copy,
+.portfolio .contact-actions {
+  opacity: 1 !important;
+  visibility: visible !important;
+  filter: none !important;
+}
+
+/* Translating -50% works only because the track holds the words twice — the
+   seam always lands on an identical copy. */
+@keyframes marquee-slide {
+  0% {
+    transform: translate(0);
+  }
+  to {
+    transform: translate(-50%);
+  }
+}
+
+/* ============================================================================
+   Work
+   The second light section. Projects alternate ground tone, and each one owns a
+   cursor-tracked aura plus a tilting cover.
+   ========================================================================= */
+/* A second, static wash that only appears on hover — separate from the aura,
+   which follows the pointer. */
+.portfolio .project::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 78% 18%, #dab87614, #0000 24%),
+    radial-gradient(circle at 12% 76%, #b0c4e012, #0000 28%);
+  transition: opacity 0.26s;
+}
+
+.portfolio .project:hover::before {
+  opacity: 1;
+}
+
+/* ------------------------------------------------------------- Cover visual */
+/* The pointer handler writes these six variables; every visual effect below
+   reads them, so the JS never touches a style property directly. */
+.portfolio .project-visual-link {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --image-x: 0px;
+  --image-y: 0px;
+  --cover-x: 50%;
+  --cover-y: 50%;
+
+  perspective: 1100px;
+  transform-style: preserve-3d;
+  outline: 1px solid #15140f14;
+  outline-offset: -1px;
+  transition:
+    box-shadow 0.24s,
+    outline-color 0.18s;
+}
+
+.portfolio .project-visual-link::before,
+.portfolio .project-visual-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Bottom scrim, wiped up from the bottom edge on hover. */
+.portfolio .project-visual-link::before {
+  background: linear-gradient(#0000 48%, #05070a33 70%, #05070aa8 100%);
+  clip-path: inset(100% 0 0);
+  transition: clip-path 0.24s var(--ease-silk);
+}
+
+/* Cursor-tracked sheen. */
+.portfolio .project-visual-link::after {
+  background: radial-gradient(
+    360px circle at var(--cover-x) var(--cover-y),
+    #fff3,
+    transparent 62%
+  );
+  mix-blend-mode: normal;
+  opacity: 0;
+  transition: opacity 0.18s;
+}
+
+/* Keyboard users get the same scrim reveal as a hover. */
+.portfolio .project-visual-link:focus-visible::before,
+.portfolio .project-visual-link:active::before {
+  clip-path: inset(48% 0 0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+  .portfolio .project-visual-link:hover {
+    outline-color: #05070a70;
+    box-shadow: 0 30px 70px #05070a33;
+  }
+
+  .portfolio .project-visual-link:hover::before {
+    clip-path: inset(48% 0 0);
+  }
+
+  .portfolio .project-visual-link:hover::after {
+    opacity: 1;
+  }
+
+  /* `video` as well as `img`: a project with a captured walkthrough tilts the
+     clip, one without tilts the still. */
+  .portfolio .project-visual-link :is(img, video) {
+    transform: translate3d(var(--image-x), var(--image-y), 0)
+      rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale(1.01);
+  }
+
+  .portfolio .project-visual-link:hover :is(img, video) {
+    transform: translate3d(var(--image-x), var(--image-y), 0)
+      rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) scale(1.065);
+    filter: saturate(1.08) contrast(1.03);
+  }
+
+  .portfolio .case-link:hover::after {
+    transform: translate(3px);
+  }
+}
+
+/* --------------------------------------------------------------- Case link */
+/* The chevron is a Material Symbols ligature drawn by CSS rather than a span,
+   so the link's text content stays exactly the label. */
+.portfolio .case-link::after {
+  content: "expand_circle_right";
+  display: inline-block;
+  margin-left: 10px;
+  font-family: "Material Symbols Rounded";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: "liga";
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 600,
+    "GRAD" 0,
+    "opsz" 48;
+  transition: transform 0.18s var(--ease-silk);
+}
+
+/* ============================================================================
+   Career — the fanned deck
+   ----------------------------------------------------------------------------
+   The mechanic is Supah's circular carousel. Three things carry it, and all
+   three live here rather than in JS:
+
+     transform-origin   Every card pivots about its own bottom-left corner. That
+                        is the whole trick: rotating about a corner swings a card
+                        through an arc, where rotating about its centre would only
+                        spin it in place.
+     one variable       `--active` is a card's signed distance from the current
+                        one over the card count. Offset, rotation and depth are
+                        all read off it, so JS sets one number per card and never
+                        touches a style property.
+     the transition     `cubic-bezier(0, .02, 0, 1)` is almost entirely
+                        deceleration. A card leaves the instant it is asked to and
+                        then glides a very long way in. Because `--active` changes
+                        in discrete steps, this transition *is* the motion — there
+                        is no per-frame work behind it at all.
+
+   The multipliers below are per-step values, not per-deck ones. `--active` is
+   already divided by the card count, so each of them is multiplied back up by
+   `--items` to cancel that division out — which is the only reason the fan looks
+   the same whether the timeline holds six engagements or fifteen.
+
+   `--items` therefore *must* equal the count `--active` was divided by. It used
+   to be hardcoded to 6 here while the count came from the data, so adding a
+   single slide silently compressed the whole fan. It is now set by
+   `CareerCarousel` from `CAREER_SLIDES.length`, so the two cannot drift.
+   ========================================================================= */
+.portfolio .career-stage {
+  /* The card is the scrolling version's slide, at the same size — 45% of a wide
+     viewport, as it was there. Both axes are explicit because every card is
+     absolutely positioned and centred by negative margin, which needs to know
+     the box it is halving. */
+  --card-w: clamp(285px, 39vw, 560px);
+  --card-h: clamp(400px, 45vw, 640px);
+
+  height: calc(var(--card-h) + clamp(64px, 7vw, 112px));
+
+  /* The deck only ever fans one way, because a timeline has an end. At the
+     newest engagement every other card is off to one side and the other half of
+     the section is empty; at the oldest it is the mirror of that. `--pos` runs
+     0 -> 1 across the deck and slides the whole stage against it, so the fan
+     stays roughly centred in the section wherever you are in it. The active card
+     drifts off centre by design — a fraction of what the void was. */
+  transform: translateX(calc((var(--pos) - 0.5) * clamp(120px, 20vw, 360px)));
+  transition: transform 0.8s cubic-bezier(0, 0.02, 0, 1);
+}
+
+.portfolio .career-card {
+  /* 54% / 13% / 8deg per step. `--items` is inherited from `.career-stage`,
+     which the component sets from the slide count.
+     The original's 80% / 20% / 12deg is tuned for a deck whose opacity ramp hides
+     everything past the third card. This one shows more of its deck, so the same
+     per-step values threw the outer cards clean off the section and rotated them
+     past reading. Tightening the step is what keeps the arc legible end to end. */
+  --x: calc(var(--active) * var(--items) * 54%);
+  --y: calc(var(--active) * var(--items) * 13%);
+  --rot: calc(var(--active) * var(--items) * 8deg);
+  /* One card either side stays properly legible and the second is a ghost, so
+     the deck reads as a timeline continuing past both edges rather than as three
+     loose cards. */
+  --opacity: calc(1 - var(--dist) * 0.42);
+
+  z-index: var(--zIndex);
+  width: var(--card-w);
+  height: var(--card-h);
+  margin: calc(var(--card-h) * -0.5) 0 0 calc(var(--card-w) * -0.5);
+  transform-origin: 0% 100%;
+  transform: translate(var(--x), var(--y)) rotate(var(--rot));
+  opacity: var(--opacity);
+  will-change: transform, opacity;
+  transition:
+    transform 0.8s cubic-bezier(0, 0.02, 0, 1),
+    opacity 0.8s cubic-bezier(0, 0.02, 0, 1);
+}
+
+/* A card behind the front one is a target for selecting, not for reading, so its
+   own controls must not intercept the click that would bring it forward. */
+.portfolio .career-card:not([data-active="true"]) {
+  cursor: pointer;
+}
+
+.portfolio .career-card:not([data-active="true"]) :is(a, button) {
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- Position -- */
+.portfolio .career-dot {
+  width: 22px;
+  background: #f5f1e83d;
+  transition:
+    width 0.4s var(--ease-silk),
+    background-color 0.4s var(--ease-silk);
+}
+
+.portfolio .career-dot[data-active="true"] {
+  width: 46px;
+  background: var(--color-accent);
+}
+
+/* The deck is still a deck without the glide — the cards simply arrive in their
+   fanned positions instead of travelling to them, which is the end state of the
+   motion rather than a different design. */
+@media (prefers-reduced-motion: reduce) {
+  .portfolio .career-card {
+    transition: none;
+    will-change: auto;
+  }
+}
+
+/* ============================================================================
+   Capabilities
+   ========================================================================= */
+.portfolio .depth-backdrop-capabilities {
+  color: #3454846b;
+  background:
+    radial-gradient(circle at 84% 28%, #4269a929, #0000 24%),
+    repeating-linear-gradient(132deg, #15140f0a 0 1px, #0000 1px 84px);
+  mask-image: linear-gradient(90deg, #0000, #000 18% 86%, #0000);
+  -webkit-mask-image: linear-gradient(90deg, #0000, #000 18% 86%, #0000);
+}
+
+.portfolio .depth-backdrop-capabilities::before {
+  top: 4%;
+  right: 8%;
+}
+
+.portfolio .depth-backdrop-capabilities::after {
+  bottom: 8%;
+  left: 8%;
+}
+
+/* ============================================================================
+   Experience
+   ========================================================================= */
+.portfolio .depth-backdrop-experience {
+  color: #71491e6b;
+  background:
+    radial-gradient(circle at 18% 36%, #c5843026, #0000 24%),
+    repeating-radial-gradient(
+      circle at 84% 52%,
+      #0000 0 74px,
+      #15140f0a 75px 76px
+    );
+  mask-image: linear-gradient(#0000, #000 18% 82%, #0000);
+  -webkit-mask-image: linear-gradient(#0000, #000 18% 82%, #0000);
+}
+
+.portfolio .depth-backdrop-experience::before {
+  bottom: 1%;
+  left: 7%;
+}
+
+.portfolio .depth-backdrop-experience::after {
+  top: 18%;
+  right: 12%;
+}
+
+/* ============================================================================
+   Perspective
+   ========================================================================= */
+.portfolio .depth-backdrop-perspective {
+  color: #3252846b;
+  background:
+    radial-gradient(circle at 74% 24%, #436cb029, #0000 24%),
+    radial-gradient(circle at 22% 82%, #c3843421, #0000 26%),
+    repeating-linear-gradient(42deg, #15140f0a 0 1px, #0000 1px 96px);
+  mask-image: radial-gradient(#000 24%, #0000 78%);
+  -webkit-mask-image: radial-gradient(#000 24%, #0000 78%);
+}
+
+.portfolio .depth-backdrop-perspective::before {
+  bottom: 8%;
+  right: 5%;
+}
+
+.portfolio .depth-backdrop-perspective::after {
+  top: 8%;
+  left: 14%;
+}
+
+/* ============================================================================
+   Contact
+   Back to the dark ground, with the same tile grid as the hero — flatter and
+   quieter, per the contact variant.
+   ========================================================================= */
+/* Tooltip drawn from the element's own data attribute — no extra markup. */
+.portfolio .social-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  width: max-content;
+  max-width: 180px;
+  padding: 7px 10px;
+  border: 1px solid #f5f1e824;
+  border-radius: 999px;
+  background: oklch(14% 0.012 260);
+  color: var(--color-ink);
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px) scale(0.97);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 0.15s var(--ease-silk),
+    transform 0.15s var(--ease-silk);
+}
+
+/* Keyboard focus gets the tooltip too, not just hover. */
+.portfolio .social-icon:hover::after,
+.portfolio .social-icon:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%) scale(1);
+}
+
+/* ============================================================================
+   Reduced motion
+   `globals.css` already clamps every animation and transition under this query,
+   so only what it cannot express stays here. The header, the marquee and the
+   lens each carry a `motion-reduce:` utility instead; the tile is here because
+   the tile itself is.
+
+   Note this must be `transition: none`, not a shorter duration: the global rule
+   sets `transition-duration: 0.15s !important`, which no local duration can
+   beat. Zeroing `transition-property` is what actually stops the flash.
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .portfolio .perspective-grid-tile {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+   Site loader
+   ----------------------------------------------------------------------------
+   Driven entirely by one attribute, `data-phase`, so the component owns the
+   timing and CSS owns the motion:
+
+     counting  the digits count up on the near-black ground
+     entering  the cream panel slides up over them, the two banners fly in from
+               opposite sides and their wordmark tracks scroll past
+     exiting   the panel lifts away, revealing the page behind it
+
+   The banner rotations are why the panel and banners are oversized (105% wide,
+   pulled 5% left): a rotated bar has to overhang or its corners cut into the
+   viewport.
+   ========================================================================= */
+.portfolio .site-loader {
+  /* Beats every other layer on the page. It has to beat the header, which is sticky and
+     blends in `difference`. */
+  z-index: 2147483646;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--color-charcoal);
+  color: var(--color-ink);
+}
+
+/* The opt-out hook. `SiteLoader` also tracks this in module scope, so a
+   client-side return to `/` does not replay the intro. */
+html.skip-home-loader .portfolio .site-loader {
+  display: none;
+}
+
+.portfolio .site-loader-progress {
+  font-size: clamp(6rem, 15vw, 12rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  /* Tabular figures: without them the digits reflow on every tick and the
+     counter jitters as it counts. */
+  font-variant-numeric: tabular-nums;
+  opacity: 1;
+  transition: opacity 0.12s ease-out;
+}
+
+/* The digits belong to the counting phase alone. `visibility` as well as
+   `opacity` so they cannot be read by a screen reader or hit by the pointer
+   once the panel is over them. */
+.portfolio .site-loader:not([data-phase="counting"]) .site-loader-progress {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.portfolio .site-loader-page-up {
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--color-ink);
+  color: var(--color-ink);
+  will-change: transform;
+  transform: translateY(100%);
+  transition: transform 1.2s cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+.portfolio .site-loader[data-phase="entering"] .site-loader-page-up {
+  transform: translateY(0);
+}
+
+/* Faster on the way out than on the way in — the exit is the part the visitor
+   is waiting through. */
+.portfolio .site-loader[data-phase="exiting"] .site-loader-page-up {
+  transition-duration: 1s;
+  transform: translateY(-100%);
+}
+
+.portfolio .site-loader-banners {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.portfolio .site-loader-banner {
+  width: 105%;
+  margin-left: -5%;
+  overflow: hidden;
+  background: var(--color-charcoal);
+  will-change: transform;
+}
+
+.portfolio .site-loader-banner:first-child {
+  margin-bottom: 4.17vw;
+  transform-origin: 100% 100%;
+  transform: translateX(100vw) rotate(2deg);
+}
+
+.portfolio .site-loader-banner:last-child {
+  transform-origin: 100% 0;
+  transform: translateX(-100vw) rotate(-2deg);
+}
+
+.portfolio .site-loader-banner-track {
+  width: max-content;
+  padding: 2vw 0;
+  font-size: clamp(5rem, 9vw, 11rem);
+  font-weight: 700;
+  line-height: 0.84;
+  letter-spacing: -0.055em;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.portfolio .site-loader-banner:first-child .site-loader-banner-track {
+  transform: translateX(140vw);
+}
+
+.portfolio .site-loader-banner:last-child .site-loader-banner-track {
+  transform: translateX(-140vw);
+}
+
+/* Both phases run the same entrance: `exiting` inherits it so the banners keep
+   travelling while the panel lifts, rather than freezing on the way out. */
+.portfolio .site-loader[data-phase="entering"] .site-loader-banner,
+.portfolio .site-loader[data-phase="exiting"] .site-loader-banner {
+  animation: 1.6s cubic-bezier(0.19, 1, 0.22, 1) 0.3s forwards
+    loader-banner-enter;
+}
+
+.portfolio .site-loader[data-phase="entering"] .site-loader-banner:last-child,
+.portfolio .site-loader[data-phase="exiting"] .site-loader-banner:last-child {
+  animation-name: loader-banner-enter-reverse;
+  animation-delay: 0.4s;
+}
+
+.portfolio .site-loader[data-phase="entering"] .site-loader-banner-track,
+.portfolio .site-loader[data-phase="exiting"] .site-loader-banner-track {
+  animation: 8s cubic-bezier(0.19, 1, 0.22, 1) 0.3s forwards
+    loader-banner-scroll;
+}
+
+.portfolio
+  .site-loader[data-phase="entering"]
+  .site-loader-banner:last-child
+  .site-loader-banner-track,
+.portfolio
+  .site-loader[data-phase="exiting"]
+  .site-loader-banner:last-child
+  .site-loader-banner-track {
+  animation-name: loader-banner-scroll-reverse;
+  animation-delay: 0.4s;
+}
+
+/* Prefixed `loader-*` so they cannot collide with the app's own keyframes. */
+@keyframes loader-banner-enter {
+  to {
+    transform: translateX(0) rotate(2deg);
+  }
+}
+
+@keyframes loader-banner-enter-reverse {
+  to {
+    transform: translateX(0) rotate(-2deg);
+  }
+}
+
+@keyframes loader-banner-scroll {
+  to {
+    transform: translateX(-80vw);
+  }
+}
+
+@keyframes loader-banner-scroll-reverse {
+  to {
+    transform: translateX(80vw);
+  }
+}
+
+@media (width <= 640px) {
+  .portfolio .site-loader-banner:first-child {
+    margin-bottom: 16vw;
+  }
+
+  .portfolio .site-loader-banner-track {
+    padding: 5vw 0;
+    font-size: 12vw;
+  }
+}

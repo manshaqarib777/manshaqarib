@@ -2,71 +2,90 @@
 
 /* ============================================================================
    Design tokens
-   One place for colour, type, easing and rhythm. Everything else in the app
-   composes from these, so a palette or type change never requires touching a
-   component.
+   ----------------------------------------------------------------------------
+   One warm editorial palette: cream and amber on charcoal, inverting to dark
+   ink on cream paper for the light sections. Everything in the app composes
+   from these, so a palette or type change never requires touching a component.
+
+   There used to be a second, cooler scale here (`ink-950`, `accent-500`,
+   `ember-400`) belonging to the design this site replaced. Nothing rendered it
+   any more except the 404 page, which is why that page looked like a different
+   product. That page now uses the palette below, and the cool scale is gone.
    ========================================================================= */
 @theme {
-  /* Neutral scale — cool, near-black. `ink-950` is the page ground. */
-  --color-ink-950: #050609;
-  --color-ink-900: #0a0c12;
-  --color-ink-850: #0f1219;
-  --color-ink-800: #151922;
-  --color-ink-700: #1e2430;
-  --color-ink-600: #2b3342;
-  --color-ink-400: #6a7385;
-  --color-ink-200: #b6bccb;
-  --color-ink-050: #edeff4;
+  /* --- Dark ground ------------------------------------------------------- */
+  /* The page ground for every dark section. */
+  --color-charcoal: oklch(11% 0.01 260);
+  /* Primary text on the dark ground. */
+  --color-ink: oklch(95% 0.018 82);
+  /* Secondary text on the dark ground. */
+  --color-muted: oklch(74% 0.028 78);
+  /* Hairline rules and borders on the dark ground. */
+  --color-line: #f5f1e824;
+  /* The single accent: warm amber. Focus, markers, active states. */
+  --color-accent: oklch(78% 0.086 78);
 
-  /* Primary accent — periwinkle. Used for focus, links and WebGL highlights. */
-  --color-accent-600: #4055ff;
-  --color-accent-500: #5b74ff;
-  --color-accent-400: #8296ff;
-  --color-accent-300: #a8b6ff;
+  /* --- Light "paper" sections -------------------------------------------- */
+  --color-paper: oklch(91% 0.024 82);
+  --color-paper-ink: oklch(15% 0.012 260);
+  --color-paper-body: oklch(39% 0.022 76);
+  --color-paper-kicker: oklch(44% 0.055 72);
 
-  /* Secondary accent — warm, for contrast in badges and gradients. */
-  --color-ember-500: #ff8a5c;
-  --color-ember-400: #ffab84;
+  /* --- Work section grounds, which alternate row by row ------------------- */
+  --color-work: oklch(94% 0.012 88);
+  --color-work-alt: oklch(96% 0.01 88);
+  --color-work-ink: oklch(11% 0.01 260);
+  /* The eyebrow on those grounds. This was `oklch(54% …)` as an inline value,
+     which measures 4.25:1 against the darker of the two grounds — under AA for
+     12px text, and it is 12px text. At 50% it is 5.03:1 and 5.35:1, in line with
+     the other light-section tokens above. */
+  --color-work-kicker: oklch(50% 0.03 260);
 
+  /* --- Starter panel ramp ------------------------------------------------- */
+  --color-mcp-muted: oklch(72% 0.022 78);
+  --color-mcp-panel: oklch(20% 0.012 260);
+  --color-mcp-surface: oklch(14.5% 0.009 260);
+  --color-mcp-warm: oklch(68% 0.14 40);
+  --color-mcp-link: oklch(87% 0.17 121);
+
+  /* --- Type --------------------------------------------------------------- */
+  /* Inter is load-bearing rather than decorative. The site uses 20 distinct
+     weights, 14 of them non-standard (470, 520, 560, 650, 760 …), and those only
+     render as authored against a *variable* face. Inter from `next/font` is
+     variable across 100–900; Helvetica Neue and Arial are static, so every one
+     of those weights would snap to 400 or 700 — and `font-synthesis: none`
+     blocks even synthetic bolding.
+
+     Neue Haas Grotesk Display is served from Adobe Fonts on the original and
+     cannot be self-hosted here, so the Typekit names stay first: they resolve if
+     a kit is ever loaded, and Inter is the closest free neo-grotesque stand-in. */
+  --font-display:
+    "neue-haas-grotesk-display-pro-mrz1wm", "neue-haas-grotesk-display",
+    var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-sora), var(--font-inter), ui-sans-serif, sans-serif;
-  --font-mono: var(--font-mono-code), ui-monospace, monospace;
 
-  /* Shared easing curve — the site's single "voice" for motion. */
-  --ease-silk: cubic-bezier(0.16, 1, 0.3, 1);
+  /* --- Motion -------------------------------------------------------------- */
+  /* The site's single voice for motion. */
+  --ease-silk: cubic-bezier(0.23, 1, 0.32, 1);
+  /* Long, soft deceleration — the loader banners and the route curtain. */
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
-
-  --animate-marquee: marquee 38s linear infinite;
-  --animate-drift: drift 9s ease-in-out infinite;
-
-  @keyframes marquee {
-    from {
-      transform: translate3d(0, 0, 0);
-    }
-    to {
-      transform: translate3d(-50%, 0, 0);
-    }
-  }
-
-  @keyframes drift {
-    0%,
-    100% {
-      transform: translate3d(0, 0, 0);
-    }
-    50% {
-      transform: translate3d(0, -10px, 0);
-    }
-  }
-
-  @keyframes logo-draw {
-    from {
-      stroke-dashoffset: 1;
-    }
-    to {
-      stroke-dashoffset: 0;
-    }
-  }
 }
+
+/* ============================================================================
+   Custom variants
+   ----------------------------------------------------------------------------
+   The design is authored against `width <= N` breakpoints. Tailwind's
+   `max-[980px]` compiles to `not all and (min-width: 980px)` — i.e. `< 980px` —
+   which differs by one pixel at the boundary, so these carry the exact
+   conditions. Read `to-lg` as "up to and including lg".
+
+   `fine` keeps the `hover: hover and pointer: fine` guard, so touch devices
+   never inherit hover-only styling.
+   ========================================================================= */
+@custom-variant to-lg (@media (width <= 980px));
+@custom-variant to-md (@media (width <= 860px));
+@custom-variant to-sm (@media (width <= 640px));
+@custom-variant fine (@media (hover: hover) and (pointer: fine));
 
 /* ============================================================================
    Base
@@ -80,12 +99,18 @@
     /* Native smooth scrolling must stay off: Lenis owns the scroll. Leaving it
        on makes anchor jumps fight the smooth-scroll animation. */
     scroll-behavior: auto;
+    /* A two-finger horizontal swipe would otherwise reach the viewport and
+       trigger the browser's back/forward gesture — which, on a page whose only
+       horizontal scroller is the career carousel, means an accidental sideways
+       flick navigates away mid-read. `x` only: vertical overscroll still
+       chains normally, so pull-to-refresh and rubber-banding survive. */
+    overscroll-behavior-x: none;
     -webkit-text-size-adjust: 100%;
   }
 
   body {
-    background-color: var(--color-ink-950);
-    color: var(--color-ink-050);
+    background-color: var(--color-charcoal);
+    color: var(--color-ink);
     font-family: var(--font-sans);
     font-feature-settings: "kern", "liga", "calt";
     -webkit-font-smoothing: antialiased;
@@ -94,6 +119,8 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* Weight, leading and tracking here are load-bearing: several headings across
+     the site set only a size and inherit the rest from this rule. */
   h1,
   h2,
   h3,
@@ -110,22 +137,15 @@
   }
 
   ::selection {
-    background-color: var(--color-accent-500);
-    color: white;
+    background-color: var(--color-accent);
+    color: var(--color-charcoal);
   }
 
   /* A visible, on-brand focus ring — never removed, only styled. */
   :focus-visible {
-    outline: 2px solid var(--color-accent-400);
+    outline: 2px solid var(--color-accent);
     outline-offset: 3px;
     border-radius: 2px;
-  }
-
-  /* The custom cursor replaces the native one, but only while it is mounted —
-     if the component fails to load, the native cursor stays. */
-  html.has-custom-cursor,
-  html.has-custom-cursor * {
-    cursor: none !important;
   }
 
   /* Thin, unobtrusive scrollbar. */
@@ -137,82 +157,20 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: var(--color-ink-700);
+    background: oklch(30% 0.012 260);
     border-radius: 999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-ink-600);
+    background: oklch(40% 0.014 260);
   }
 }
 
 /* ============================================================================
-   Utilities
-   ========================================================================= */
-@utility container-wide {
-  margin-inline: auto;
-  width: 100%;
-  max-width: 1600px;
-  padding-inline: 1.25rem;
-
-  @media (width >= 640px) {
-    padding-inline: 2rem;
-  }
-  @media (width >= 1024px) {
-    padding-inline: 3rem;
-  }
-}
-
-@utility text-display {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 0.92;
-}
-
-/* Editorial eyebrow label: 01 — SECTION */
-@utility label-meta {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-ink-400);
-}
-
-@utility glass {
-  background-color: color-mix(in oklab, var(--color-ink-900) 55%, transparent);
-  backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid color-mix(in oklab, white 8%, transparent);
-}
-
-/* Soft radial glow used behind headings and cards. */
-@utility glow-accent {
-  background-image: radial-gradient(
-    60% 60% at 50% 40%,
-    color-mix(in oklab, var(--color-accent-500) 22%, transparent) 0%,
-    transparent 100%
-  );
-}
-
-/* ============================================================================
-   Components
+   Film grain
+   A single inline SVG turbulence, so it costs no network request and no image
+   decode. Applied to `<body>`, so it sits over every route.
    ========================================================================= */
 @layer components {
-  /* Monogram stroke-on animation. The paths declare pathLength="1", so the dash
-     values are expressed as fractions rather than raw path lengths. */
-  .logo-draw circle,
-  .logo-draw path {
-    stroke-dasharray: 1;
-    animation: logo-draw 1.6s var(--ease-out-expo) forwards;
-  }
-  .logo-draw path:nth-child(2) {
-    animation-delay: 0.15s;
-  }
-  .logo-draw path:nth-child(3) {
-    animation-delay: 0.3s;
-  }
-
-  /* Film grain overlay. A single inline SVG turbulence, so it costs no network
-     request and no image decode. */
   .grain::after {
     content: "";
     position: fixed;
@@ -222,51 +180,243 @@
     opacity: 0.035;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
+}
 
-  /* Hairline divider that fades at both ends. */
-  .rule-fade {
-    height: 1px;
-    background-image: linear-gradient(
-      to right,
-      transparent,
-      color-mix(in oklab, white 12%, transparent) 20%,
-      color-mix(in oklab, white 12%, transparent) 80%,
-      transparent
-    );
-  }
+/* ============================================================================
+   Site header
+   ----------------------------------------------------------------------------
+   Lives here rather than in a route stylesheet because `SiteHeader` is a shared
+   layout component: the home page and every case study render the same one.
 
-  /* Link with an underline that wipes in from the left. */
-  .link-underline {
-    position: relative;
-  }
-  .link-underline::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    height: 1px;
-    width: 100%;
-    background: currentColor;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.6s var(--ease-silk);
-  }
-  .link-underline:hover::after,
-  .link-underline:focus-visible::after {
-    transform: scaleX(1);
-  }
+   `mix-blend-mode: difference` is what inverts the nav against whatever scrolls
+   beneath it, which is also how it survives the page's cream/charcoal
+   alternation without a scroll listener. The keyframes ease it in from `normal`
+   so the first paint is not a flash of inverted colour.
 
-  /* Split-line masks created by SplitType. */
-  .split-line {
-    will-change: transform;
+   Layout and colour are utilities on the element; only the keyframes and the
+   pseudo-element marker — which no utility can express — are here.
+   ========================================================================= */
+@keyframes header-invert {
+  0% {
+    mix-blend-mode: normal;
+  }
+  to {
+    mix-blend-mode: difference;
+  }
+}
+
+.nav-links a {
+  transition:
+    opacity 0.16s ease,
+    transform 0.14s var(--ease-silk);
+}
+
+/* The dot that marks the hovered or current link. */
+.nav-links a::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 8px);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0;
+  transform: translate(4px, -50%) scale(0.72);
+  transition:
+    opacity 0.14s ease,
+    transform 0.18s var(--ease-silk);
+}
+
+.nav-links a:hover,
+.nav-links a[aria-current="location"] {
+  opacity: 1;
+  transform: translate(-10px);
+}
+
+.nav-links a:hover::before,
+.nav-links a[aria-current="location"]::before {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+/* Hovering one link recedes the others. */
+.nav-links:has(a:hover) a:not(:hover):not([aria-current="location"]) {
+  opacity: 0.38;
+}
+
+/* ============================================================================
+   Route transition curtain and tap hand
+   ----------------------------------------------------------------------------
+   Two related moves, both driven by classes on `<html>`:
+
+     (default)             the curtain wipes upward off screen on arrival
+     is-transitioning      it wipes back down before a plain navigation
+     is-tap-transitioning  leaving for a case study: a black panel grows from the
+                           bottom with the hand held over it
+     is-tap-arriving       landing on one: the panel shrinks away to the top
+     is-tap-settled        the resting state once the arrival has played
+
+   Cover-from-the-bottom then reveal-to-the-top reads as one continuous motion
+   across the navigation, which is the whole point of splitting it in two.
+
+   `TapTransition` owns the clock and the class names; everything visual is here.
+   ========================================================================= */
+.transition-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 1001;
+  overflow: hidden;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 42%, #dab87621, #0000 30%),
+    oklch(9% 0.012 260);
+  transform: translateY(-102%);
+  animation: curtain-leave 0.62s var(--ease-silk) both;
+  /* Load-bearing beyond the usual hint: `will-change: transform` makes this a
+     containing block, which is what the fixed `.tap-hand` inside is positioned
+     and clipped against. Drop it and the hand stops tracking the panel. */
+  will-change: transform;
+}
+
+/* Two faint ellipses, squashed — the lens rings. */
+.transition-curtain::before,
+.transition-curtain::after {
+  content: "";
+  position: absolute;
+  inset: -28%;
+  border: 1px solid #f5f1e812;
+  border-radius: 50%;
+}
+
+.transition-curtain::before {
+  transform: scaleX(0.74);
+}
+
+.transition-curtain::after {
+  transform: scale(0.66) scaleX(0.74);
+}
+
+html.is-transitioning .transition-curtain {
+  animation: curtain-enter 0.3s var(--ease-silk) both;
+}
+
+.tap-hand {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: min(232px, 48vw);
+  aspect-ratio: 1;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.98);
+  transform-origin: 50%;
+  will-change: transform, opacity;
+}
+
+.tap-hand-asset {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Leaving: anchored to the bottom, growing to full height. */
+html.is-tap-transitioning .transition-curtain {
+  inset: auto 0 0;
+  height: 0;
+  background: #000;
+  transform: none;
+  animation: overlay-slide-out-bottom 0.501s both;
+}
+
+/* Arriving: anchored to the top, shrinking away. Slower than the departure —
+   the destination has to have something to reveal. */
+html.is-tap-arriving .transition-curtain {
+  inset: 0 0 auto;
+  height: 0;
+  background: #000;
+  transform: none;
+  animation: overlay-slide-in-top 1.2s both;
+}
+
+html.is-tap-settled .transition-curtain {
+  inset: 0 0 auto;
+  height: 0;
+  background: #000;
+  transform: none;
+  animation: none;
+}
+
+/* The rings belong to the idle curtain only — every tap phase drops them. */
+html:is(.is-tap-transitioning, .is-tap-arriving, .is-tap-settled)
+  .transition-curtain::before,
+html:is(.is-tap-transitioning, .is-tap-arriving, .is-tap-settled)
+  .transition-curtain::after {
+  opacity: 0;
+}
+
+html:is(.is-tap-transitioning, .is-tap-arriving) .tap-hand {
+  animation: tap-asset-show 1ms linear both;
+}
+
+html.is-tap-settled .tap-hand {
+  opacity: 0;
+  animation: none;
+}
+
+@keyframes curtain-leave {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-102%);
+  }
+}
+
+@keyframes curtain-enter {
+  from {
+    transform: translateY(-102%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes overlay-slide-out-bottom {
+  from {
+    height: 0;
+  }
+  to {
+    height: 100%;
+  }
+}
+
+@keyframes overlay-slide-in-top {
+  from {
+    height: 100%;
+  }
+  to {
+    height: 0;
+  }
+}
+
+/* A 1ms hold rather than a fade: the animation exists purely to pin the hand
+   visible for as long as its phase class is on `<html>`. */
+@keyframes tap-asset-show {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
 /* ============================================================================
    Print
-   The résumé has to survive being printed or saved as PDF — a résumé page that
-   can't be printed is missing a feature. Everything decorative is dropped and
-   the palette inverts to ink on paper.
+   ----------------------------------------------------------------------------
+   A case study or the home page should survive being printed or saved as PDF.
+   Everything fixed or decorative is dropped — it would otherwise either tile
+   across every page or paint a full-bleed dark rectangle — and the palette
+   inverts to ink on paper.
    ========================================================================= */
 @media print {
   @page {
@@ -275,60 +425,45 @@
 
   html,
   body {
-    background: #ffffff !important;
-    color: #111111 !important;
+    background: #fff !important;
+    color: #111 !important;
   }
 
-  /* The WebGL canvas, grain, cursor, preloader, progress bar and nav are all
-     screen-only chrome. */
-  [data-webgl-root],
-  header.site-header,
-  header[class*="fixed"],
-  footer,
+  /* Fixed chrome: header, route curtain, intro loader, cursor lens, film grain,
+     and the decorative tile grids and parallax backdrops. */
+  .site-header,
+  .transition-curtain,
+  .site-loader,
+  .cursor-lens,
+  .perspective-grid,
+  .depth-backdrop,
+  .project-aura,
   .grain::after {
     display: none !important;
   }
 
-  .resume-page {
-    padding-top: 0 !important;
-  }
-
-  .resume-page * {
-    color: #111111 !important;
+  main,
+  main * {
+    color: #111 !important;
     background: transparent !important;
     text-shadow: none !important;
     box-shadow: none !important;
   }
 
   /* Hairlines need real ink to survive a printer. */
-  .resume-page [class*="border"] {
-    border-color: #cccccc !important;
+  main [class*="border"] {
+    border-color: #ccc !important;
   }
 
-  .resume-page a {
+  main a {
     text-decoration: underline;
   }
 
-  /* Keep a role and its bullets together where the paper allows. */
-  .resume-page article,
-  .resume-page li {
+  /* Keep a heading and the copy under it together where the paper allows. */
+  article,
+  figure,
+  li {
     break-inside: avoid;
-  }
-
-  .resume-page h1 {
-    font-size: 30pt !important;
-  }
-  .resume-page h2 {
-    font-size: 15pt !important;
-  }
-  .resume-page h3 {
-    font-size: 11pt !important;
-  }
-  .resume-page p,
-  .resume-page li,
-  .resume-page span {
-    font-size: 9.5pt !important;
-    line-height: 1.45 !important;
   }
 }
 
@@ -348,6 +483,13 @@
   }
 
   .grain::after {
+    display: none;
+  }
+
+  /* The curtain is decoration over a navigation that works without it. The rule
+     above would clamp its animations to 0.01ms and leave the panel parked
+     mid-screen, so it has to come out entirely. */
+  .transition-curtain {
     display: none;
   }
 }

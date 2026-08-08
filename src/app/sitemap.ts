@@ -1,7 +1,17 @@
 import type { MetadataRoute } from "next";
-import { PROJECTS } from "@/constants/projects";
-import { SITE } from "@/constants/site";
+import { PROJECTS } from "@/content/projects";
+import { getCaseStudy } from "@/content/case-studies";
+import { SITE } from "@/content/site";
 
+/**
+ * Every URL the site actually serves, and no others.
+ *
+ * The projects come from `@/content/projects` — the same record the work section
+ * and the case pages render from — And a project only appears here if it has
+ * a written case study, because `/work/[slug]` sets `dynamicParams = false` and
+ * would 404 on a slug it never built. A sitemap that lists a 404 is worse than a
+ * short sitemap.
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
@@ -12,23 +22,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 1,
     },
-    {
-      url: `${SITE.url}/resume`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${SITE.url}/ashish-2`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    ...PROJECTS.map((project) => ({
-      url: `${SITE.url}/work/${project.slug}`,
-      lastModified,
-      changeFrequency: "yearly" as const,
-      priority: 0.8,
-    })),
+    ...PROJECTS.filter((project) => getCaseStudy(project.slug)).map(
+      (project) => ({
+        url: `${SITE.url}/work/${project.slug}`,
+        lastModified,
+        changeFrequency: "yearly" as const,
+        priority: 0.8,
+      }),
+    ),
   ];
 }
