@@ -93,7 +93,7 @@ export const SCRUB_LINE =
   "A component is done when the next screen can be assembled from it instead of written again.";
 
 export const WORK_HEADING = {
-  kicker: "Seven platforms",
+  kicker: "Fifteen platforms",
   title: "Scale. Compliance. Speed.",
 } as const;
 
@@ -123,30 +123,79 @@ export const CAPABILITIES = [
 
 export const EXPERIENCE_KICKER = "Experience";
 
+/**
+ * One row per engagement, newest first.
+ *
+ * `company`, `role` and `detail` are what the section renders. `duration`,
+ * `location`, `items` and `tech` are carried alongside them but not rendered —
+ * the row is a three-column rule and adding a fourth is a design decision, not a
+ * data one. They are here so that decision does not also require re-sourcing the
+ * facts.
+ */
 export const EXPERIENCE_ROWS = [
   {
     company: "Independent",
     role: "Senior Frontend Engineer",
     detail:
       "Upwork Top Rated Plus. Four concurrent engagements across e-commerce, SaaS, fintech and healthcare, owning frontend architecture end to end.",
+    duration: "Feb 2023 – Present",
+    location: "Remote",
+    items: [
+      "Top Rated Plus freelancer delivering production apps for global clients",
+      "Scalable full-stack applications on the Next.js App Router with MongoDB and Prisma ORM",
+      "Redux slices for auth, dashboard filters, modals and notifications",
+      "NextAuth.js for secure login flows across credentials and OAuth",
+      "Modular frontend architecture using layouts and middleware",
+      "GitHub Actions for CI/CD and the Serverless Framework for AWS Lambda deploys",
+    ],
+    tech: ["Next.js", "Redux Toolkit", "Node.js", "MongoDB", "Prisma", "NextAuth.js"],
   },
   {
     company: "Carbonic IT Solutions",
     role: "Web Developer",
     detail:
       "Client applications from Figma to production for US and UK clients, working directly with non-technical stakeholders.",
+    duration: "2022 – Feb 2023",
+    location: "Pakistan",
+    items: [
+      "Built and maintained web applications with performance and scalability as the brief",
+      "Applied modern development practices and a clean code architecture",
+      "Worked across functions to translate client requirements into delivery",
+      "Built responsive interfaces with user experience as the constraint",
+    ],
+    tech: ["Laravel", "PHP", "JavaScript", "MySQL", "CSS", "HTML"],
   },
   {
     company: "VisionX",
     role: "Frontend Engineer",
     detail:
       "Three years across Halcyon, Ayshei and Morta — enterprise React, GraphQL and the reusable primitives underneath them.",
+    duration: "2019 – 2022",
+    location: "Pakistan",
+    items: [
+      "Developed and maintained applications in Laravel, on a modular architecture",
+      "Implemented RESTful APIs to improve third-party integration",
+      "Improved database efficiency through query optimisation and indexing",
+      "Migrated legacy codebases to modern Laravel versions",
+      "Built dynamic sites and custom CMS solutions in core PHP",
+    ],
+    tech: ["Laravel", "PHP", "REST APIs", "MySQL", "JavaScript", "CSS"],
   },
   {
     company: "Dixeam Inc",
     role: "Developer & Team Lead",
     detail:
       "SnapDebt and Moonrock on React, Node and Laravel. Led a small team and cut page load times by 30%.",
+    duration: "2017 – 2019",
+    location: "Pakistan",
+    items: [
+      "Led a team building scalable web solutions on modern PHP frameworks",
+      "Architected backend services against security and performance requirements",
+      "Introduced CI/CD workflows to streamline delivery",
+      "Cut page load times by 30%",
+      "Implemented RESTful APIs and integrated third-party services",
+    ],
+    tech: ["PHP", "Laravel", "MySQL", "JavaScript", "REST APIs", "CI/CD"],
   },
 ] as const;
 
@@ -159,7 +208,7 @@ export const PERSPECTIVE = {
 export const CONTACT = {
   kicker: "Contact",
   title: "Building something that has to scale?",
-  email: "mansha.qarib777@gmail.com",
+  email: "manshaqarib@gmail.com",
   primary: "Email Mansha",
   secondary: { label: "View resume", href: RESUME_PDF },
 } as const;
@@ -176,6 +225,18 @@ export const SOCIAL_LINKS = [
     label: "LinkedIn",
     short: "in",
     href: "https://linkedin.com/in/manshaqarib",
+    external: true,
+  },
+  {
+    label: "Upwork",
+    short: "up",
+    href: "https://www.upwork.com/freelancers/manshaqarib2",
+    external: true,
+  },
+  {
+    label: "Fiverr",
+    short: "fv",
+    href: "https://www.fiverr.com/laravelcoder777/",
     external: true,
   },
   {

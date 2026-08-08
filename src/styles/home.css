@@ -353,11 +353,15 @@ body.cursor-expanded .portfolio .cursor-lens {
                         in discrete steps, this transition *is* the motion — there
                         is no per-frame work behind it at all.
 
-   One value is re-derived rather than transcribed. The original multiplies
-   `--active` by 800%, 200% and 120deg for ten cards, which is 80%, 20% and 12deg
-   per step. This timeline has six, so the multipliers are scaled to hold those
-   per-step values — transcribing them literally would fan six cards half as far
-   again as intended and throw the outer ones off screen.
+   The multipliers below are per-step values, not per-deck ones. `--active` is
+   already divided by the card count, so each of them is multiplied back up by
+   `--items` to cancel that division out — which is the only reason the fan looks
+   the same whether the timeline holds six engagements or fifteen.
+
+   `--items` therefore *must* equal the count `--active` was divided by. It used
+   to be hardcoded to 6 here while the count came from the data, so adding a
+   single slide silently compressed the whole fan. It is now set by
+   `CareerCarousel` from `CAREER_SLIDES.length`, so the two cannot drift.
    ========================================================================= */
 .portfolio .career-stage {
   /* The card is the scrolling version's slide, at the same size — 45% of a wide
@@ -380,8 +384,8 @@ body.cursor-expanded .portfolio .cursor-lens {
 }
 
 .portfolio .career-card {
-  --items: 6;
-  /* 54% / 13% / 8deg per step.
+  /* 54% / 13% / 8deg per step. `--items` is inherited from `.career-stage`,
+     which the component sets from the slide count.
      The original's 80% / 20% / 12deg is tuned for a deck whose opacity ramp hides
      everything past the third card. This one shows more of its deck, so the same
      per-step values threw the outer cards clean off the section and rotated them

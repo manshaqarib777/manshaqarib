@@ -357,11 +357,20 @@ export function CareerCarousel() {
         role="region"
         aria-roledescription="carousel"
         aria-label="Career timeline"
-        // How far through the deck we are, 0 to 1. The stylesheet slides the
-        // whole stage against it so the one-sided fan stays centred in the
-        // section — see the note on `.career-stage`.
+        // Two numbers the stylesheet reads, both derived from the data:
+        //
+        //   --pos    how far through the deck we are, 0 to 1. The stage slides
+        //            against it so the one-sided fan stays centred.
+        //   --items  the slide count. The card transforms multiply by it to
+        //            cancel the division in `--active`, so the fan keeps the
+        //            same per-step geometry at any deck size. It lives here
+        //            rather than in CSS because CSS cannot count the slides —
+        //            hardcoding it meant adding one slide compressed the fan.
         style={
-          { "--pos": count > 1 ? active / (count - 1) : 0.5 } as React.CSSProperties
+          {
+            "--pos": count > 1 ? active / (count - 1) : 0.5,
+            "--items": count,
+          } as React.CSSProperties
         }
       >
         {CAREER_SLIDES.map((slide, index) => {
@@ -425,8 +434,25 @@ export function CareerCarousel() {
                       aria-label={`${slide.title} — walkthrough of the live site`}
                     />
                   </div>
+                ) : slide.poster ? (
+                  // No walkthrough, but a captured still: show the still. This
+                  // branch is why the media test is `video ? … : poster ? …` and
+                  // not just `video ? … : offline` — most engagements have a
+                  // screenshot without a clip, and testing only for the clip sent
+                  // every one of them to the offline mark with its own capture
+                  // sitting unused in the record.
+                  <div className="relative aspect-video w-full overflow-hidden rounded-xl">
+                    <Image
+                      className="size-full object-cover object-top"
+                      src={slide.poster}
+                      alt={`${slide.title} — the live site`}
+                      fill
+                      sizes="(max-width: 1280px) 75vw, 45vw"
+                    />
+                  </div>
                 ) : (
-                  // The offline state: a ringed video-off mark.
+                  // Neither: the site is unreachable, so nothing was captured.
+                  // A ringed video-off mark, rather than an empty plate.
                   <div className="flex aspect-video w-full items-center justify-center rounded-xl opacity-50 transition-opacity duration-300 hover:opacity-100">
                     <div className="flex size-24 items-center justify-center rounded-full border-4 border-accent sm:size-32 sm:border-6 md:size-36">
                       <svg

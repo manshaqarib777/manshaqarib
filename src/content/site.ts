@@ -13,7 +13,7 @@ export const SITE = {
   role: "Senior React Developer",
   description:
     "Mansha Qarib — Senior React developer with 8+ years building production frontends in React 19, TypeScript and Next.js App Router. Component libraries and data-heavy dashboards for platforms serving 700+ financial institutions and 100,000+ users.",
-  email: "mansha.qarib777@gmail.com",
+  email: "manshaqarib@gmail.com",
   url: "https://manshaqarib.com",
   keywords: [
     "senior react developer",

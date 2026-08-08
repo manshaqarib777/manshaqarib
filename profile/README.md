@@ -6,7 +6,7 @@
 
 [![Portfolio](https://img.shields.io/badge/PORTFOLIO-manshaqarib.com-D6B178?style=for-the-badge&labelColor=030407)](https://manshaqarib.com)
 [![LinkedIn](https://img.shields.io/badge/LINKEDIN-manshaqarib-F5EEE1?style=for-the-badge&labelColor=030407)](https://linkedin.com/in/manshaqarib)
-[![Email](https://img.shields.io/badge/EMAIL-mansha.qarib777-B5A998?style=for-the-badge&labelColor=030407)](mailto:mansha.qarib777@gmail.com)
+[![Email](https://img.shields.io/badge/EMAIL-manshaqarib-B5A998?style=for-the-badge&labelColor=030407)](mailto:manshaqarib@gmail.com)
 
 </div>
 
@@ -119,6 +119,6 @@ financial institutions** and **100,000+ users**.
 
 ## Elsewhere
 
-**[manshaqarib.com](https://manshaqarib.com)** · **[LinkedIn](https://linkedin.com/in/manshaqarib)** · **[mansha.qarib777@gmail.com](mailto:mansha.qarib777@gmail.com)** · Riyadh, Saudi Arabia
+**[manshaqarib.com](https://manshaqarib.com)** · **[LinkedIn](https://linkedin.com/in/manshaqarib)** · **[manshaqarib@gmail.com](mailto:manshaqarib@gmail.com)** · Riyadh, Saudi Arabia
 
 <sub>Building something that has to scale? Get in touch.</sub>

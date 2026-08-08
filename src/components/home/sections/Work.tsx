@@ -20,13 +20,34 @@ import {
 } from "../styles";
 
 /**
- * The work section: the second light band. Projects alternate ground tone, and
- * each one owns a cursor-tracked aura plus a tilting cover.
+ * The work section: the second light band.
+ *
+ * Only the featured projects render, each as a full-bleed row — alternating
+ * ground tone, a cursor-tracked aura, a tilting cover. All fifteen once did,
+ * which came to roughly twenty-four viewports of scroll, and the tail of it
+ * restated what each project's own case study already says at greater length.
+ *
+ * The selection is read from the data rather than sliced by index here, so
+ * promoting a project is a one-word edit in `projects.ts` and the numbering
+ * follows the featured entries in array order with no gaps.
+ *
+ * What this costs is worth stating where someone will find it: the unfeatured
+ * projects still build `/work/[slug]` pages and still appear in the sitemap, but
+ * only the ones the career deck carries a `caseSlug` for — Deliveroo, Halcyon,
+ * Neonbit, Salearis, SnapDebt — are reachable by clicking. Five are not linked
+ * from anywhere on the site: Global Shopaholic, Morta, LiftFoils, Bang & Olufsen
+ * and Moonrock. Promote one here, or give it a career slide, and that changes
+ * with no other edit.
+ *
+ * Emakity is a separate case and not one of the five — its entry in
+ * `case-studies.ts` is commented out, so it has no page to be orphaned from.
  *
  * `scroll-mt-*` on the section: the fixed header would otherwise cover the top
  * of the target when someone follows "Work" from the nav.
  */
 export function Work() {
+  const featured = PROJECTS.filter((project) => project.featured);
+
   return (
     <section
       className="work scroll-mt-[120px] bg-work text-work-ink"
@@ -39,12 +60,13 @@ export function Work() {
         <h2 className={SECTION_H2_CENTERED}>{WORK_HEADING.title}</h2>
       </div>
 
-      {PROJECTS.map((project, index) => (
+      {featured.map((project, index) => (
         <ProjectRow key={project.slug} project={project} index={index} />
       ))}
     </section>
   );
 }
+
 
 function ProjectRow({ project, index }: { project: Project; index: number }) {
   // `/work/[slug]` sets `dynamicParams = false`, so a project without a written
@@ -103,10 +125,14 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
         </div>
       )}
 
-      <div className="project-brief mx-auto mt-[-10px] grid w-[min(880px,100%)] grid-cols-[repeat(2,minmax(0,1fr))] gap-[clamp(36px,7vw,96px)] text-left">
-        <Brief heading="The challenge" body={project.brief.challenge} />
-        <Brief heading="The solution" body={project.brief.solution} />
-      </div>
+      {/* Same rule as the metric row: a project without a written brief renders
+          none rather than an empty pair of columns. */}
+      {project.brief && (
+        <div className="project-brief mx-auto mt-[-10px] grid w-[min(880px,100%)] grid-cols-[repeat(2,minmax(0,1fr))] gap-[clamp(36px,7vw,96px)] text-left">
+          <Brief heading="The challenge" body={project.brief.challenge} />
+          <Brief heading="The solution" body={project.brief.solution} />
+        </div>
+      )}
 
       {/* `case-link` stays as a class: its trailing chevron is a Material
           Symbols ligature drawn by a CSS `::after`, so the link's text content
@@ -129,6 +155,10 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
  * A walkthrough of the live site fills the frame where one was captured.
  * Neonbit is offline, so it keeps generated artwork — which is drawn to fit,
  * hence `object-contain`.
+ *
+ * A project with neither renders the empty frame. That is deliberate rather
+ * than a fallback: the moment a screenshot is added to `projects.ts` it fills,
+ * with no other change anywhere.
  */
 function ProjectMedia({
   project,
@@ -146,6 +176,8 @@ function ProjectMedia({
       />
     );
   }
+
+  if (!project.cover) return null;
 
   return (
     <Image

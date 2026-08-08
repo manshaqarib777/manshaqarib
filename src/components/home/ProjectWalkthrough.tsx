@@ -29,7 +29,8 @@ export function ProjectWalkthrough({
   title,
 }: {
   video: string;
-  poster: string;
+  /** The resting still. Optional: a clip with no capture starts on its own. */
+  poster?: string;
   title: string;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -64,13 +65,15 @@ export function ProjectWalkthrough({
 
   return (
     <>
-      <Image
-        className="size-full object-cover object-top [transition:transform_0.26s_var(--ease-silk),filter_0.22s_ease] will-change-transform"
-        src={poster}
-        alt={`${title} — the live site`}
-        fill
-        sizes="(max-width: 980px) 100vw, 52vw"
-      />
+      {poster && (
+        <Image
+          className="size-full object-cover object-top [transition:transform_0.26s_var(--ease-silk),filter_0.22s_ease] will-change-transform"
+          src={poster}
+          alt={`${title} — the live site`}
+          fill
+          sizes="(max-width: 980px) 100vw, 52vw"
+        />
+      )}
       {/* `pointer-events-none` so the frame's own link still takes the click. */}
       <video
         ref={videoRef}

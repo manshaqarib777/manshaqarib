@@ -44,18 +44,23 @@ export function CaseHero({
         </dl>
       </section>
 
-      <section className={S.COVER_BAND}>
-        <div className={S.COVER_FRAME}>
-          <Image
-            className="object-contain"
-            src={project.cover}
-            alt={`${project.title} case study cover`}
-            fill
-            priority
-            sizes="100vw"
-          />
-        </div>
-      </section>
+      {/* Every project with a written case study has a cover today; the guard is
+          here because `cover` is optional on the record and TypeScript is right
+          to insist. */}
+      {project.cover && (
+        <section className={S.COVER_BAND}>
+          <div className={S.COVER_FRAME}>
+            <Image
+              className="object-contain"
+              src={project.cover}
+              alt={`${project.title} case study cover`}
+              fill
+              priority
+              sizes="100vw"
+            />
+          </div>
+        </section>
+      )}
     </>
   );
 }
