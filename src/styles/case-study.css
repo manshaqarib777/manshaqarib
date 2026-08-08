@@ -1,0 +1,440 @@
+/* ============================================================================
+   Case study route — the paint pass
+   ----------------------------------------------------------------------------
+   This sheet used to carry the whole route: roughly seven hundred lines of
+   element-scoped rules (`.case-page .case-summary dt { … }`) styling markup that
+   carried no styling information of its own. All of that now lives with the
+   markup as utilities, in `src/components/case-study/styles.ts` — the same shape
+   the home route uses.
+
+   What is left is one section, because it is the one part that utilities
+   genuinely cannot express:
+
+     - `grid-template-areas` over three named rows, plus `display: contents` on
+       the copy wrapper, so the two beat kinds share a single DOM shape.
+     - Side alternation driven by `data-side`, which places two siblings into the
+       *same* grid cell in swapped order.
+     - `clip-path: inset(var(--paint) …)` — the entire mechanism is a custom
+       property written by JavaScript and read by the compositor.
+     - Three pseudo-elements: the head's falloff and its marker dot.
+
+   Everything else about the section — its heading, its walkthrough block — is
+   utilities like the rest of the route.
+
+   Scoped `.portfolio.case-page` throughout, so nothing here can reach the home
+   page, which uses some of the same class names.
+   ========================================================================= */
+
+/* ============================================================================
+   The idea
+   ----------------------------------------------------------------------------
+   The section's own thesis is "the first paint is the whole pitch", so the
+   composition demonstrates it rather than describing it. The beats sit on one
+   dark stage — the page's device for emphasis inside a cream section, the same
+   full-bleed escape the proof band makes — and a single render head sweeps down
+   it as the page scrolls. Everything the head has passed is painted: real
+   pixels, cream type, amber labels. Everything ahead of it is layout without
+   paint: graph paper on the stage ground. Type and screenshot are subject to the
+   same pass, because in a browser they are.
+
+   The dark ground is load-bearing rather than a mood: amber
+   oklch(78% 0.086 78) is unreadable on this page's cream (about 1.3:1), and the
+   head has to be amber to read as the accent rather than as a new colour. On the
+   stage the accent works, so the kickers go back to amber here too.
+
+   One mechanism drives all of it: `--paint`, the head's offset into a beat,
+   written by `PaintPassMotion`. The veil is clipped to start at it and the head
+   line is positioned at it — no other property animates, and nothing else in the
+   section moves.
+   ========================================================================= */
+.portfolio.case-page .paint-stage {
+  position: relative;
+  /* Breaks the section's rail to run the full viewport width, the same way the
+     proof band does. `overflow-x: clip` on the shell absorbs the scrollbar. */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding-inline: max(20px, 50vw - 590px);
+  background:
+    radial-gradient(circle at 50% 0%, #dab8761c, #0000 34%),
+    oklch(12% 0.012 260);
+  color: var(--color-ink);
+}
+
+/* One beat, as a ledger row: the figure number in a narrow rail, the beat itself
+   in the measure beside it. */
+.portfolio.case-page .paint-beat {
+  position: relative;
+  display: grid;
+  grid-template-columns: clamp(52px, 5vw, 88px) minmax(0, 1fr);
+  column-gap: clamp(18px, 3vw, 48px);
+  padding-block: clamp(78px, 9vw, 132px);
+  border-top: 1px solid var(--color-line);
+}
+
+.portfolio.case-page .paint-beat:first-child {
+  border-top: 0;
+}
+
+/* Tabular figures so the rail's numbers sit on one axis down the stage. */
+.portfolio.case-page .paint-beat-number {
+  margin: 0;
+  color: oklch(58% 0.03 78);
+  font-size: clamp(20px, 2.2vw, 32px);
+  font-weight: 470;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.portfolio.case-page .paint-beat-label {
+  margin: 0;
+  color: var(--color-accent);
+  font-size: 11px;
+  font-weight: 760;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.portfolio.case-page .paint-beat h3 {
+  margin: 14px 0 0;
+  font-weight: 560;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.portfolio.case-page .paint-beat-deck {
+  margin: 20px 0 0;
+  max-width: 46ch;
+  color: var(--color-muted);
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.5;
+}
+
+/* -------------------------------------------------------------- The lead --- */
+/* The first beat is the pitch, so it is composed as one: the statement at
+   display scale with its deck set beside it on the same baseline, and the plate
+   full width beneath. `display: contents` lets the copy's three elements place
+   into the body's areas directly, so the two beat kinds share one DOM shape. */
+.portfolio.case-page .paint-beat[data-beat="lead"] .paint-beat-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.5fr);
+  grid-template-areas:
+    "label deck"
+    "head  deck"
+    "plate plate";
+  align-items: end;
+  column-gap: clamp(28px, 5vw, 84px);
+  row-gap: clamp(30px, 3.4vw, 52px);
+}
+
+.portfolio.case-page .paint-beat[data-beat="lead"] .paint-beat-copy {
+  display: contents;
+}
+
+.portfolio.case-page .paint-beat[data-beat="lead"] .paint-beat-label {
+  grid-area: label;
+  align-self: end;
+}
+
+.portfolio.case-page .paint-beat[data-beat="lead"] h3 {
+  grid-area: head;
+  margin: 0;
+  font-size: clamp(38px, 5.2vw, 80px);
+  letter-spacing: -0.012em;
+}
+
+.portfolio.case-page .paint-beat[data-beat="lead"] .paint-beat-deck {
+  grid-area: deck;
+  margin: 0;
+  max-width: 34ch;
+  font-size: clamp(17px, 1.5vw, 21px);
+}
+
+.portfolio.case-page .paint-beat[data-beat="lead"] .paint-figure {
+  grid-area: plate;
+}
+
+/* ---------------------------------------------------------- The support --- */
+/* The beats after the pitch are the deeper story, so they step down a scale and
+   alternate side — a rhythm rather than a repeat.
+
+   Top-aligned, not centred. Centring a short copy block against a full-page
+   screenshot floats it in the middle of a column of nothing; aligning both to
+   the top gives the beat one axis, and the hairline above the copy continues the
+   plate's own top edge across the measure. */
+.portfolio.case-page .paint-beat[data-beat="support"] .paint-beat-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.86fr);
+  align-items: start;
+  column-gap: clamp(28px, 5vw, 80px);
+}
+
+.portfolio.case-page .paint-beat[data-beat="support"] .paint-beat-copy {
+  padding-top: 22px;
+  border-top: 1px solid var(--color-line);
+}
+
+.portfolio.case-page .paint-beat[data-beat="support"] h3 {
+  font-size: clamp(27px, 3.1vw, 46px);
+}
+
+.portfolio.case-page .paint-beat[data-side="left"] .paint-figure,
+.portfolio.case-page .paint-beat[data-side="right"] .paint-beat-copy {
+  grid-area: 1 / 1;
+}
+
+.portfolio.case-page .paint-beat[data-side="left"] .paint-beat-copy,
+.portfolio.case-page .paint-beat[data-side="right"] .paint-figure {
+  grid-area: 1 / 2;
+}
+
+/* The plate hugs the outer edge of the stage on whichever side it sits. */
+.portfolio.case-page .paint-beat[data-side="right"] .paint-figure {
+  justify-items: end;
+}
+
+/* ------------------------------------------------------------- The plate --- */
+/* Bound on both axes rather than by height alone: a 1440 × 2600 full-page shot
+   and a 414 × 896 phone shot then land on the same visual weight without either
+   one being cropped or upscaled. */
+.portfolio.case-page .paint-figure {
+  display: grid;
+  justify-items: start;
+  gap: 20px;
+  min-width: 0;
+  margin: 0;
+}
+
+.portfolio.case-page .paint-figure img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: min(74svh, 780px);
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  background: oklch(8% 0.012 260);
+  box-shadow: 0 34px 72px #0305087a;
+}
+
+.portfolio.case-page .paint-beat[data-beat="support"] .paint-figure img {
+  max-height: min(72svh, 740px);
+}
+
+.portfolio.case-page .paint-figure figcaption {
+  max-width: 380px;
+  color: var(--color-muted);
+  font-size: 14px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.portfolio.case-page .paint-figure figcaption strong,
+.portfolio.case-page .paint-figure figcaption span {
+  display: block;
+}
+
+.portfolio.case-page .paint-figure figcaption strong {
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.portfolio.case-page .paint-figure figcaption span {
+  margin-top: 8px;
+}
+
+/* --------------------------------------------------------- The unpainted --- */
+/* Everything the head has not reached: the beat's own ground, one step darker
+   than the stage so it reads as recessed, over a graph-paper grid at the same
+   tone the hero band uses for its own. Nearly — not fully — opaque, so what is
+   about to be painted is a whisper rather than a blank.
+
+   `--paint` defaults to 0, which is the designed arrival state: a beat that has
+   not been reached is unpainted. That means the veil is also what a visitor
+   would be left with if the script never ran, so both escape hatches matter —
+   the `<noscript>` rule in `CaseProduct.tsx` and the reduced-motion rule at the
+   end of this sheet each remove it outright. */
+.portfolio.case-page .paint-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  clip-path: inset(var(--paint, 0px) 0 0 0);
+  background-color: oklch(9.5% 0.01 260 / 0.94);
+  background-image:
+    linear-gradient(oklch(95% 0.018 82 / 0.045) 1px, #0000 1px),
+    linear-gradient(90deg, oklch(95% 0.018 82 / 0.045) 1px, #0000 1px);
+  background-size: 40px 40px;
+}
+
+/* The head itself: a hairline at the paint edge with a short falloff below it,
+   so the paint reads as just-laid rather than as a mask boundary. `--lit` is 1
+   only while the head is inside this beat — without it every beat would show a
+   line parked at its own top or bottom edge. */
+.portfolio.case-page .paint-head {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: var(--paint, 0px);
+  z-index: 4;
+  height: 0;
+  border-top: 1px solid var(--color-accent);
+  opacity: var(--lit, 0);
+  pointer-events: none;
+  transition: opacity 0.22s var(--ease-silk);
+}
+
+.portfolio.case-page .paint-head::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 88px;
+  background: linear-gradient(oklch(78% 0.086 78 / 0.14), #0000);
+}
+
+/* Below the line, never above: the unpainted side is always empty ground, so the
+   one piece of signage in this section is always legible. */
+.portfolio.case-page .paint-head span {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  color: var(--color-accent);
+  font-size: 11px;
+  font-weight: 760;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.portfolio.case-page .paint-head span::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-accent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portfolio.case-page .paint-figure img {
+    transition:
+      transform 0.24s var(--ease-silk),
+      box-shadow 0.24s ease;
+  }
+
+  .portfolio.case-page .paint-figure:hover img {
+    transform: translateY(-4px);
+    box-shadow: 0 42px 84px #03050899;
+  }
+}
+
+/* ------------------------------------------------------------ Responsive -- */
+@media (width <= 980px) {
+  /* Both beat kinds collapse to one column, and both put the copy first: read
+     the claim, then watch it paint. The alternating sides are a desktop rhythm —
+     stacked, they would only be an inconsistency. */
+  .portfolio.case-page .paint-beat[data-beat="lead"] .paint-beat-body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "label"
+      "head"
+      "deck"
+      "plate";
+    align-items: start;
+    row-gap: clamp(26px, 4vw, 40px);
+  }
+
+  .portfolio.case-page .paint-beat[data-beat="lead"] .paint-beat-label {
+    align-self: start;
+  }
+
+  .portfolio.case-page .paint-beat[data-beat="lead"] .paint-beat-deck {
+    max-width: 46ch;
+  }
+
+  .portfolio.case-page .paint-beat[data-beat="support"] .paint-beat-body {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    row-gap: clamp(26px, 4vw, 40px);
+  }
+
+  /* Back to document order — copy, then plate — on both sides. The copy's
+     hairline goes with the two-column layout that needed it: stacked, it would
+     sit a few pixels under the beat's own rule and read as a doubled line. */
+  .portfolio.case-page .paint-beat[data-side] .paint-beat-copy,
+  .portfolio.case-page .paint-beat[data-side] .paint-figure {
+    grid-area: auto;
+  }
+
+  .portfolio.case-page .paint-beat[data-beat="support"] .paint-beat-copy {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .portfolio.case-page .paint-beat[data-side="right"] .paint-figure {
+    justify-items: start;
+  }
+}
+
+@media (width <= 640px) {
+  /* The rail becomes a marker line above the beat rather than a column beside
+     it: at this width a 52px track only squeezes the measure next to it, and the
+     beat's own label already sits directly under the number. */
+  .portfolio.case-page .paint-beat {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 22px;
+    padding-block: clamp(58px, 12vw, 88px);
+  }
+
+  .portfolio.case-page .paint-beat-number {
+    font-size: 20px;
+  }
+
+  .portfolio.case-page .paint-beat[data-beat="lead"] h3 {
+    font-size: clamp(32px, 9.4vw, 46px);
+  }
+
+  .portfolio.case-page .paint-beat[data-beat="support"] h3 {
+    font-size: clamp(26px, 7.6vw, 36px);
+  }
+
+  .portfolio.case-page .paint-figure img,
+  .portfolio.case-page .paint-beat[data-beat="support"] .paint-figure img {
+    max-height: min(64svh, 560px);
+  }
+}
+
+/* ------------------------------------------------------- Reduced motion ---- */
+/* `globals.css` already clamps every animation and transition under this query,
+   but the paint pass is not an animation — it is a scroll position expressed as
+   a clip, and `PaintPassMotion` never starts under reduced motion. So the veil
+   would simply stay where it was rendered, covering the beat. Removing it
+   outright is what leaves the section fully painted, which is its end state.
+   `display: none`, not `opacity`, so the veil cannot intercept anything. */
+@media (prefers-reduced-motion: reduce) {
+  .portfolio.case-page .paint-veil,
+  .portfolio.case-page .paint-head {
+    display: none;
+  }
+}
+
+/* ============================================================================
+   The one animation on this route
+   Applied from `styles.ts` as `animate-[rise-in_…]`; only the keyframes, which
+   have no utility form, live here.
+   ========================================================================= */
+@keyframes rise-in {
+  0% {
+    opacity: 0;
+    filter: blur(2px);
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}

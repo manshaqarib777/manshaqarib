@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-label="Mansha Qarib — Senior React Developer. Systems, not screens.">
+  <title>Mansha Qarib — Senior React Developer</title>
+
+  <defs>
+    <!-- The amber wash the site uses at the top of every dark band. -->
+    <radialGradient id="wash" cx="22%" cy="0%" r="70%">
+      <stop offset="0%" stop-color="#D6B178" stop-opacity="0.16" />
+      <stop offset="45%" stop-color="#D6B178" stop-opacity="0" />
+    </radialGradient>
+    <!-- Graph paper, at the same tone as the site's design band. -->
+    <pattern id="grid" width="72" height="72" patternUnits="userSpaceOnUse">
+      <path d="M72 0H0v72" fill="none" stroke="#F5EEE1" stroke-opacity="0.03" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="320" fill="#030407" />
+  <rect width="1200" height="320" fill="url(#grid)" />
+  <rect width="1200" height="320" fill="url(#wash)" />
+
+  <g font-family="'Helvetica Neue', Helvetica, Arial, sans-serif">
+    <!-- Wordmark -->
+    <text x="64" y="74" fill="#F5EEE1" font-size="26" font-weight="600" letter-spacing="-1">ManshaQarib.</text>
+
+    <!-- Kicker -->
+    <text x="64" y="132" fill="#D6B178" font-size="15" font-weight="700" letter-spacing="3.6">SENIOR REACT DEVELOPER</text>
+
+    <!-- The line the whole site is built around -->
+    <text x="62" y="212" fill="#F5EEE1" font-size="74" font-weight="700" letter-spacing="-3">Systems, not screens.</text>
+
+    <!-- Hairline, fading at both ends like the site's rules -->
+    <line x1="64" y1="252" x2="1136" y2="252" stroke="#F5EEE1" stroke-opacity="0.14" stroke-width="1" />
+
+    <text x="64" y="288" fill="#B5A998" font-size="19" letter-spacing="0.2">React &#183; TypeScript &#183; Next.js App Router &#183; Node.js</text>
+    <text x="1136" y="288" fill="#B5A998" font-size="19" text-anchor="end" letter-spacing="0.2">Riyadh, SA</text>
+  </g>
+</svg>
