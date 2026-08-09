@@ -52,9 +52,17 @@ export const KICKER_PAPER = `${KICKER_BASE} text-paper-kicker`;
 /** Cool grey, on the work section's lighter grounds. */
 export const KICKER_WORK = `${KICKER_BASE} text-work-kicker`;
 
+/**
+ * The horizontal rail every section aligns to: centres an 1180px measure without
+ * needing a wrapper element. Named because a section that supplies its own
+ * vertical rhythm still has to land on the same left edge as its neighbours —
+ * applying `SECTION_PAD` and `SECTION_HEADING` together indents the heading
+ * twice, which on a 2000px viewport put it 410px right of the content under it.
+ */
+export const SECTION_RAIL = "px-[max(24px,50vw_-_590px)] to-sm:px-[20px]";
+
 /** Heading rail for the work and capabilities section headers. */
-export const SECTION_HEADING =
-  "px-[max(24px,50vw_-_590px)] pt-[132px] pb-[64px] to-sm:px-[20px]";
+export const SECTION_HEADING = `${SECTION_RAIL} pt-[132px] pb-[64px]`;
 
 /**
  * A section that carries a parallax backdrop. Every child except the backdrop is
@@ -77,12 +85,8 @@ export const DEPTH_SECTION = [
 export const DEPTH_BACKDROP =
   "depth-backdrop absolute -inset-[18%] z-0 origin-[50%] [transform:translate(0)_scale(1.08)] pointer-events-none";
 
-/**
- * Section rail. The horizontal value centres an 1180px measure without needing
- * a wrapper element.
- */
-export const SECTION_PAD =
-  "px-[max(24px,50vw_-_590px)] py-[120px] to-sm:px-[20px]";
+/** The rail plus the standard vertical rhythm, for sections with no heading rail. */
+export const SECTION_PAD = `${SECTION_RAIL} py-[120px]`;
 
 /**
  * Type scale shared by every editorial h2.
@@ -99,8 +103,17 @@ const H2_SCALE = [
   "to-sm:text-[clamp(42px,13vw,64px)]",
 ].join(" ");
 
-/** Left-aligned, flush: the intro and capabilities headings. */
+/** Left-aligned, flush: the intro heading. */
 export const SECTION_H2 = `${H2_SCALE} max-w-[860px] m-0`;
+
+/**
+ * The capabilities heading runs to the full rail rather than the 860px measure.
+ *
+ * At 104px this title needs ~1890px of line, so an 860px box broke it into three
+ * lines with a two-word orphan on the last. The rail gives it two, and
+ * `text-balance` keeps those two near-equal instead of long-then-short.
+ */
+export const CAPABILITIES_H2 = `${H2_SCALE} m-0 max-w-[1180px] text-balance`;
 
 /** Centred variant, for the work heading rail. */
 export const SECTION_H2_CENTERED = `${H2_SCALE} mx-auto my-0 max-w-[860px]`;
@@ -342,7 +355,10 @@ export const CAPABILITIES_SECTION = "capabilities bg-paper text-paper-ink";
  * borders of their own.
  */
 export const CAPABILITY_LIST = [
-  "capability-list mt-[56px] grid gap-px bg-[#15140f29]",
+  // Carries the rail itself, because the section no longer does — see
+  // SECTION_RAIL. `pb` closes the section; the heading's own `pb-[64px]` is the
+  // only gap above, so there is no `mt` here to double it.
+  `capability-list ${SECTION_RAIL} pb-[120px] grid gap-px bg-[#15140f29]`,
   // Two columns from 980px down, not four. The dead media query documented
   // above meant four ~165px columns survived to 640px, where "Frontend
   // architecture" wrapped onto three lines against a title that has no room to

@@ -33,7 +33,8 @@ export const NAV_LINKS = [
 
 export const HERO = {
   eyebrow: "Mansha Qarib / Senior React Developer",
-  title: "Systems, not screens.",
+  /** One entry per rendered line, so the break is authored rather than left to wrapping. */
+  titleLines: ["Systems,", "not screens."],
   text: "I build production frontends in React, TypeScript and Next.js — component libraries, data-heavy dashboards, and the rendering decisions that keep them fast once there are forty screens instead of four.",
   actions: {
     primary: { label: "See selected work", href: "#work" },

@@ -17,7 +17,10 @@ export function Hero() {
     >
       <PerspectiveGrid variant="hero" />
 
-      <div className="hero-copy relative z-[2] grid w-[min(760px,100%)] place-items-center">
+      {/* 980px, not 760px: the h1 tops out at 132px, and its longest authored
+          line needs ~820px at that size. A 760px column silently re-wrapped it
+          into a third line. The body copy keeps its own 620px measure below. */}
+      <div className="hero-copy relative z-[2] grid w-[min(980px,100%)] place-items-center">
         <p className={`eyebrow m-0 ${KICKER}`}>{HERO.eyebrow}</p>
 
         {/* Deliberately not carrying the `to-sm:text-[clamp(42px,13vw,64px)]`
@@ -26,7 +29,11 @@ export function Hero() {
             than the h2s beneath it. The h1 stays the largest type on the page at
             every width, which is the point of it. */}
         <h1 className="m-0 max-w-[980px] font-display text-[clamp(56px,9vw,132px)] font-[600] leading-[0.88] tracking-[0px]">
-          {HERO.title}
+          {HERO.titleLines.map((line) => (
+            <span className="block" key={line}>
+              {line}
+            </span>
+          ))}
         </h1>
 
         <p className="hero-text mx-0 mt-[28px] mb-0 max-w-[620px] text-[clamp(18px,1.8vw,22px)] leading-[1.35] text-muted">

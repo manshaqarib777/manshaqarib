@@ -1,5 +1,6 @@
 import { CAPABILITIES, CAPABILITIES_HEADING } from "@/content/home";
 import {
+  CAPABILITIES_H2,
   CAPABILITIES_SECTION,
   CAPABILITY,
   CAPABILITY_LIST,
@@ -8,15 +9,13 @@ import {
   DEPTH_BACKDROP,
   DEPTH_SECTION,
   KICKER,
-  SECTION_H2,
   SECTION_HEADING,
-  SECTION_PAD,
 } from "../styles";
 
 export function Capabilities() {
   return (
     <section
-      className={`${CAPABILITIES_SECTION} ${DEPTH_SECTION} ${SECTION_PAD} scroll-mt-[120px]`}
+      className={`${CAPABILITIES_SECTION} ${DEPTH_SECTION} scroll-mt-[120px]`}
       id="capabilities"
     >
       <div
@@ -28,7 +27,7 @@ export function Capabilities() {
         <div className={`section-kicker ${KICKER}`}>
           {CAPABILITIES_HEADING.kicker}
         </div>
-        <h2 className={SECTION_H2}>{CAPABILITIES_HEADING.title}</h2>
+        <h2 className={CAPABILITIES_H2}>{CAPABILITIES_HEADING.title}</h2>
       </div>
 
       <div className={CAPABILITY_LIST}>
