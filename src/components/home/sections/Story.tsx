@@ -1,6 +1,11 @@
 import { SCRUB_LINE, SIGNALS, STORY_CARDS } from "@/content/home";
 import { ScrubLine } from "../ScrubLine";
-import { DEPTH_BACKDROP, DEPTH_SECTION, storyCardClass } from "../styles";
+import {
+  DEPTH_BACKDROP,
+  DEPTH_SECTION,
+  storyCardClass,
+  storyCardTitleClass,
+} from "../styles";
 
 /**
  * The design-approach section: a signal marquee, a bento of five tiles, and the
@@ -64,16 +69,11 @@ function StoryBento() {
     <div className="story-bento grid grid-flow-dense grid-cols-[repeat(12,minmax(0,1fr))] gap-px border border-line bg-[#f5f1e81a] to-sm:grid-cols-[1fr]">
       {STORY_CARDS.map((card) => (
         <article className={storyCardClass(card.size)} key={card.title}>
-          {/* Two type scales, because the grid has two shapes. Above 640px the
-              tiles are still twelve columns wide even on a small laptop, so a
-              `span 3` tile can be under 200px and the type has to come down with
-              it. At 640 and below every tile is full width, so the second scale
-              climbs again rather than leaving a heading stranded small in a wide
-              box. `break-word` is the backstop if a future copy edit overruns —
-              see the note on STORY_CARDS. */}
-          <h3 className="m-0 max-w-[12ch] font-display text-[clamp(26px,3.6vw,60px)] leading-[0.94] [overflow-wrap:break-word] to-sm:text-[clamp(32px,9vw,52px)]">
-            {card.title}
-          </h3>
+          {/* The scale steps down with the column span rather than being one
+              value for all five tiles — see `storyCardTitleClass`. That is what
+              removed the `overflow-wrap: break-word` backstop this heading used
+              to need, and the mid-word break it was failing to prevent. */}
+          <h3 className={storyCardTitleClass(card.size)}>{card.title}</h3>
           <p className="mx-0 mt-[36px] mb-0 max-w-[280px] text-[17px] leading-[1.45] text-muted">
             {card.text}
           </p>

@@ -81,34 +81,6 @@ export function HomeMotion() {
         },
       );
 
-      /* -------------------------------------------------------- Design MCP */
-
-      gsap.from(".design-mcp-copy > *", {
-        opacity: 0,
-        transform: "translate3d(0, 18px, 0)",
-        duration: 0.64,
-        ease: "power3.out",
-        stagger: 0.07,
-        scrollTrigger: { trigger: ".design-mcp-copy", start: "top 82%" },
-      });
-
-      gsap.from(".design-mcp-panel", {
-        opacity: 0,
-        transform: "translate3d(0, 24px, 0)",
-        duration: 0.68,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".design-mcp-panel", start: "top 88%" },
-      });
-
-      gsap.from(".design-mcp-step", {
-        opacity: 0,
-        transform: "translate3d(0, 16px, 0)",
-        duration: 0.56,
-        ease: "power3.out",
-        stagger: 0.08,
-        scrollTrigger: { trigger: ".design-mcp-steps", start: "top 86%" },
-      });
-
       /* -------------------------------------------------- The throughline */
 
       gsap.from(".intro-section > :not(.depth-backdrop)", {
@@ -133,11 +105,20 @@ export function HomeMotion() {
 
       /* --------------------------------------------------------------- Story */
 
-      gsap.from(".story-card", {
-        transform: "translate3d(0, 22px, 0)",
+      // The tiles' contents rise, not the tiles.
+      //
+      // Both this grid and the capability grid draw their hairlines by showing a
+      // dark container background through 1px gaps — so a tile translated 22px
+      // down opens a 22px band of that background above itself, and the entrance
+      // read as a grey bar sweeping across the section rather than as cards
+      // arriving. Animating what is inside each tile gives the same rise with
+      // the grid staying solid throughout.
+      gsap.from(".story-card > *", {
+        opacity: 0,
+        transform: "translate3d(0, 18px, 0)",
         duration: 0.7,
         ease: "power3.out",
-        stagger: 0.06,
+        stagger: 0.05,
         scrollTrigger: { trigger: ".story-bento", start: "top 78%" },
       });
 
@@ -389,7 +370,10 @@ export function HomeMotion() {
       (
         [
           {
-            targets: ".capabilities .section-heading > *, .capability",
+            // `.capability > *`, for the same reason as the story tiles above:
+            // translating the card itself exposes the grid's hairline
+            // background as a solid band along its top edge.
+            targets: ".capabilities .section-heading > *, .capability > *",
             trigger: ".capabilities",
           },
           {

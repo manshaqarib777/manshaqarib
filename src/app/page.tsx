@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Courier_Prime } from "next/font/google";
 import "@/styles/home.css";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -7,9 +6,9 @@ import { CareerCarousel } from "@/components/home/CareerCarousel";
 import { CursorLens } from "@/components/home/CursorLens";
 import { SiteLoader } from "@/components/home/SiteLoader";
 import { HomeMotion } from "@/components/home/motion";
+import { NavSpy } from "@/components/layout/NavSpy";
 import { Capabilities } from "@/components/home/sections/Capabilities";
 import { Contact } from "@/components/home/sections/Contact";
-import { DesignMcp } from "@/components/home/sections/DesignMcp";
 import { Experience } from "@/components/home/sections/Experience";
 import { Hero } from "@/components/home/sections/Hero";
 import { Intro } from "@/components/home/sections/Intro";
@@ -19,23 +18,13 @@ import { Work } from "@/components/home/sections/Work";
 import { HERO, NAV_LINKS } from "@/content/home";
 
 /**
- * The connector URI is set in Courier Prime. Declared here rather than in the
- * root layout so the face is only requested on this route.
- */
-const courierPrime = Courier_Prime({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-courier-prime",
-  display: "swap",
-});
-
-/**
- * Material Symbols Rounded, subset to only the six ligatures this page actually
- * renders. `next/font` cannot express `icon_names`, so this stays a stylesheet
- * link — the subset is worth far more than self-hosting the whole icon set.
+ * Material Symbols Rounded, subset to the one ligature this page renders: the
+ * chevron `.case-link::after` draws. `next/font` cannot express `icon_names`, so
+ * this stays a stylesheet link — a one-glyph subset is worth far more than
+ * self-hosting the whole icon set.
  */
 const ICON_FONT_HREF =
-  "https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,600,1,0&icon_names=check,content_copy,description,expand_circle_right,link,terminal&display=block";
+  "https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,600,1,0&icon_names=expand_circle_right&display=block";
 
 export const metadata: Metadata = {
   title: "Mansha Qarib — Senior React Developer",
@@ -49,10 +38,16 @@ export const metadata: Metadata = {
  * A server component: every word ships in the initial HTML, and the hero needs
  * no client JS at all — the tile flashes and the nav indicator are pure CSS.
  * Only five children ship JavaScript: the loader, the cursor lens, the career
- * deck, the starter panel, and the single motion sibling at the end.
+ * deck, the nav spy, and the single motion sibling at the end.
  *
  * The sections are composed here in reading order and own their own markup;
  * `src/components/home/styles.ts` holds the class combinations they share.
+ *
+ * The order is the argument the page makes: who and what (hero), why it is hard
+ * (the throughline), how I think about it (the principles), what I have built
+ * (work), what that means to hire (capabilities), where it happened (experience
+ * and the career deck), the one idea underneath it (perspective), then how to
+ * reach me.
  */
 export default function HomePage() {
   return (
@@ -61,7 +56,7 @@ export default function HomePage() {
     // `--fade-stop` is declared here because the perspective grid's overlay
     // gradient reads it.
     <main
-      className={`portfolio ${courierPrime.variable} relative block cursor-crosshair bg-charcoal font-display tracking-[0px] text-ink [--fade-stop:#030508] [font-synthesis:none] [overflow-x:clip]`}
+      className="portfolio relative block cursor-crosshair bg-charcoal font-display tracking-[0px] text-ink [--fade-stop:#030508] [font-synthesis:none] [overflow-x:clip]"
       id="main"
     >
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -88,9 +83,9 @@ export default function HomePage() {
 
       {/* Shared with the case pages — see `@/components/layout/SiteHeader`. */}
       <SiteHeader brandHref="#top" links={NAV_LINKS} />
+      <NavSpy links={NAV_LINKS} />
 
       <Hero />
-      <DesignMcp />
       <Intro />
       <Story />
       <Work />

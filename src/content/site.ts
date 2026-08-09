@@ -12,7 +12,7 @@ export const SITE = {
   name: "Mansha Qarib",
   role: "Senior React Developer",
   description:
-    "Mansha Qarib — Senior React developer with 8+ years building production frontends in React 19, TypeScript and Next.js App Router. Component libraries and data-heavy dashboards for platforms serving 700+ financial institutions and 100,000+ users.",
+    "Senior React developer, 8+ years. Production frontends in React, TypeScript and the Next.js App Router — component libraries and data-heavy dashboards for platforms serving 700+ financial institutions and 100,000+ users.",
   email: "manshaqarib@gmail.com",
   url: "https://manshaqarib.com",
   keywords: [

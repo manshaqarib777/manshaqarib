@@ -5,6 +5,8 @@ import {
   EXPERIENCE,
   EXPERIENCE_COMPANY,
   EXPERIENCE_DETAIL,
+  EXPERIENCE_DURATION,
+  EXPERIENCE_HEAD,
   EXPERIENCE_ROLE,
   EXPERIENCE_ROW,
   KICKER_PAPER,
@@ -25,9 +27,15 @@ export function Experience() {
 
       {EXPERIENCE_ROWS.map((row) => (
         <div className={EXPERIENCE_ROW} key={row.company}>
-          <h2 className={EXPERIENCE_COMPANY}>{row.company}</h2>
+          <div className={EXPERIENCE_HEAD}>
+            <h2 className={EXPERIENCE_COMPANY}>{row.company}</h2>
+            {/* The dates were carried in the data and never shown, which left a
+                career section with no dates in it. Under the name rather than in
+                a fourth column, so the three-column rule is unchanged. */}
+            <p className={EXPERIENCE_DURATION}>{row.duration}</p>
+          </div>
           <p className={EXPERIENCE_ROLE}>{row.role}</p>
-          <span className={EXPERIENCE_DETAIL}>{row.detail}</span>
+          <p className={EXPERIENCE_DETAIL}>{row.detail}</p>
         </div>
       ))}
     </section>

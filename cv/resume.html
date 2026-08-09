@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Mansha Qarib - Senior React Developer</title>
+    <!--
+      Source for the CV PDF. Print with `cv/build.sh`, which drives headless
+      Chrome and writes both `public/mansha-qarib-senior-react-developer.pdf`
+      (the site's "Download resume" link) and the copy in ~/Downloads.
+
+      Every choice below is an ATS-parsing choice, not an aesthetic one:
+
+        single column        A two-column CV is read by most parsers as one
+                             continuous text stream, which interleaves the two
+                             columns line by line and destroys every entry.
+        no flex, no grid,
+        no floats, no tables Anything that positions text out of document order
+                             can reorder it in the PDF's text stream too. Every
+                             block below reads top to bottom, in order.
+        no photo             The previous PDF embedded a 600x600 headshot -
+                             353KB of a 438KB file. Images are skipped at best
+                             and break parsing at worst, and a photo is a
+                             screening liability in the US, UK and EU.
+        no header/footer     Parsers commonly drop the header and footer regions
+                             entirely, so nothing that matters can live there.
+                             Chrome's own print header is off in build.sh.
+        Arial / Liberation   Metrically compatible, embeds as real glyphs with a
+                             Unicode map, so text extracts exactly as authored.
+        ASCII punctuation    Hyphens, not en dashes, in date ranges; "x" not the
+                             multiplication sign; no arrows or middots. Every
+                             one of those has an extractor somewhere that turns
+                             it into a replacement character mid-word.
+        real headings        PROFESSIONAL SUMMARY / TECHNICAL SKILLS /
+                             PROFESSIONAL EXPERIENCE / EDUCATION /
+                             CERTIFICATIONS are the strings parsers segment on.
+                             Inventive section names are the single most common
+                             reason a CV parses as one undifferentiated blob.
+
+      The content is drawn from `src/content/` - the same records the portfolio
+      renders - so a project cannot say one thing here and another there. Where
+      the two used to disagree, the portfolio was right and this file was wrong:
+      Lappeland is a custom-label storefront rather than an outdoor-gear
+      marketplace, and Neonbit is an in-stream advertising marketplace rather
+      than a security dashboard.
+    -->
+    <style>
+      @page {
+        size: A4;
+        margin: 11mm 13mm;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, "Liberation Sans", Helvetica, sans-serif;
+        font-size: 9.1pt;
+        line-height: 1.27;
+        color: #000;
+      }
+
+      /* --- Header ---------------------------------------------------------- */
+
+      h1 {
+        font-size: 16pt;
+        line-height: 1.1;
+        letter-spacing: 0.2px;
+      }
+
+      .title {
+        font-size: 10pt;
+        font-weight: bold;
+        margin-top: 2pt;
+      }
+
+      .contact {
+        font-size: 9pt;
+        margin-top: 3pt;
+      }
+
+      /* --- Sections -------------------------------------------------------- */
+
+      h2 {
+        font-size: 9.8pt;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        border-bottom: 1px solid #000;
+        padding-bottom: 2pt;
+        margin-top: 9pt;
+        margin-bottom: 5pt;
+      }
+
+      /* A role. Title on its own line, then company / location / dates as one
+         text run separated by pipes - the shape parsers match most reliably. */
+      h3 {
+        font-size: 9.7pt;
+        margin-top: 7pt;
+      }
+
+      h3:first-of-type {
+        margin-top: 0;
+      }
+
+      .meta {
+        font-size: 9.2pt;
+        margin-top: 1pt;
+        margin-bottom: 3pt;
+      }
+
+      /* A named platform inside a role. Bold text rather than a heading level,
+         so the outline stays Name > Section > Role and a parser does not read a
+         project as a fifth employer. */
+      .project {
+        margin-top: 4pt;
+      }
+
+      ul {
+        list-style: disc;
+        padding-left: 13pt;
+      }
+
+      li {
+        margin-top: 1.4pt;
+      }
+
+      p {
+        margin-top: 3pt;
+      }
+
+      .skills p {
+        margin-top: 2.4pt;
+      }
+
+      strong {
+        font-weight: bold;
+      }
+
+      /* Keep a role's title, dates and first bullet together, but let the rest
+         of a long role flow across the page break.
+
+         This was `break-inside: avoid-page` on the whole `.role`, which is the
+         wrong rule for a CV: the contract role runs most of a page on its own,
+         so the browser had to ignore it there anyway, while the short Dixeam
+         role at the bottom of page two was honoured and jumped whole to page
+         three — leaving a gap on two and eleven lines stranded on three. Keeping
+         only the heading with what follows it fixes the orphan without paying a
+         page for it. */
+      h2,
+      h3,
+      .meta {
+        break-after: avoid-page;
+      }
+
+      h2,
+      h3 {
+        break-inside: avoid-page;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Mansha Qarib</h1>
+    <p class="title">Senior React Developer | React.js | TypeScript | Next.js | Redux Toolkit</p>
+    <p class="contact">
+      manshaqarib@gmail.com | +966 54 339 8604 | Riyadh, Saudi Arabia |
+      linkedin.com/in/manshaqarib | github.com/manshaqarib777 | manshaqarib.com
+    </p>
+
+    <h2>Professional Summary</h2>
+    <p>
+      Senior React developer with 8+ years building production frontends in React, TypeScript and the
+      Next.js App Router with Server Components, SSR and ISR. Builds reusable component libraries and
+      data-heavy dashboards end to end, including the tax-filing interface used by 700+ US financial
+      institutions, a classifieds and auctions marketplace serving 100,000+ users, and a debt-recovery
+      platform used by 10,000+ businesses. Owns frontend architecture rather than screens: rendering
+      strategy chosen per route, component primitives built once and composed after, WCAG 2.1 AA
+      specified up front, and Core Web Vitals measured against a budget. HackerRank certified in Frontend
+      Developer (React), Software Engineer and Node.js. Based in Riyadh with a transferable Iqama,
+      available immediately.
+    </p>
+
+    <h2>Key Achievements</h2>
+    <ul>
+      <li>
+        Doubled site traffic post-launch by rebuilding a storefront's rendering architecture on the
+        Next.js App Router, at roughly 95 Lighthouse performance on mobile.
+      </li>
+      <li>
+        Built the React and Redux Toolkit interface through which 700+ financial institutions process
+        millions of dollars in tax filings.
+      </li>
+      <li>
+        Delivered the React frontend for a UAE marketplace serving 100,000+ users across four verticals,
+        from one component set parameterised by vertical.
+      </li>
+      <li>
+        Reduced page load times by 30% while leading a small development team, through query optimisation
+        and CI/CD workflows introduced to the team.
+      </li>
+    </ul>
+
+    <h2>Technical Skills</h2>
+    <div class="skills">
+      <p>
+        <strong>Languages:</strong> TypeScript, JavaScript (ES6+), SQL, PHP, HTML5, CSS3
+      </p>
+      <p>
+        <strong>Frontend:</strong> React 18 and 19, Hooks, custom hooks, Context, Next.js (App Router,
+        Server Components, SSR, ISR), React Router, reusable UI component libraries, design systems, Radix
+        UI, shadcn/ui, Storybook, Tailwind CSS, Ant Design, Material UI, Recharts, dnd-kit, responsive and
+        mobile-first design, cross-browser compatibility, WCAG 2.1 AA accessibility, Core Web Vitals, code
+        splitting, SEO, React Native, Vue.js, Nuxt.js
+      </p>
+      <p>
+        <strong>State Management:</strong> Redux Toolkit, Redux, TanStack Query (useQuery, useMutation,
+        cache invalidation), React Context, server and client state separation, normalised store design,
+        Redux Persist
+      </p>
+      <p>
+        <strong>Backend and API:</strong> Node.js, NestJS, Express, Prisma ORM, REST API design and
+        integration, GraphQL, WebSockets, JWT, OAuth, NextAuth.js, Laravel Sanctum, role-based access
+        control, Zod schema validation, Laravel, Supabase
+      </p>
+      <p><strong>Databases:</strong> PostgreSQL, MySQL, MongoDB, Redis</p>
+      <p>
+        <strong>Cloud and DevOps:</strong> AWS (Lambda, S3, EC2, IAM), Serverless Framework, Vercel,
+        Docker, Git, GitHub Actions, Jenkins, CI/CD pipelines
+      </p>
+      <p>
+        <strong>Testing and Quality:</strong> Jest and Vitest (unit and integration), Cypress and
+        Playwright end-to-end, automated regression suites, ESLint, Prettier, Husky pre-commit hooks,
+        code reviews
+      </p>
+      <p>
+        <strong>Practices:</strong> Frontend architecture, rendering strategy per route, Agile and Scrum,
+        mentoring, technical documentation, cross-functional collaboration, stakeholder communication
+      </p>
+      <p><strong>Tools:</strong> Git, Figma (Auto Layout, components, prototyping), Storybook, Vite, npm, Postman, Jira</p>
+    </div>
+
+    <h2>Professional Experience</h2>
+
+    <div class="role">
+      <h3>Senior Frontend Engineer (Contract) - Independent</h3>
+      <p class="meta">Upwork Top Rated Plus | Remote | Feb 2023 - Present</p>
+      <ul>
+        <li>
+          Shipped React and Next.js applications in TypeScript across four concurrent client engagements
+          in e-commerce, SaaS, fintech and healthcare, owning frontend architecture end to end.
+        </li>
+        <li>
+          Chose rendering strategy per route rather than per application: ISR for catalogue pages, server
+          rendering on request for anything reflecting live stock or live rates, Server Components keeping
+          the client bundle to what actually needs interactivity.
+        </li>
+        <li>
+          Built reusable component libraries documented in Storybook, integrated REST and GraphQL APIs
+          secured with JWT, OAuth and role-based access control, and delivered live order, booking and
+          tracking views over WebSockets without polling.
+        </li>
+        <li>
+          Delivered WCAG 2.1 AA accessibility as scoped work rather than a pass at the end, designed
+          screens in Figma where there was no dedicated designer, and shipped through GitHub Actions CI/CD
+          with Jest, ESLint, Prettier and Husky pre-commit hooks.
+        </li>
+        <li>
+          <strong>Lappeland (lappeland.no)</strong> - custom-label storefront for the Norwegian market on
+          the Next.js App Router with TypeScript, Prisma ORM, NextAuth and Tailwind CSS, including a
+          design-your-own configurator. Doubled traffic post-launch by splitting the rendering - catalogue
+          pages incrementally regenerated, live-stock pages server-rendered per request - at roughly 95
+          Lighthouse performance on mobile.
+        </li>
+        <li>
+          <strong>LiftFoils (liftfoils.com)</strong> - headless commerce for a premium electric hydrofoil
+          brand on Next.js 14 and the Shopify Storefront GraphQL API, with a guided configurator that
+          narrows boards, wings and masts by rider level before showing a price, region-based
+          multi-currency pricing and Stripe checkout. Traffic doubled after the migration.
+        </li>
+        <li>
+          <strong>Bang &amp; Olufsen (bang-olufsen.com)</strong> - luxury audio storefronts across 70+
+          countries on Next.js 14, TypeScript and GraphQL, with localised pricing, language and shipping
+          per market, and editorial in Contentful so marketing ships campaigns without a deploy behind ISR
+          product pages.
+        </li>
+        <li>
+          <strong>NerdWallet (nerdwallet.com)</strong> - personal finance comparison platform serving
+          millions of monthly users. Server-rendered the editorial and comparison surfaces in Next.js,
+          React and TypeScript with rate data fetched per request against PostgreSQL, so the indexed page
+          carries the figures the visitor reads, and reflowed comparison tables into stacked cards on
+          narrow viewports.
+        </li>
+        <li>
+          <strong>Deliveroo (deliveroo.co.uk)</strong> - restaurant delivery marketplace across the UK
+          and Europe. Collapsed restaurant, menu and order reads into single round trips behind a Node.js
+          GraphQL layer, put Redis in front of the search path, and built live rider tracking over a
+          WebSocket channel rather than polling.
+        </li>
+        <li>
+          <strong>Neonbit (neonbit.at)</strong> - two-sided advertising marketplace for live gaming
+          streams, built in React and TypeScript on a custom Laravel API with role-scoped views serving
+          brands and streamers from one product, including a planner that turns a budget and a CPM into
+          projected impressions and clicks before booking across 500+ verified streamers.
+        </li>
+        <li>
+          <strong>Salearis (salearis.com)</strong> - B2B sales-talent marketplace across Germany, Austria
+          and Switzerland. One Laravel and Vue.js application serving both sides behind Sanctum sessions
+          with two-factor authentication, Stripe subscription billing, German and English localisation,
+          and candidate sourcing, screening and interview scheduling.
+        </li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <h3>Web Developer - Carbonic IT Solutions</h3>
+      <p class="meta">Pakistan | 2022 - Feb 2023</p>
+      <ul>
+        <li>
+          Delivered client web applications from Figma specification through to production deployment for
+          US and UK clients, working directly with non-technical stakeholders with no technical
+          intermediary in between.
+        </li>
+        <li>
+          <strong>JACOBS Drycleaners (jacobsdrycleaners.co.uk)</strong> - Nuxt.js and Vue.js front end on a
+          Laravel 8 REST API serving two audiences on one system: customers booking and tracking orders,
+          and staff managing those orders and customer records from an admin area.
+        </li>
+        <li>
+          <strong>Global Shopaholic (globalshopaholics.com)</strong> - Bootstrap Vue 3 storefront on a
+          Laravel 8 backend with payment-gateway integration and order processing, delivered end to end
+          against direct stakeholder feedback.
+        </li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <h3>Frontend Engineer - VisionX</h3>
+      <p class="meta">Pakistan | 2019 - 2022</p>
+      <ul>
+        <li>
+          Delivered frontend engineering across three enterprise platforms over a three-year tenure in an
+          Agile team, working with architects, designers and backend engineers and contributing to code
+          reviews and frontend standards.
+        </li>
+        <li>
+          <strong>Halcyon (halcyonsolutions.ai)</strong> - US tax management platform used by 700+
+          financial institutions. Built the enterprise React frontend with Redux Toolkit and Ant Design,
+          replacing per-module forms and data tables with reusable primitives sized for long field sets and
+          conditional sections, which removed validation logic duplicated across filing modules.
+          Normalised the Redux store so every module read a filing from one place, surfaced server-side
+          validation inline against the offending field, and integrated Node.js, MySQL and Prisma ORM
+          services including IRS Tax API data flows.
+        </li>
+        <li>
+          <strong>Ayshei (ayshei.com)</strong> - UAE classifieds and auctions marketplace serving 100,000+
+          users. Built the React frontend for four verticals from one component set parameterised by
+          vertical, against GraphQL APIs over Golang and Node.js microservices with PostgreSQL, including
+          an AI listing assistant that turns a photo into a title and description, vector-based semantic
+          search, and live auction bidding. Shipped on AWS EC2 and S3 through Docker and Jenkins CI/CD.
+        </li>
+        <li>
+          <strong>Morta (morta.com)</strong> - construction-tech SaaS for property developers. Delivered
+          procurement, budgeting and stakeholder coordination on Next.js, TypeScript and GraphQL,
+          modelling procurement as an explicit six-state tender flow, with Stripe subscription billing, a
+          Storybook-documented component library and Jest and Cypress coverage.
+        </li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <h3>Developer and Team Lead - Dixeam Inc</h3>
+      <p class="meta">Pakistan | 2017 - 2019</p>
+      <ul>
+        <li>
+          Led a small development team, introduced CI/CD workflows to streamline delivery, and reduced
+          page load times by 30% through query optimisation and indexing.
+        </li>
+        <li>
+          <strong>SnapDebt (snapdebtrecovery.com)</strong> - debt recovery platform serving 10,000+
+          businesses across Florida, built on React with Redux Toolkit, Node.js and Prisma ORM. Modelled
+          collection workflows as explicit states with document storage on AWS S3, so compliance reporting
+          derived from the same data the interface rendered.
+        </li>
+        <li>
+          <strong>Moonrock (moonrockpm.com)</strong> - cross-platform tenant and landlord property
+          management app in React Native and TypeScript with MySQL, putting rent, leases and maintenance
+          on one shared record, with Stripe handling recurring rent and maintenance requests tracked as
+          state rather than messages.
+        </li>
+      </ul>
+    </div>
+
+    <h2>Education</h2>
+    <h3>Bachelor of Science in Computer Science</h3>
+    <p class="meta">University of Sargodha, Pakistan | 2016 - 2020</p>
+
+    <h2>Certifications</h2>
+    <ul>
+      <li>Frontend Developer (React) - HackerRank Role Certification | Dec 2025 | ID AB235BF66DFC</li>
+      <li>
+        Software Engineer - HackerRank Role Certification (problem solving, SQL, REST API) | Jul 2026 |
+        ID E6B80B2188AA
+      </li>
+      <li>Node.js - HackerRank Skill Certification | Jul 2026 | ID 573E451FEDA8</li>
+      <li>Top Rated Plus Freelancer - Upwork | 2023</li>
+    </ul>
+  </body>
+</html>

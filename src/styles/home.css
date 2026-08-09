@@ -73,30 +73,6 @@ body.cursor-expanded .portfolio .cursor-lens {
   }
 }
 
-/* A 72px graph-paper grid, masked to fade at the top and bottom edges. */
-.portfolio .design-mcp-section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    linear-gradient(oklch(95% 0.018 82 / 0.025) 1px, #0000 1px),
-    linear-gradient(90deg, oklch(95% 0.018 82 / 0.025) 1px, #0000 1px);
-  background-size: 72px 72px;
-  mask-image: linear-gradient(#0000, #000 18% 82%, #0000);
-  -webkit-mask-image: linear-gradient(#0000, #000 18% 82%, #0000);
-}
-
-@media (hover: hover) and (pointer: fine) {
-
-  /* The whole field reacts when the button inside it is hovered. */
-  .portfolio .design-mcp-action-copy:has(.design-mcp-copy-button:hover) {
-    background: oklch(52% 0.1 121 / 0.19);
-    border-color: oklch(87% 0.17 121 / 0.26);
-  }
-}
-
 /* ============================================================================
    Depth backdrops
    ========================================================================= */
@@ -168,6 +144,7 @@ body.cursor-expanded .portfolio .cursor-lens {
    reference carries the same rule for the same reason. */
 .portfolio .intro-section > :not(.depth-backdrop),
 .portfolio .story-card,
+.portfolio .story-card > *,
 .portfolio .project-heading,
 .portfolio .project-visual,
 .portfolio .project .case-link,
@@ -175,6 +152,7 @@ body.cursor-expanded .portfolio .cursor-lens {
 .portfolio .project-brief > div,
 .portfolio .capabilities .section-heading > *,
 .portfolio .capability,
+.portfolio .capability > *,
 .portfolio .experience > .section-kicker,
 .portfolio .experience-row,
 .portfolio .perspective-copy > *,
@@ -702,7 +680,9 @@ html.skip-home-loader .portfolio .site-loader {
    travelling while the panel lifts, rather than freezing on the way out. */
 .portfolio .site-loader[data-phase="entering"] .site-loader-banner,
 .portfolio .site-loader[data-phase="exiting"] .site-loader-banner {
-  animation: 1.6s cubic-bezier(0.19, 1, 0.22, 1) 0.3s forwards
+  /* 1.15s + 0.2s delay. Paired with `TIMING.full.hold` in `SiteLoader` — see the
+     note there: the banners are timed to land exactly as the panel lifts. */
+  animation: 1.15s cubic-bezier(0.19, 1, 0.22, 1) 0.2s forwards
     loader-banner-enter;
 }
 

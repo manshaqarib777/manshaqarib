@@ -74,7 +74,7 @@ const CARD_MEDIA =
  */
 const BADGE = [
   "inline-flex h-fit w-fit shrink-0 items-center justify-center",
-  "rounded-[999px] border border-accent/40 bg-mcp-surface px-[11px] py-[5px]",
+  "rounded-[999px] border border-accent/40 bg-surface-raised px-[11px] py-[5px]",
   "text-[11px] font-[650] tracking-[0.14em] whitespace-nowrap uppercase",
   "cursor-default text-accent",
   "[transition:color_0.18s_ease,background-color_0.18s_ease,border-color_0.18s_ease,transform_0.16s_var(--ease-silk)]",

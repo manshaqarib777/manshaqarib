@@ -62,7 +62,13 @@ export function SiteHeader({ brandHref, links, currentHref }: SiteHeaderProps) {
           {BRAND}
         </Link>
 
-        <div className="nav-links inline-flex flex-col items-end justify-end gap-[5px] text-right to-sm:gap-[4px]">
+        {/* A column on the desktop rail, a single row below 640px.
+            Three stacked links are ~60px tall, which on a phone is a block of
+            nav sitting across whatever heading happens to be under it — and the
+            fixed header blends in `difference`, so the collision reads as two
+            texts fighting rather than as chrome. One row is ~20px and clears the
+            content. `items-baseline` sits it on the wordmark's baseline. */}
+        <div className="nav-links inline-flex flex-col items-end justify-end gap-[5px] text-right to-sm:flex-row to-sm:items-baseline to-sm:gap-[14px]">
           {links.map((link) => (
             <a
               className={NAV_LINK}

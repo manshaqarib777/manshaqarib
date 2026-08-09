@@ -21,9 +21,17 @@ export interface CareerSlide {
   stack: readonly string[];
   liveUrl?: string;
   /**
-   * Only the engagements with a written case study under `/work/[slug]`. That
-   * route sets `dynamicParams = false`, so a slug it does not build is a 404 —
-   * slides without one simply do not render the second button.
+   * The engagement's case study under `/work/[slug]`.
+   *
+   * All fourteen have one written, and all fourteen now carry it. Eight did not:
+   * their cards offered "Go to website" and nothing else, so the deck advertised
+   * a live site while the study sat unlinked — and the work index on the home
+   * page, which reads the same records, listed a case study for the very project
+   * the card would not open.
+   *
+   * Still optional, and still checked: `/work/[slug]` sets
+   * `dynamicParams = false`, so a slug it does not build is a hard 404. A slide
+   * without one simply does not render the second button.
    */
   caseSlug?: string;
 }
@@ -57,6 +65,7 @@ export const CAREER_SLIDES: readonly CareerSlide[] = [
     poster: `${SCREENSHOTS}/08-liftfoils/1-desktop-hero.png`,
     stack: ["NEXT.JS 14", "SHOPIFY", "TYPESCRIPT", "STRIPE"],
     liveUrl: "https://www.liftfoils.com/",
+    caseSlug: "liftfoils",
   },
   {
     title: "BANG & OLUFSEN",
@@ -65,6 +74,7 @@ export const CAREER_SLIDES: readonly CareerSlide[] = [
     poster: `${SCREENSHOTS}/11-bang-olufsen/1-desktop-hero.png`,
     stack: ["NEXT.JS 14", "TYPESCRIPT", "GRAPHQL", "CONTENTFUL"],
     liveUrl: "https://www.bang-olufsen.com/",
+    caseSlug: "bang-olufsen",
   },
   {
     title: "NERDWALLET",
@@ -73,6 +83,7 @@ export const CAREER_SLIDES: readonly CareerSlide[] = [
     poster: `${SCREENSHOTS}/10-nerdwallet/1-desktop-hero.png`,
     stack: ["NEXT.JS", "REACT", "TYPESCRIPT", "POSTGRESQL"],
     liveUrl: "https://www.nerdwallet.com/",
+    caseSlug: "nerdwallet",
   },
   {
     // Captured by hand: the site answers an automated browser with a bot
@@ -120,6 +131,7 @@ export const CAREER_SLIDES: readonly CareerSlide[] = [
     poster: `${SCREENSHOTS}/04-jacobs-drycleaners/1-desktop-hero.png`,
     stack: ["NUXT.JS", "VUE", "LARAVEL", "REST API"],
     liveUrl: "https://jacobsdrycleaners.co.uk",
+    caseSlug: "jacobs-drycleaners",
   },
   {
     title: "SHOPAHOLIC — 2022",
@@ -128,6 +140,7 @@ export const CAREER_SLIDES: readonly CareerSlide[] = [
     poster: `${SCREENSHOTS}/03-global-shopaholic/1-desktop-hero.png`,
     stack: ["VUE 3", "LARAVEL", "PHP", "PAYMENTS"],
     liveUrl: "https://globalshopaholics.com",
+    caseSlug: "global-shopaholic",
   },
 
   /* ------------------------------------------------------ VisionX, 2019 – 2022 */
@@ -138,6 +151,7 @@ export const CAREER_SLIDES: readonly CareerSlide[] = [
     poster: `${SCREENSHOTS}/07-morta/1-desktop-hero.png`,
     stack: ["NEXT.JS", "NODE.JS", "GRAPHQL", "STRIPE"],
     liveUrl: "https://morta.com/",
+    caseSlug: "morta",
   },
   {
     title: "AYSHEI — 2019",
@@ -175,5 +189,6 @@ export const CAREER_SLIDES: readonly CareerSlide[] = [
     poster: `${SCREENSHOTS}/12-moonrock/1-desktop-hero.png`,
     stack: ["REACT NATIVE", "TYPESCRIPT", "MYSQL", "STRIPE"],
     liveUrl: "https://www.moonrockpm.com",
+    caseSlug: "moonrock",
   },
 ];

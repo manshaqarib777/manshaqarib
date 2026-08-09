@@ -1,4 +1,5 @@
 import { CONTACT, SOCIAL_LINKS } from "@/content/home";
+import { EmailAddress } from "../EmailAddress";
 import { PerspectiveGrid } from "../PerspectiveGrid";
 import {
   BUTTON,
@@ -9,6 +10,7 @@ import {
   CONTACT_COPY,
   CONTACT_H2,
   CONTACT_KICKER,
+  CONTACT_NOTE,
   CONTACT_SECTION,
   SECTION_PAD,
   SOCIAL_ICON,
@@ -18,6 +20,9 @@ import {
 /**
  * The closing band: back to the dark ground, with the same tile grid as the
  * hero — flatter and quieter, per the contact variant.
+ *
+ * The order is what a reader needs, in that order: what this is, what I'm open
+ * to, the address itself, then the two actions.
  */
 export function Contact() {
   return (
@@ -30,6 +35,8 @@ export function Contact() {
       <div className={CONTACT_COPY}>
         <p className={CONTACT_KICKER}>{CONTACT.kicker}</p>
         <h2 className={CONTACT_H2}>{CONTACT.title}</h2>
+        <p className={CONTACT_NOTE}>{CONTACT.note}</p>
+        <EmailAddress email={CONTACT.email} />
       </div>
 
       <div className={CONTACT_ACTIONS}>
@@ -48,7 +55,7 @@ export function Contact() {
 
         {/* A `nav` rather than a div: `aria-label` needs a role to attach to,
             and on a bare div it is dropped. */}
-        <nav className={SOCIAL_ROW} aria-label="Social links">
+        <nav className={SOCIAL_ROW} aria-label="Profiles">
           {SOCIAL_LINKS.map((social) => (
             <a
               className={SOCIAL_ICON}

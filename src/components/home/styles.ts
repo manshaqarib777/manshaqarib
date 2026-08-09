@@ -202,6 +202,49 @@ export const TAG = [
 ].join(" ");
 
 /* ---------------------------------------------------------------------------
+   Work index — everything the featured rows leave out
+   ------------------------------------------------------------------------ */
+
+/** Sits on the work section's alternate ground, closing the band. */
+export const WORK_INDEX = [
+  "work-index px-[max(24px,50vw_-_590px)] pt-[96px] pb-[120px]",
+  "[border-top:1px_solid_#15140f14] bg-work-alt to-sm:px-[20px] to-sm:pt-[64px] to-sm:pb-[80px]",
+].join(" ");
+
+export const WORK_INDEX_LIST =
+  "mx-auto mt-[48px] grid w-[min(1180px,100%)] grid-cols-[repeat(2,minmax(0,1fr))] gap-x-[clamp(28px,4vw,64px)] to-lg:grid-cols-[1fr]";
+
+/**
+ * One row. A project with a written case study is a link to it; one without is
+ * a link to the live site; one with neither is a plain row rather than a link
+ * that goes nowhere.
+ *
+ * `group` so the trailing label can respond to a hover anywhere on the row.
+ */
+export const WORK_INDEX_ROW = [
+  "group flex items-baseline justify-between gap-[20px] py-[22px] no-underline",
+  "[border-top:1px_solid_#15140f1f] text-work-ink",
+  "[transition:padding_0.2s_var(--ease-silk)]",
+  "fine:hover:[padding-left:10px]",
+].join(" ");
+
+export const WORK_INDEX_TITLE =
+  "block font-display text-[clamp(22px,2.2vw,30px)] leading-[1.1] font-[560] tracking-[-0.03em]";
+
+export const WORK_INDEX_DISCIPLINE =
+  "mt-[7px] block text-[13px] leading-[1.4] text-[oklch(45%_0.022_260)]";
+
+/**
+ * The "Case study" / "Live site" label. Present at rest so the row says where it
+ * goes before it is hovered — it only brightens on hover rather than appearing.
+ */
+export const WORK_INDEX_ACTION = [
+  "shrink-0 text-[12px] font-[700] tracking-[0.14em] uppercase whitespace-nowrap",
+  "text-[oklch(58%_0.022_260)] [transition:color_0.18s_ease]",
+  "fine:group-hover:text-[oklch(20%_0.012_260)]",
+].join(" ");
+
+/* ---------------------------------------------------------------------------
    Story
    ------------------------------------------------------------------------ */
 
@@ -240,133 +283,38 @@ const STORY_CARD_SPAN: Record<string, string> = {
  */
 const STORY_CARD_SPAN_RESPONSIVE = "to-sm:[grid-column:auto]";
 
+/**
+ * The heading scale, stepped down with the span.
+ *
+ * All five tiles used to share one clamp topping out at 60px, which a `span 3`
+ * column cannot hold: at 1440px "Measure it." broke mid-word into "Measur /
+ * e it." The old note in `content/home.ts` asked whoever edited the copy to
+ * measure a replacement against the column by hand — a constraint the content
+ * module has no way to check. Tying the scale to the span instead makes the
+ * copy free: the narrow tiles set smaller type, which is what a narrow column
+ * wanted in the first place.
+ *
+ * Below 640px every tile is full width, so all three variants climb back to one
+ * scale — hence the shared `to-sm:` step rather than three different ones.
+ */
+const STORY_CARD_TITLE_SCALE: Record<string, string> = {
+  wide: "text-[clamp(26px,3.6vw,60px)]",
+  long: "text-[clamp(26px,3.6vw,60px)]",
+  tall: "text-[clamp(26px,3.6vw,60px)]",
+  mid: "text-[clamp(24px,2.9vw,46px)]",
+  small: "text-[clamp(22px,2.3vw,36px)]",
+};
+
+export const storyCardTitleClass = (size: string) =>
+  [
+    "m-0 max-w-[14ch] font-display leading-[0.94] text-balance",
+    STORY_CARD_TITLE_SCALE[size] ?? STORY_CARD_TITLE_SCALE.wide,
+    "to-sm:max-w-[16ch] to-sm:text-[clamp(32px,9vw,52px)]",
+  ].join(" ");
+
 /** The size keyword is kept in the class list as a readable marker. */
 export const storyCardClass = (size: string) =>
   `${size} ${STORY_CARD} ${STORY_CARD_SPAN[size] ?? ""} ${STORY_CARD_SPAN_RESPONSIVE}`;
-
-/* ---------------------------------------------------------------------------
-   Design MCP panel
-   ------------------------------------------------------------------------ */
-
-/**
- * Focus ring and press feedback shared by every control in the panel.
- *
- * `font-family: inherit` rather than the `font` shorthand: buttons take a family
- * from the UA and need overriding, but the shorthand also resets weight and
- * line-height. Tailwind resolves conflicting utilities by stylesheet order, not
- * class-list order, so a shorthand here silently beat the `font-[660]` and
- * `leading-none` set alongside it.
- */
-const MCP_CONTROL = [
-  "[font-family:inherit] [-webkit-tap-highlight-color:transparent]",
-  "active:[transform:scale(0.97)]",
-  "focus-visible:[outline:2px_solid_oklch(85%_0.07_78)] focus-visible:[outline-offset:3px]",
-].join(" ");
-
-/**
- * Everything both tab kinds share. Deliberately carries no size and no
- * `data-active` treatment: the two kinds differ on exactly those properties, and
- * two utilities for one property cannot reliably override each other.
- */
-export const MCP_TAB = [
-  MCP_CONTROL,
-  "inline-flex w-auto cursor-pointer items-center justify-center gap-[9px]",
-  "rounded-[999px] [border:0]",
-  "bg-none text-center text-[16px] font-[660] leading-none whitespace-nowrap",
-  "[transition:color_0.16s_var(--ease-silk),background-color_0.16s_var(--ease-silk),box-shadow_0.18s_var(--ease-silk),transform_0.14s_var(--ease-silk)]",
-  // The `hover:` is load-bearing — without it the hover treatment sticks to every
-  // inactive tab at rest.
-  "fine:not-data-[active=true]:hover:text-ink",
-  "fine:not-data-[active=true]:hover:bg-[oklch(100%_0_0/0.055)]",
-  "to-sm:text-[14px]",
-].join(" ");
-
-/** Agent tabs: cream pill when selected. */
-export const MCP_AGENT_TAB = [
-  "min-h-[46px] px-[15px] to-sm:min-h-[42px] to-sm:px-[13px]",
-  "text-[oklch(87%_0.018_82)]",
-  "data-[active=true]:text-[oklch(18%_0.01_260)]",
-  "data-[active=true]:bg-[oklch(95%_0.01_82)]",
-  "data-[active=true]:[box-shadow:inset_0_1px_oklch(100%_0_0/0.55),0_8px_24px_oklch(3%_0.01_260/0.2)]",
-].join(" ");
-
-/** Mode tabs: taller, dimmer at rest, and a translucent lift when selected. */
-export const MCP_MODE_TAB = [
-  "min-h-[48px] px-[16px] to-sm:min-h-[40px] to-sm:px-[13px]",
-  "text-[oklch(72%_0.018_82)]",
-  "data-[active=true]:text-ink",
-  "data-[active=true]:[background:linear-gradient(oklch(100%_0_0/0.13),oklch(100%_0_0/0.055))]",
-  "data-[active=true]:[box-shadow:inset_0_1px_oklch(100%_0_0/0.08),0_8px_20px_oklch(3%_0.01_260/0.22)]",
-].join(" ");
-
-/** Both tablists. They scroll horizontally once the toolbar stacks. */
-export const MCP_TABS =
-  "flex items-center gap-[6px] to-md:justify-start to-md:overflow-x-auto to-md:p-[3px_2px] to-md:[scrollbar-width:none]";
-
-/**
- * Step action. `mt-auto` pins each one to the bottom of its column so the three
- * line up even though the copy above them differs in length.
- */
-export const MCP_ACTION = [
-  MCP_CONTROL,
-  "mt-auto inline-flex w-auto max-w-full cursor-pointer items-center justify-center gap-[10px]",
-  "min-h-[48px] rounded-[13px] border border-[oklch(95%_0.018_82/0.1)] px-[16px]",
-  "bg-[oklch(100%_0_0/0.085)] text-ink",
-  "text-center text-[15px] font-[680] leading-[1.15] no-underline",
-  "[box-shadow:inset_0_1px_oklch(100%_0_0/0.07),0_6px_oklch(3%_0.01_260/0.24)]",
-  "[transition:color_0.16s_ease,background-color_0.16s_ease,border-color_0.16s_ease,transform_0.14s_var(--ease-silk),box-shadow_0.16s_var(--ease-silk)]",
-  "to-sm:mt-[28px]",
-].join(" ");
-
-export const MCP_ACTION_SECONDARY = [
-  "fine:hover:bg-[oklch(100%_0_0/0.13)]",
-  "fine:hover:border-[oklch(95%_0.018_82/0.18)]",
-].join(" ");
-
-export const MCP_ACTION_PRIMARY = [
-  "border-[oklch(72%_0.14_40)] bg-mcp-warm text-[oklch(98%_0.006_82)]",
-  "[box-shadow:inset_0_-3px_oklch(35%_0.12_40/0.28),0_7px_oklch(3%_0.01_260/0.28),0_16px_28px_oklch(3%_0.01_260/0.18)]",
-  "fine:hover:bg-[oklch(72%_0.14_40)] fine:hover:border-[oklch(77%_0.13_40)]",
-].join(" ");
-
-/** The copyable value field. `:has()` on the wrapper stays in CSS. */
-export const MCP_ACTION_COPY = [
-  "mt-auto grid w-full grid-cols-[minmax(0,1fr)_44px] items-center gap-[8px]",
-  "min-h-[50px] overflow-hidden rounded-[13px]",
-  "border border-[oklch(87%_0.17_121/0.16)] bg-[oklch(52%_0.1_121/0.15)]",
-  "p-[2px_3px_2px_16px] text-left text-mcp-link",
-  "[box-shadow:inset_0_1px_oklch(87%_0.17_121/0.04)]",
-  "to-sm:mt-[28px]",
-].join(" ");
-
-export const MCP_COPY_BUTTON = [
-  MCP_CONTROL,
-  "inline-flex size-[44px] cursor-pointer items-center justify-center",
-  "rounded-[10px] [border:0] bg-[oklch(87%_0.17_121/0.08)] text-mcp-link",
-  "[transition:color_0.16s_ease,background-color_0.16s_ease,transform_0.14s_var(--ease-silk)]",
-  "fine:hover:bg-[oklch(87%_0.17_121/0.15)]",
-].join(" ");
-
-/** Links and buttons inside the panel footer. */
-export const MCP_SHORTCUT_LINK = [
-  "inline-flex w-auto max-w-full cursor-pointer items-center justify-center gap-[8px]",
-  // `[font-family:inherit]`, never the `font` shorthand — it would reset the
-  // weight set alongside it.
-  "[border:0] bg-none px-0 py-[4px] font-[680] text-ink no-underline [font-family:inherit]",
-  "[transition:color_0.16s_ease,transform_0.14s_var(--ease-silk)]",
-  "fine:hover:text-[oklch(79%_0.018_82)]",
-  "active:[transform:scale(0.97)]",
-  "focus-visible:[outline:2px_solid_oklch(85%_0.07_78)] focus-visible:[outline-offset:3px]",
-].join(" ");
-
-/**
- * The chevron shifts right on hover of its parent action or link.
- *
- * `!` on the size is required: the Material Symbols stylesheet comes from Google
- * Fonts and is unlayered, so its `font-size: 24px` outranks any Tailwind utility.
- */
-export const MCP_CHEVRON =
-  "design-mcp-chevron text-[22px]! [transition:transform_0.18s_var(--ease-silk)]";
 
 /* ---------------------------------------------------------------------------
    Capabilities
@@ -395,20 +343,29 @@ export const CAPABILITIES_SECTION = "capabilities bg-paper text-paper-ink";
  */
 export const CAPABILITY_LIST = [
   "capability-list mt-[56px] grid gap-px bg-[#15140f29]",
-  "grid-cols-[repeat(4,minmax(0,1fr))] to-sm:grid-cols-[1fr]",
+  // Two columns from 980px down, not four. The dead media query documented
+  // above meant four ~165px columns survived to 640px, where "Frontend
+  // architecture" wrapped onto three lines against a title that has no room to
+  // wrap. This is that design decision, made.
+  "grid-cols-[repeat(4,minmax(0,1fr))] to-lg:grid-cols-[repeat(2,minmax(0,1fr))]",
+  "to-sm:grid-cols-[1fr]",
 ].join(" ");
 
 export const CAPABILITY = [
-  "capability min-h-[210px] p-[28px] bg-paper",
+  // `flex-col` rather than the block box it was: the title and body need a real
+  // gap between them, and a gap is the honest way to say so — the `p` carried no
+  // margin (Tailwind's preflight zeroes it), so the body used to sit flush
+  // against the descenders of a two-line title.
+  "capability flex min-h-[210px] flex-col gap-[14px] p-[28px] bg-paper",
   "[transition:transform_0.18s_var(--ease-silk),background-color_0.18s_ease]",
   "fine:hover:bg-[oklch(93%_0.024_82)]",
   "fine:hover:[transform:translateY(-2px)]",
 ].join(" ");
 
 /** Weight, leading and tracking come from the `@layer base` h3 rule. */
-export const CAPABILITY_TITLE = "m-0 font-display text-[28px]";
+export const CAPABILITY_TITLE = "m-0 font-display text-[26px] text-balance";
 
-export const CAPABILITY_TEXT = "text-paper-body leading-[1.5]";
+export const CAPABILITY_TEXT = "m-0 text-paper-body leading-[1.5]";
 
 /* ---------------------------------------------------------------------------
    Experience
@@ -422,20 +379,42 @@ export const EXPERIENCE = `experience ${EDITORIAL_GROUND}`;
 /**
  * Company / role / detail, as three columns sharing one hairline rule.
  *
- * Stays three columns at every width, for the same dead-media-query reason as
- * CAPABILITY_LIST: the `1fr` tablet rule never took effect.
+ * It used to stay three columns at every width, for the same dead-media-query
+ * reason as CAPABILITY_LIST — which on a 390px phone meant three ~110px columns
+ * of one-word lines with the detail column clipped off the right edge of the
+ * viewport. A career section is the part of a portfolio most likely to be read
+ * on a phone, so this now stacks: role and dates beside the company at tablet
+ * width, everything in one column below 640px.
  */
 export const EXPERIENCE_ROW = [
-  "experience-row grid grid-cols-[0.7fr_0.55fr_1fr] gap-[34px] py-[34px]",
-  "[border-top:1px_solid_#15140f24]",
+  "experience-row grid gap-[34px] py-[34px] [border-top:1px_solid_#15140f24]",
+  "grid-cols-[0.7fr_0.55fr_1fr]",
+  "to-lg:grid-cols-[0.9fr_1fr] to-lg:gap-x-[28px] to-lg:gap-y-[18px]",
+  "to-sm:grid-cols-[1fr] to-sm:gap-[12px] to-sm:py-[28px]",
 ].join(" ");
 
+/**
+ * The company cell: name over its date range.
+ *
+ * At tablet width the detail column moves to the second row and spans both, so
+ * the two short cells sit side by side above it rather than squeezing a long
+ * paragraph into a third of the width.
+ */
+export const EXPERIENCE_HEAD = "grid content-start gap-[8px]";
+
 export const EXPERIENCE_COMPANY =
-  "m-0 font-display text-[clamp(30px,4vw,52px)] leading-[1]";
+  "m-0 font-display text-[clamp(28px,4vw,52px)] leading-[1]";
 
-export const EXPERIENCE_ROLE = "m-0 font-[720]";
+/** Small, tracked and quiet: a date is metadata, not a heading. */
+export const EXPERIENCE_DURATION =
+  "m-0 text-[12px] font-[700] tracking-[0.14em] text-paper-kicker uppercase";
 
-export const EXPERIENCE_DETAIL = "text-paper-body leading-[1.5]";
+export const EXPERIENCE_ROLE = "m-0 font-[720] to-lg:self-start";
+
+export const EXPERIENCE_DETAIL = [
+  "m-0 text-paper-body leading-[1.5]",
+  "to-lg:[grid-column:1/-1] to-sm:[grid-column:auto]",
+].join(" ");
 
 /* ---------------------------------------------------------------------------
    Perspective
@@ -470,19 +449,20 @@ export const CONTACT_COPY =
   "contact-copy relative z-[2] grid justify-items-center w-full";
 
 /**
- * The contact kicker is *not* the 12px amber KICKER.
+ * The contact kicker, now the same 12px amber eyebrow as every other section.
  *
- * In the pre-Tailwind stylesheet `.contact p` (0,2,1) outranked
- * `.section-kicker` (0,2,0), so
- * this one resolves to 21px muted with a 28px top margin while still keeping
- * the kicker's weight, tracking and casing. Transcribed as computed rather than
- * as authored, so the cascade accident is preserved deliberately and visibly.
+ * It used to render at 21px muted, which was not a decision: in the pre-Tailwind
+ * stylesheet `.contact p` (0,2,1) outranked `.section-kicker` (0,2,0), and the
+ * migration transcribed the computed result to preserve the cascade accident
+ * visibly. Preserved visibly it read as a mistake — one section whose eyebrow is
+ * five times the size of the rest, sitting directly above the largest heading on
+ * the page. The accident is now resolved in favour of the design.
  */
-export const CONTACT_KICKER = [
-  "section-kicker mt-[28px] max-w-[760px]",
-  "text-[21px] font-[760] leading-[1.5] tracking-[0.16em] uppercase",
-  "text-muted",
-].join(" ");
+export const CONTACT_KICKER = `section-kicker ${KICKER}`;
+
+/** What I'm open to, between the heading and the address. */
+export const CONTACT_NOTE =
+  "mx-auto mt-[clamp(18px,2vw,26px)] mb-[clamp(22px,2.4vw,32px)] max-w-[520px] text-[17px] leading-[1.5] text-muted";
 
 export const CONTACT_ACTIONS = [
   "contact-actions relative z-[2] flex flex-wrap",

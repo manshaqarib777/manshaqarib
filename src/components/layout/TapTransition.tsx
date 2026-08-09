@@ -27,11 +27,23 @@ import { useRouter } from "next/navigation";
  * and the class names, nothing else.
  */
 
-/** Matches the departure animation in the stylesheet. */
-const LEAVE_MS = 501;
+/**
+ * Matches the departure animation in the stylesheet.
+ *
+ * These two used to be 501 and 1200 — 1.7 seconds between clicking a case study
+ * and being able to read it, of which 1.2s was spent looking at a black panel
+ * over a destination that had already arrived. The wipe is a signature, but a
+ * signature that has to be sat through twice to compare two projects stops being
+ * one. Shortened to ~1.1s total: the same choreography, at a pace that survives
+ * being seen more than once.
+ *
+ * Both values are duplicated as animation durations in `globals.css`; change one
+ * and the panel either snaps or hangs.
+ */
+const LEAVE_MS = 420;
 
 /** Matches the arrival animation. Longer: the destination has more to reveal. */
-const ARRIVE_MS = 1200;
+const ARRIVE_MS = 720;
 
 const HAND_SRC = "/tap-animation.gif";
 

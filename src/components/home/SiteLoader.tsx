@@ -21,9 +21,22 @@ import { BRAND } from "@/content/home";
  * `useAssetLoader` instead; the two are deliberately different.)
  */
 
-/** Phase timings, in ms. */
+/**
+ * Phase timings, in ms.
+ *
+ * These were 2000 / 2500 / 1000 — five and a half seconds of full-screen intro
+ * before a first-time visitor could read a word. For a portfolio that is a real
+ * cost: the reader is usually deciding between several tabs, and the intro is
+ * the one part of the page that cannot be skimmed past.
+ *
+ * The whole choreography still plays, at 3.35s. `hold` is not arbitrary: the
+ * banners land at `count + 200 + 1150` (their delay plus duration, in
+ * `home.css`), which is exactly when `exit` begins — so the panel starts lifting
+ * on the frame the banners come to rest, rather than either freezing them or
+ * waiting on them. Move one and move the other.
+ */
 const TIMING = {
-  full: { count: 2000, hold: 2500, exit: 1000 },
+  full: { count: 1200, hold: 1350, exit: 800 },
   reduced: { count: 240, hold: 80, exit: 180 },
 } as const;
 

@@ -41,12 +41,9 @@
      the other light-section tokens above. */
   --color-work-kicker: oklch(50% 0.03 260);
 
-  /* --- Starter panel ramp ------------------------------------------------- */
-  --color-mcp-muted: oklch(72% 0.022 78);
-  --color-mcp-panel: oklch(20% 0.012 260);
-  --color-mcp-surface: oklch(14.5% 0.009 260);
-  --color-mcp-warm: oklch(68% 0.14 40);
-  --color-mcp-link: oklch(87% 0.17 121);
+  /* --- Raised dark surface ------------------------------------------------ */
+  /* One step up from the charcoal ground: the career deck's stack chips. */
+  --color-surface-raised: oklch(14.5% 0.009 260);
 
   /* --- Type --------------------------------------------------------------- */
   /* Inter is load-bearing rather than decorative. The site uses 20 distinct
@@ -245,6 +242,26 @@
   opacity: 0.38;
 }
 
+/* Below 640px the links are a single row, where the dot has nowhere to go: it
+   sits 14px to the left of its link, which is exactly the gap, so it would land
+   on the previous label — and the -10px shift would nudge its neighbours. The
+   current section is marked by weight and opacity instead. */
+@media (width <= 640px) {
+  .nav-links a::before {
+    display: none;
+  }
+
+  .nav-links a {
+    opacity: 0.58;
+  }
+
+  .nav-links a:hover,
+  .nav-links a[aria-current="location"] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* ============================================================================
    Route transition curtain and tap hand
    ----------------------------------------------------------------------------
@@ -326,7 +343,8 @@ html.is-tap-transitioning .transition-curtain {
   height: 0;
   background: #000;
   transform: none;
-  animation: overlay-slide-out-bottom 0.501s both;
+  /* Paired with `LEAVE_MS` in `TapTransition`. */
+  animation: overlay-slide-out-bottom 0.42s both;
 }
 
 /* Arriving: anchored to the top, shrinking away. Slower than the departure —
@@ -336,7 +354,8 @@ html.is-tap-arriving .transition-curtain {
   height: 0;
   background: #000;
   transform: none;
-  animation: overlay-slide-in-top 1.2s both;
+  /* Paired with `ARRIVE_MS` in `TapTransition`. */
+  animation: overlay-slide-in-top 0.72s both;
 }
 
 html.is-tap-settled .transition-curtain {

@@ -4,6 +4,7 @@ import "@/styles/case-study.css";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { CaseClosing } from "@/components/case-study/sections/CaseClosing";
 import { CaseHero } from "@/components/case-study/sections/CaseHero";
+import { CaseNext } from "@/components/case-study/sections/CaseNext";
 import { CaseProduct } from "@/components/case-study/sections/CaseProduct";
 import { CaseStoryIntro } from "@/components/case-study/sections/CaseStoryIntro";
 import { getCaseStudy } from "@/content/case-studies";
@@ -23,10 +24,14 @@ interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-/** Only projects that have both facts and a written case study get a page. */
-const CASE_SLUGS = PROJECTS.filter((project) => getCaseStudy(project.slug)).map(
-  (project) => project.slug,
-);
+/**
+ * Only projects that have both facts and a written case study get a page.
+ *
+ * Held as the project records rather than as slugs alone, because the closing
+ * band needs the next study's title and discipline as well as its URL.
+ */
+const CASE_PROJECTS = PROJECTS.filter((project) => getCaseStudy(project.slug));
+const CASE_SLUGS = CASE_PROJECTS.map((project) => project.slug);
 
 export const dynamicParams = false;
 
@@ -63,6 +68,15 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
   if (!project || !study) notFound();
 
+  // Wraps, so the last study leads back to the first rather than rendering a
+  // band with nothing in it. A single-study site would point at itself, so that
+  // case renders no band at all.
+  const index = CASE_PROJECTS.findIndex((entry) => entry.slug === slug);
+  const next =
+    CASE_PROJECTS.length > 1
+      ? CASE_PROJECTS[(index + 1) % CASE_PROJECTS.length]
+      : undefined;
+
   return (
     <main className={SHELL} data-case={slug} id="main">
       {/* Literally the same header as the home page. Reusing it keeps this the
@@ -89,6 +103,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
       <CaseStoryIntro project={project} study={study} />
       <CaseProduct project={project} study={study} />
       <CaseClosing study={study} />
+      {next && <CaseNext next={next} />}
     </main>
   );
 }

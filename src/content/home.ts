@@ -2,28 +2,42 @@ import { RESUME_PDF } from "./assets";
 
 /**
  * Copy for the home route, section by section, in the order the page renders
- * them. Project records live in `projects.ts`, the career deck in `career.ts`
- * and the starter panel in `design-mcp.ts`; everything here is prose.
+ * them. Project records live in `projects.ts` and the career deck in
+ * `career.ts`; everything here is prose.
  *
  * Kept out of the components so a copy edit never touches markup.
+ *
+ * The page makes one argument in eight beats, and each beat has its own job.
+ * Nothing should say the same thing twice — the sections used to state the same
+ * three claims (primitives, accessibility, performance) four times over, in the
+ * marquee, the bento, the capabilities heading and the capability cards, which
+ * read as padding rather than emphasis. The registers now are:
+ *
+ *   marquee        the stack, as nouns
+ *   bento          the principles
+ *   capabilities   what an engagement actually is
+ *   perspective    the single idea underneath all of it
+ *
+ * If a new claim belongs in more than one of those, it belongs in one.
  */
 
 /** The wordmark. Read by both the header and the loader's banner tracks. */
 export const BRAND = "ManshaQarib.";
 
+/** In page order, so the nav reads down the document rather than across it. */
 export const NAV_LINKS = [
-  { label: "About", href: "#capabilities" },
   { label: "Work", href: "#work" },
+  { label: "About", href: "#capabilities" },
   { label: "Contact", href: "#contact" },
 ] as const;
 
 export const HERO = {
   eyebrow: "Mansha Qarib / Senior React Developer",
   title: "Systems, not screens.",
-  text: "I build production frontends in React, TypeScript and Next.js — component libraries and data-heavy dashboards that stay maintainable at scale.",
+  text: "I build production frontends in React, TypeScript and Next.js — component libraries, data-heavy dashboards, and the rendering decisions that keep them fast once there are forty screens instead of four.",
   actions: {
-    primary: { label: "View selected work", href: "#work" },
-    secondary: { label: "View resume", href: RESUME_PDF },
+    primary: { label: "See selected work", href: "#work" },
+    secondary: { label: "Download resume", href: RESUME_PDF },
   },
 } as const;
 
@@ -39,27 +53,33 @@ export const INTRO = {
   text: "One screen is easy. The tenth is where duplication, drift and retrofitted accessibility show up. That is the work.",
 } as const;
 
+/**
+ * The marquee, which is `aria-hidden` decoration — so it carries the stack as
+ * plain nouns rather than claims. Every entry appears in a shipped project in
+ * `projects.ts` or `career.ts`; nothing aspirational goes in this list.
+ */
 export const SIGNALS = [
-  "Real primitives",
-  "Typed boundaries",
-  "WCAG 2.1 AA",
-  "Measured budgets",
-  "Fewer re-renders",
-  "Rendering per route",
+  "React",
+  "Next.js App Router",
+  "TypeScript",
+  "Redux Toolkit",
+  "GraphQL",
+  "Node.js",
+  "Prisma",
+  "Storybook",
+  "Tailwind",
+  "React Native",
 ] as const;
 
 /**
- * `size` maps to a column span in the 12-column bento.
+ * `size` maps to a column span in the 12-column bento, and also to a type scale
+ * — see `storyCardClass` in `../components/home/styles.ts`.
  *
- * The titles are written to their column. The constraint is the widest *line*,
- * not the widest word: at the heading's scale the `small` tile holds about seven
- * characters and the `mid` tile about nine, and two short words on one line
- * blow that as easily as one long one — "Accessibility" overflowed outright, and
- * "Test, don't" cleared its column by a single pixel at one width.
- *
- * So the narrow tiles carry titles whose longest line is one short word. The
- * type is fixed and stays; the copy is what gives. Measure a replacement rather
- * than counting characters — this module cannot see the grid.
+ * The narrow tiles used to carry the heading at the same size as the wide ones,
+ * which meant the copy had to be measured against the column by hand: the note
+ * that used to live here counted characters, and "Measure it." still broke
+ * mid-word into "Measur / e it." at 1440px. The scale now steps down with the
+ * span, so a title of this length fits any tile and the copy is free again.
  */
 export const STORY_CARDS = [
   {
@@ -70,7 +90,7 @@ export const STORY_CARDS = [
   {
     size: "mid",
     title: "Usable by default.",
-    text: "Specified up front, never retrofitted.",
+    text: "Specified with the component, not audited after it.",
   },
   {
     size: "small",
@@ -93,31 +113,49 @@ export const SCRUB_LINE =
   "A component is done when the next screen can be assembled from it instead of written again.";
 
 export const WORK_HEADING = {
-  kicker: "Fifteen platforms",
-  title: "Scale. Compliance. Speed.",
+  kicker: "Selected work",
+  title: "Four builds, and what made each one hard.",
+} as const;
+
+/**
+ * The heading over the index of everything the featured rows leave out.
+ *
+ * The work section renders four projects in full. Ten more are real, shipped and
+ * recorded in `projects.ts`, and five of those have written case studies — but
+ * before this index existed the only way to reach any of them was to drag the
+ * career deck, and five were linked from nowhere at all.
+ */
+export const WORK_INDEX_HEADING = {
+  kicker: "Also shipped",
+  title: "The rest of it.",
 } as const;
 
 export const CAPABILITIES_HEADING = {
   kicker: "How I work",
-  title: "Primitives first. Access always. Performance measured.",
+  title: "What I usually get brought in to do.",
 } as const;
 
+/**
+ * Deliberately not the principles again — those are the bento above. These are
+ * the four shapes an engagement actually takes, each one drawn from a row in
+ * `EXPERIENCE_ROWS` or a brief in `projects.ts`.
+ */
 export const CAPABILITIES = [
   {
-    title: "Frontend architecture",
-    text: "Rendering strategy chosen per route, not per app.",
+    title: "Own the frontend",
+    text: "Architecture, rendering strategy and delivery — often as the only frontend engineer on the project.",
   },
   {
-    title: "Component systems",
-    text: "Built once, documented in Storybook, composed after.",
+    title: "Build the component system",
+    text: "One set of primitives, documented in Storybook, so the tenth screen is assembly rather than authoring.",
   },
   {
-    title: "Accessibility",
-    text: "WCAG 2.1 AA specified up front, then tested.",
+    title: "Untangle what exists",
+    text: "Validation duplicated across modules, components that have drifted, one rendering mode picked for a whole site.",
   },
   {
-    title: "Performance",
-    text: "Core Web Vitals, budgeted and measured.",
+    title: "Work without a spec",
+    text: "Straight with non-technical stakeholders — from a Figma file, or from a conversation, to production.",
   },
 ] as const;
 
@@ -126,10 +164,14 @@ export const EXPERIENCE_KICKER = "Experience";
 /**
  * One row per engagement, newest first.
  *
- * `company`, `role` and `detail` are what the section renders. `duration`,
- * `location`, `items` and `tech` are carried alongside them but not rendered —
- * the row is a three-column rule and adding a fourth is a design decision, not a
- * data one. They are here so that decision does not also require re-sourcing the
+ * `company`, `duration`, `role` and `detail` are what the section renders. The
+ * dates used to be carried here and not shown, which left a career section with
+ * no dates in it — the one thing a reader scans for. They now sit under the
+ * company name rather than in a fourth column, so the three-column rule is
+ * unchanged.
+ *
+ * `location`, `items` and `tech` are still carried but not rendered. They are
+ * here so that adding a detail view later does not require re-sourcing the
  * facts.
  */
 export const EXPERIENCE_ROWS = [
@@ -154,7 +196,7 @@ export const EXPERIENCE_ROWS = [
     company: "Carbonic IT Solutions",
     role: "Web Developer",
     detail:
-      "Client applications from Figma to production for US and UK clients, working directly with non-technical stakeholders.",
+      "Client work for US and UK businesses, taken from a Figma file to production with no technical intermediary in between.",
     duration: "2022 – Feb 2023",
     location: "Pakistan",
     items: [
@@ -169,23 +211,23 @@ export const EXPERIENCE_ROWS = [
     company: "VisionX",
     role: "Frontend Engineer",
     detail:
-      "Three years across Halcyon, Ayshei and Morta — enterprise React, GraphQL and the reusable primitives underneath them.",
+      "Three years across Halcyon, Ayshei and Morta — enterprise React, GraphQL, and the reusable form and table primitives underneath them.",
     duration: "2019 – 2022",
     location: "Pakistan",
     items: [
-      "Developed and maintained applications in Laravel, on a modular architecture",
-      "Implemented RESTful APIs to improve third-party integration",
-      "Improved database efficiency through query optimisation and indexing",
-      "Migrated legacy codebases to modern Laravel versions",
-      "Built dynamic sites and custom CMS solutions in core PHP",
+      "Enterprise React frontends for tax filing, marketplace and construction-tech products",
+      "Reusable form and data-table primitives that removed duplicated UI across modules",
+      "GraphQL data layer, so cross-module reads cost one round trip instead of several",
+      "Normalised Redux Toolkit store as the single home for a record",
+      "Component library documented in Storybook, with Jest and Cypress coverage",
     ],
-    tech: ["Laravel", "PHP", "REST APIs", "MySQL", "JavaScript", "CSS"],
+    tech: ["React", "GraphQL", "Redux Toolkit", "Node.js", "Storybook", "TypeScript"],
   },
   {
     company: "Dixeam Inc",
     role: "Developer & Team Lead",
     detail:
-      "SnapDebt and Moonrock on React, Node and Laravel. Led a small team and cut page load times by 30%.",
+      "SnapDebt and Moonrock on React, Node and Laravel. Led a small team, introduced CI/CD, and cut page load times by 30%.",
     duration: "2017 – 2019",
     location: "Pakistan",
     items: [
@@ -207,10 +249,16 @@ export const PERSPECTIVE = {
 
 export const CONTACT = {
   kicker: "Contact",
-  title: "Building something that has to scale?",
+  title: "Tell me what you're building.",
+  /**
+   * What a reader actually wants to know before writing, and nothing more. No
+   * response-time promise: there is no evidence for one, and an invented SLA is
+   * the fastest way to look like every other portfolio.
+   */
+  note: "Contract and freelance frontend work, remote.",
   email: "manshaqarib@gmail.com",
-  primary: "Email Mansha",
-  secondary: { label: "View resume", href: RESUME_PDF },
+  primary: "Email me",
+  secondary: { label: "Download resume", href: RESUME_PDF },
 } as const;
 
 /** `short` is the glyph inside the circle; `label` doubles as the tooltip. */
@@ -238,11 +286,5 @@ export const SOCIAL_LINKS = [
     short: "fv",
     href: "https://www.fiverr.com/laravelcoder777/",
     external: true,
-  },
-  {
-    label: "Email",
-    short: "@",
-    href: `mailto:${CONTACT.email}`,
-    external: false,
   },
 ] as const;

@@ -11,11 +11,9 @@ import { SITE } from "@/content/site";
  * stylesheet, and `display: swap` so text is never invisible while it loads.
  *
  * It is also load-bearing rather than decorative — see the note on
- * `--font-display` in `globals.css`. Two more families used to be loaded here,
- * Sora and JetBrains Mono, on every route; after the design change nothing
- * rendered either of them except the 404 page, so both were pure download cost.
- *
- * Courier Prime is still loaded, but only on the home route that uses it.
+ * `--font-display` in `globals.css`. Three more families used to be loaded,
+ * Sora and JetBrains Mono here and Courier Prime on the home route; nothing
+ * renders any of them now, so all three were pure download cost.
  */
 const inter = Inter({
   subsets: ["latin"],

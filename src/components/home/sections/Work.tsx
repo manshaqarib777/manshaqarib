@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { WORK_HEADING } from "@/content/home";
+import { WORK_HEADING, WORK_INDEX_HEADING } from "@/content/home";
 import { PROJECTS, type Project } from "@/content/projects";
 import { getCaseStudy } from "@/content/case-studies";
 import { ProjectWalkthrough } from "../ProjectWalkthrough";
@@ -17,6 +17,12 @@ import {
   SECTION_H2_CENTERED,
   SECTION_HEADING,
   TAG,
+  WORK_INDEX,
+  WORK_INDEX_ACTION,
+  WORK_INDEX_DISCIPLINE,
+  WORK_INDEX_LIST,
+  WORK_INDEX_ROW,
+  WORK_INDEX_TITLE,
 } from "../styles";
 
 /**
@@ -31,22 +37,21 @@ import {
  * promoting a project is a one-word edit in `projects.ts` and the numbering
  * follows the featured entries in array order with no gaps.
  *
- * What this costs is worth stating where someone will find it: the unfeatured
- * projects still build `/work/[slug]` pages and still appear in the sitemap, but
- * only the ones the career deck carries a `caseSlug` for — Deliveroo, Halcyon,
- * Neonbit, Salearis, SnapDebt — are reachable by clicking. Five are not linked
- * from anywhere on the site: Global Shopaholic, Morta, LiftFoils, Bang & Olufsen
- * and Moonrock. Promote one here, or give it a career slide, and that changes
- * with no other edit.
- *
- * Emakity is a separate case and not one of the five — its entry in
- * `case-studies.ts` is commented out, so it has no page to be orphaned from.
+ * What the short list used to cost was reachability. The unfeatured projects
+ * still built `/work/[slug]` pages and still appeared in the sitemap, but only
+ * the ones the career deck carries a `caseSlug` for were reachable by clicking —
+ * and reachable meant dragging a fanned carousel until the right card came
+ * forward. Five projects were linked from nowhere on the site at all. The index
+ * below closes that: every project the featured rows leave out gets one row,
+ * pointing at its case study where one is written and at the live site
+ * otherwise. It costs about one viewport, against ten orphans.
  *
  * `scroll-mt-*` on the section: the fixed header would otherwise cover the top
  * of the target when someone follows "Work" from the nav.
  */
 export function Work() {
   const featured = PROJECTS.filter((project) => project.featured);
+  const rest = PROJECTS.filter((project) => !project.featured);
 
   return (
     <section
@@ -63,8 +68,84 @@ export function Work() {
       {featured.map((project, index) => (
         <ProjectRow key={project.slug} project={project} index={index} />
       ))}
+
+      {rest.length > 0 && <WorkIndex projects={rest} />}
     </section>
   );
+}
+
+/**
+ * The remaining projects, as a two-column index.
+ *
+ * Deliberately not more full-bleed rows: all fifteen once rendered that way and
+ * came to roughly twenty-four viewports of scroll, most of it restating what
+ * each project's own case study says at greater length. A row here carries the
+ * title, the discipline and where it goes — enough to decide whether to open it.
+ */
+function WorkIndex({ projects }: { projects: readonly Project[] }) {
+  return (
+    <div className={WORK_INDEX}>
+      <div className="mx-auto w-[min(1180px,100%)] text-center">
+        <div className={`section-kicker ${KICKER_WORK}`}>
+          {WORK_INDEX_HEADING.kicker}
+        </div>
+        <h3 className="mx-auto mt-[16px] mb-0 font-display text-[clamp(34px,4.4vw,64px)] leading-[1] font-[560]">
+          {WORK_INDEX_HEADING.title}
+        </h3>
+      </div>
+
+      <div className={WORK_INDEX_LIST}>
+        {projects.map((project) => (
+          <WorkIndexRow key={project.slug} project={project} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function WorkIndexRow({ project }: { project: Project }) {
+  // Same gate as the featured rows: `/work/[slug]` sets `dynamicParams = false`,
+  // so a project without a written case study has no page and linking one would
+  // be a hard 404.
+  const hasCaseStudy = Boolean(getCaseStudy(project.slug));
+
+  const body = (
+    <>
+      <span>
+        <span className={WORK_INDEX_TITLE}>{project.title}</span>
+        <span className={WORK_INDEX_DISCIPLINE}>{project.discipline}</span>
+      </span>
+      {(hasCaseStudy || project.liveUrl) && (
+        <span className={WORK_INDEX_ACTION}>
+          {hasCaseStudy ? "Case study" : "Live site"}
+        </span>
+      )}
+    </>
+  );
+
+  if (hasCaseStudy) {
+    return (
+      <Link className={WORK_INDEX_ROW} href={`/work/${project.slug}`}>
+        {body}
+      </Link>
+    );
+  }
+
+  if (project.liveUrl) {
+    return (
+      <a
+        className={WORK_INDEX_ROW}
+        href={project.liveUrl}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {body}
+      </a>
+    );
+  }
+
+  // Neither a case study nor a reachable site: a row, not a dead link.
+  return <div className={WORK_INDEX_ROW}>{body}</div>;
 }
 
 

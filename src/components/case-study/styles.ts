@@ -353,3 +353,60 @@ export const REFLECTION_TITLE = [
   "max-w-[940px] mt-[20px] mb-0 mx-0 text-ink",
   "text-[clamp(34px,4.8vw,68px)] font-[520] leading-[1] text-balance",
 ].join(" ");
+
+/* ---------------------------------------------------------------------------
+   Onward navigation
+   ----------------------------------------------------------------------------
+   A case study used to end on the reflection band with nothing after it: no way
+   back to the work section, and no way to the next study. The only route onward
+   was the browser's back button or the wordmark in the header — which returns to
+   the top of the home page rather than to the place the visitor left.
+
+   Two links, on the same dark ground the reflection closes on so the page ends
+   as one band rather than two.
+   ------------------------------------------------------------------------ */
+
+export const NEXT_BAND = [
+  FULL_BLEED,
+  BAND_RAIL,
+  "grid gap-[40px] py-[clamp(72px,9vw,116px)] bg-[oklch(9%_0.012_260)]",
+  // A hairline, because this sits directly under the reflection band, which is
+  // dark too. Without it the one-step drop in ground tone reads as a rendering
+  // seam; with it, it reads as the page closing.
+  "[border-top:1px_solid_#f5f1e814]",
+].join(" ");
+
+export const NEXT_ROW = [
+  "flex items-end justify-between gap-[32px]",
+  "to-sm:flex-col to-sm:items-start to-sm:gap-[28px]",
+].join(" ");
+
+/** "Next case study" / "Back to all work" — the label above each target. */
+export const NEXT_LABEL =
+  "m-0 text-[12px] font-[760] tracking-[0.16em] text-accent uppercase";
+
+/**
+ * The next study's title, as the link itself.
+ *
+ * `group` on the anchor so the arrow drawn beside it can move on hover without
+ * the arrow needing to be hoverable.
+ */
+export const NEXT_LINK = [
+  "group mt-[14px] inline-flex items-baseline gap-[14px] no-underline",
+  "font-display text-[clamp(30px,4.4vw,60px)] font-[560] leading-[1]",
+  "tracking-[-0.03em] text-ink [transition:color_0.18s_ease]",
+  "fine:hover:text-accent",
+].join(" ");
+
+export const NEXT_ARROW =
+  "inline-block [transition:transform_0.22s_var(--ease-silk)] fine:group-hover:[transform:translateX(8px)]";
+
+export const NEXT_DISCIPLINE =
+  "m-0 mt-[14px] text-[14px] leading-[1.4] text-muted";
+
+/** The quieter of the two: a return to the work section, not a destination. */
+export const NEXT_BACK = [
+  "group inline-flex items-center gap-[10px] shrink-0 no-underline",
+  "text-[13px] font-[680] tracking-[0.04em] text-muted",
+  "[transition:color_0.18s_ease] fine:hover:text-ink",
+].join(" ");
