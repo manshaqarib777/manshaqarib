@@ -65,10 +65,11 @@ export function CaseProduct({
                 <p className="paint-beat-deck">{screen.body}</p>
               </div>
 
-              <figure className="paint-figure">
-                {/* Intrinsic size differs per shot and the CSS bounds it on both
-                    axes, so this is a plain `img` with `loading="lazy"` rather
-                    than a fill `Image` in a fixed-ratio box. */}
+              <figure className="paint-figure" data-shot={screen.shot}>
+                {/* Intrinsic size differs per shot and the CSS frames each one
+                    at its own shape off `data-shot`, so this is a plain `img`
+                    with `loading="lazy"` rather than a fill `Image` in a
+                    fixed-ratio box. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={screen.image} alt={screen.alt} loading="lazy" />
                 <figcaption>
@@ -88,14 +89,23 @@ export function CaseProduct({
 
       <PaintPassMotion />
 
-      {study.video && project.video && (
+      {study.video && (project.mobileVideo || project.video) && (
         <figure className={S.VIDEO_BLOCK}>
           <div className={S.VIDEO_COPY}>
             <p className={S.KICKER_PAPER}>{study.video.kicker}</p>
             <h3 className={S.VIDEO_TITLE}>{study.video.heading}</h3>
             <p className={S.VIDEO_BODY}>{study.video.body}</p>
           </div>
-          <div className={S.VIDEO_FRAME}>
+          {/* The shell follows the footage, not the other way round: a phone for
+              a phone-width capture, a 16:9 slab for the desktop clip. Poster is
+              dropped on the phone shell — `project.cover` is a 16:10 desktop
+              still, and standing it in front of portrait footage is the same
+              crop this section was fixed to stop doing. */}
+          <div
+            className={
+              project.mobileVideo ? S.VIDEO_FRAME : S.VIDEO_FRAME_DESKTOP
+            }
+          >
             {/* `preload="none"`: the walkthrough is well below the fold and
                 nobody should pay for it on arrival. */}
             <video
@@ -103,10 +113,17 @@ export function CaseProduct({
               controls
               playsInline
               preload="none"
-              poster={project.cover}
-              aria-label={`${project.title} — walkthrough of the live site`}
+              poster={project.mobileVideo ? undefined : project.cover}
+              aria-label={
+                project.mobileVideo
+                  ? `${project.title} — walkthrough of the live site at phone width`
+                  : `${project.title} — walkthrough of the live site`
+              }
             >
-              <source src={project.video} type="video/mp4" />
+              <source
+                src={project.mobileVideo ?? project.video}
+                type="video/mp4"
+              />
             </video>
           </div>
         </figure>

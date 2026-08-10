@@ -20,6 +20,13 @@ export interface Skill {
 }
 
 export const SKILL_GROUPS: Readonly<Record<string, readonly Skill[]>> = {
+  "AI / LLM": [
+    { name: "OpenAI & Anthropic APIs", level: 90 },
+    { name: "RAG pipelines", level: 88 },
+    { name: "Vector search (pgvector)", level: 85 },
+    { name: "Prompt engineering", level: 85 },
+    { name: "LangChain", level: 80 },
+  ],
   Frontend: [
     { name: "React.js", level: 95 },
     { name: "Next.js", level: 92 },
@@ -52,17 +59,28 @@ export const SKILL_GROUPS: Readonly<Record<string, readonly Skill[]>> = {
  * brand colours is the thing it is deliberately not doing.
  */
 export const TOOLING: Readonly<Record<string, readonly string[]>> = {
-  Frontend: ["React", "Vue.js", "JavaScript", "Tailwind", "HTML5", "CSS"],
-  Backend: ["PHP", "Laravel", "Node.js", "Python", "Django"],
-  DevOps: ["Git", "GitHub Actions", "Docker", "AWS", "Postman"],
+  "AI / LLM": [
+    "OpenAI API",
+    "Anthropic (Claude) API",
+    "RAG pipelines",
+    "LangChain",
+    "pgvector",
+    "Semantic search",
+    "Text-to-SQL",
+    "Vision-to-structured-data",
+    "Prompt engineering",
+  ],
+  Frontend: ["React", "Vue.js", "Next.js", "Nuxt.js", "JavaScript", "Tailwind"],
+  Backend: ["PHP", "Laravel", "Node.js", "Golang", "Python", "Django"],
+  DevOps: ["Git", "GitHub Actions", "Docker", "Jenkins", "AWS", "Vercel"],
   Architecture: [
     "REST APIs",
+    "GraphQL",
     "Microservices",
+    "Onion Architecture",
     "CI/CD",
     "SEO",
-    "Webhooks",
     "Code Reviews",
-    "Responsive Design",
     "Performance",
   ],
 };

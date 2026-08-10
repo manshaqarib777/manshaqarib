@@ -75,7 +75,7 @@ export default function OpengraphImage() {
               color: "#F5EEE1",
             }}
           >
-            Systems, not screens.
+            Systems that do the work.
           </div>
           <div
             style={{
@@ -87,8 +87,8 @@ export default function OpengraphImage() {
               color: "#B5A998",
             }}
           >
-            Production frontends in React, TypeScript and Next.js — component
-            libraries and data-heavy dashboards that stay maintainable at scale.
+            Full-stack applications end to end, with the AI inside them —
+            retrieval assistants, document extraction and semantic search.
           </div>
         </div>
 

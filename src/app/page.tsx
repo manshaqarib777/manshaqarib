@@ -16,6 +16,7 @@ import { Perspective } from "@/components/home/sections/Perspective";
 import { Story } from "@/components/home/sections/Story";
 import { Work } from "@/components/home/sections/Work";
 import { HERO, NAV_LINKS } from "@/content/home";
+import { SITE } from "@/content/site";
 
 /**
  * Material Symbols Rounded, subset to the one ligature this page renders: the
@@ -27,7 +28,7 @@ const ICON_FONT_HREF =
   "https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,600,1,0&icon_names=expand_circle_right&display=block";
 
 export const metadata: Metadata = {
-  title: "Mansha Qarib — Senior React Developer",
+  title: `Mansha Qarib — ${SITE.role}`,
   description: HERO.text,
   alternates: { canonical: "/" },
 };

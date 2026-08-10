@@ -23,6 +23,15 @@ import { SCREENSHOTS } from "./assets";
  * renders blank to a headless browser, being client-rendered behind auth. It
  * shows the empty cover frame until a screenshot is referenced here, at which
  * point it fills with no other change.
+ *
+ * SnapDebt is the exception to the capture note above. Its four assets were
+ * rebuilt from a fresh set of full-page stills rather than from a live session:
+ * the hero is the top 16:10 slice of the 1838 x 10820 desktop shot, and both
+ * walkthroughs are pans down the full-page captures — 1440 x 810 over 18s for
+ * desktop, 390 x 844 over 24s for mobile. Panning a still gives a steadier
+ * result than a scripted scroll and costs nothing in fidelity, since the source
+ * is the whole page either way. It is also the only route available for a page
+ * that runs 20,068px at phone width.
  */
 export interface Project {
   slug: string;
@@ -63,6 +72,22 @@ export interface Project {
    * megabytes before anyone asked for them.
    */
   video?: string;
+  /**
+   * A 390 × 844 walkthrough of the same page at phone width, panned down the
+   * full-page mobile capture.
+   *
+   * The case study frames its walkthrough in a phone shell, which was being fed
+   * the 1440 × 810 desktop clip — `object-cover` then threw away roughly
+   * three-quarters of every frame's width. Where this is set the shell gets
+   * footage shot at its own aspect; where it is not, the shell steps aside for a
+   * 16:10 frame that fits the desktop clip whole. See `CaseProduct`.
+   *
+   * Only the eight projects whose `3-mobile.png` is a full-page capture have one.
+   * The other six were captured at a single 414 × 896 viewport, which is one
+   * screenful — there is nothing to pan down. Those need a fresh capture pass
+   * before they can carry a mobile walkthrough.
+   */
+  mobileVideo?: string;
   /** The live site, where it is still reachable. */
   liveUrl?: string;
   /**
@@ -242,6 +267,7 @@ export const PROJECTS: readonly Project[] = [
     tags: ["Next.js", "Node.js", "GraphQL", "Stripe"],
     cover: `${SCREENSHOTS}/07-morta/1-desktop-hero.png`,
     video: `${SCREENSHOTS}/07-morta/4-walkthrough.mp4`,
+    mobileVideo: `${SCREENSHOTS}/07-morta/5-mobile-walkthrough.mp4`,
     liveUrl: "https://morta.com/",
     metrics: [],
     brief: {
@@ -278,6 +304,7 @@ export const PROJECTS: readonly Project[] = [
     tags: ["Next.js 14", "Shopify API", "TypeScript", "Stripe"],
     cover: `${SCREENSHOTS}/08-liftfoils/1-desktop-hero.png`,
     video: `${SCREENSHOTS}/08-liftfoils/4-walkthrough.mp4`,
+    mobileVideo: `${SCREENSHOTS}/08-liftfoils/5-mobile-walkthrough.mp4`,
     liveUrl: "https://www.liftfoils.com/",
     metrics: [{ value: "2×", label: "traffic after migration" }],
     brief: {
@@ -315,6 +342,7 @@ export const PROJECTS: readonly Project[] = [
     featured: true,
     cover: `${SCREENSHOTS}/10-nerdwallet/1-desktop-hero.png`,
     video: `${SCREENSHOTS}/10-nerdwallet/4-walkthrough.mp4`,
+    mobileVideo: `${SCREENSHOTS}/10-nerdwallet/5-mobile-walkthrough.mp4`,
     liveUrl: "https://www.nerdwallet.com/",
     metrics: [{ value: "Millions", label: "monthly users" }],
     brief: {
@@ -351,6 +379,7 @@ export const PROJECTS: readonly Project[] = [
     tags: ["Next.js", "Node.js", "GraphQL", "Redis"],
     cover: `${SCREENSHOTS}/13-deliveroo/1-desktop-hero.png`,
     video: `${SCREENSHOTS}/13-deliveroo/4-walkthrough.mp4`,
+    mobileVideo: `${SCREENSHOTS}/13-deliveroo/5-mobile-walkthrough.mp4`,
     liveUrl: "https://deliveroo.co.uk/",
     metrics: [{ value: "Millions", label: "users across UK & Europe" }],
     brief: {
@@ -387,6 +416,7 @@ export const PROJECTS: readonly Project[] = [
     tags: ["Next.js 14", "TypeScript", "GraphQL", "Contentful"],
     cover: `${SCREENSHOTS}/11-bang-olufsen/1-desktop-hero.png`,
     video: `${SCREENSHOTS}/11-bang-olufsen/4-walkthrough.mp4`,
+    mobileVideo: `${SCREENSHOTS}/11-bang-olufsen/5-mobile-walkthrough.mp4`,
     liveUrl: "https://www.bang-olufsen.com/",
     metrics: [{ value: "70+", label: "countries served" }],
     brief: {
@@ -423,6 +453,7 @@ export const PROJECTS: readonly Project[] = [
     tags: ["React Native", "TypeScript", "MySQL", "Stripe"],
     cover: `${SCREENSHOTS}/12-moonrock/1-desktop-hero.png`,
     video: `${SCREENSHOTS}/12-moonrock/4-walkthrough.mp4`,
+    mobileVideo: `${SCREENSHOTS}/12-moonrock/5-mobile-walkthrough.mp4`,
     liveUrl: "https://www.moonrockpm.com",
     metrics: [],
     brief: {
@@ -496,9 +527,10 @@ export const PROJECTS: readonly Project[] = [
     title: "Salearis",
     challenge:
       "A two-sided marketplace matching businesses with vetted sales contractors.",
-    tags: ["Laravel", "Vue.js", "Stripe", "Sanctum Auth"],
+    tags: ["Laravel", "Vue.js", "RAG assistant", "Stripe"],
     cover: `${SCREENSHOTS}/14-salearis/1-desktop-hero.png`,
     video: `${SCREENSHOTS}/14-salearis/4-walkthrough.mp4`,
+    mobileVideo: `${SCREENSHOTS}/14-salearis/5-mobile-walkthrough.mp4`,
     liveUrl: "https://salearis.com/",
     metrics: [
       { value: "0€", label: "placement fee" },
@@ -509,7 +541,7 @@ export const PROJECTS: readonly Project[] = [
       challenge:
         "A hiring marketplace has two audiences with opposite needs, and in the DACH region it also has to be credible in German and compliant about how it holds candidate data.",
       solution:
-        "One Laravel application serving both sides behind Sanctum-authenticated sessions with two-factor authentication, German and English throughout, and Stripe carrying subscription billing.",
+        "One Laravel application serving both sides behind Sanctum-authenticated sessions with two-factor authentication, German and English throughout, Stripe carrying subscription billing, and a RAG assistant answering support questions from the marketplace's own docs and policies.",
     },
     summary:
       "A freelancer marketplace connecting businesses with vetted sales professionals — closers, setters and SDRs — across Germany, Austria and Switzerland. Freelancers browse jobs, manage profiles with CV and video uploads, track performance and schedule interviews; companies get posting tools, candidate sourcing and screening, team collaboration, reporting and billing. Two-factor authentication, German/English localisation, theming, a blog and a support ticketing system.",
@@ -517,6 +549,7 @@ export const PROJECTS: readonly Project[] = [
       "Two-sided marketplace for freelancers and companies",
       "Job posting, candidate sourcing and screening tools",
       "Stripe subscription billing and payment processing",
+      "RAG-based FAQ assistant deflecting repetitive support queries",
       "Two-factor authentication and Sanctum security",
       "Multi-language support (German & English)",
       "Performance tracking and referral programmes",
@@ -524,7 +557,7 @@ export const PROJECTS: readonly Project[] = [
     techStack: [
       "Laravel Backend with Sanctum Auth",
       "Vue.js Frontend",
-      "Tailwind CSS & Responsive Design",
+      "Retrieval Layer with OpenAI & Anthropic APIs",
       "Stripe Payment & Subscription Billing",
       "Multi-Language (DE/EN) Support",
       "Google Ads & LinkedIn Tracking",
@@ -573,6 +606,7 @@ export const PROJECTS: readonly Project[] = [
     tags: ["React", "TypeScript", "Laravel API", "Campaign planner"],
     cover: `${SCREENSHOTS}/02-neonbit/1-desktop-hero.png`,
     video: `${SCREENSHOTS}/02-neonbit/4-walkthrough.mp4`,
+    mobileVideo: `${SCREENSHOTS}/02-neonbit/5-mobile-walkthrough.mp4`,
     liveUrl: "https://neonbit.at/",
     metrics: [
       { value: "500+", label: "verified streamers" },
@@ -611,6 +645,7 @@ export const PROJECTS: readonly Project[] = [
     tags: ["React", "Redux Toolkit", "Node.js", "AWS S3"],
     cover: `${SCREENSHOTS}/09-snapdebt/1-desktop-hero.png`,
     video: `${SCREENSHOTS}/09-snapdebt/4-walkthrough.mp4`,
+    mobileVideo: `${SCREENSHOTS}/09-snapdebt/5-mobile-walkthrough.mp4`,
     liveUrl: "https://snapdebtrecovery.com/",
     metrics: [
       { value: "10,000+", label: "businesses served" },

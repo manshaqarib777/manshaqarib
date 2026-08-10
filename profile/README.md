@@ -4,7 +4,7 @@
 
 <br />
 
-[![Portfolio](https://img.shields.io/badge/PORTFOLIO-manshaqarib.com-D6B178?style=for-the-badge&labelColor=030407)](https://manshaqarib.com)
+[![Portfolio](https://img.shields.io/badge/PORTFOLIO-manshaqarib.vercel.app-D6B178?style=for-the-badge&labelColor=030407)](https://manshaqarib.vercel.app)
 [![LinkedIn](https://img.shields.io/badge/LINKEDIN-manshaqarib-F5EEE1?style=for-the-badge&labelColor=030407)](https://linkedin.com/in/manshaqarib)
 [![Email](https://img.shields.io/badge/EMAIL-manshaqarib-B5A998?style=for-the-badge&labelColor=030407)](mailto:manshaqarib@gmail.com)
 
@@ -29,13 +29,13 @@ financial institutions** and **100,000+ users**.
 
 | Project | Discipline | Scale | |
 | :--- | :--- | :--- | :--- |
-| **[Halcyon](https://halcyonsolutions.ai)** | Fintech · Enterprise React | 700+ financial institutions · millions in filings | [Case study](https://manshaqarib.com/work/halcyon) |
-| **[Ayshei](https://ayshei.com)** | Marketplace · GraphQL | 100k+ users · 4 verticals | [Case study](https://manshaqarib.com/work/ayshei) |
-| **[Lappeland](https://lappeland.no)** | E-commerce · Next.js App Router | 2× traffic · ~95 Lighthouse | [Case study](https://manshaqarib.com/work/lappeland) |
-| **[SnapDebt](https://snapdebtrecovery.com)** | Fintech · Workflow automation | 10,000+ businesses · 30% faster | [Case study](https://manshaqarib.com/work/snapdebt) |
+| **[Halcyon](https://halcyonsolutions.ai)** | Fintech · Enterprise React | 700+ financial institutions · millions in filings | [Case study](https://manshaqarib.vercel.app/work/halcyon) |
+| **[Ayshei](https://ayshei.com)** | Marketplace · GraphQL | 100k+ users · 4 verticals | [Case study](https://manshaqarib.vercel.app/work/ayshei) |
+| **[Lappeland](https://lappeland.no)** | E-commerce · Next.js App Router | 2× traffic · ~95 Lighthouse | [Case study](https://manshaqarib.vercel.app/work/lappeland) |
+| **[SnapDebt](https://snapdebtrecovery.com)** | Fintech · Workflow automation | 10,000+ businesses · 30% faster | [Case study](https://manshaqarib.vercel.app/work/snapdebt) |
 | **[Global Shopaholic](https://globalshopaholics.com)** | E-commerce · Vue & Laravel | Spec to deployment, solo | — |
 | **[JACOBS Drycleaners](https://jacobsdrycleaners.co.uk)** | Service booking · Nuxt & Laravel | Two audiences, one system | — |
-| **Neonbit** | SaaS · Security & RBAC | Permissions model as the product | [Case study](https://manshaqarib.com/work/neonbit) |
+| **Neonbit** | SaaS · Security & RBAC | Permissions model as the product | [Case study](https://manshaqarib.vercel.app/work/neonbit) |
 
 <sub>Metrics are the real figures only. A project with none carries none.</sub>
 
@@ -87,10 +87,14 @@ financial institutions** and **100,000+ users**.
 
 | | | |
 | :--- | :--- | :--- |
-| **Independent** | Senior Frontend Engineer | Upwork Top Rated Plus. Four concurrent engagements across e-commerce, SaaS, fintech and healthcare, owning frontend architecture end to end. |
-| **Carbonic IT Solutions** | Web Developer | Client applications from Figma to production for US and UK clients, working directly with non-technical stakeholders. |
-| **VisionX** | Frontend Engineer | Three years across Halcyon, Ayshei and Morta — enterprise React, GraphQL and the reusable primitives underneath them. |
-| **Dixeam Inc** | Developer & Team Lead | SnapDebt and Moonrock on React, Node and Laravel. Led a small team and cut page load times by 30%. |
+| **GODO Services L.L.C** | Lead Full Stack Engineer | Dubai fintech introducing clients to regulated financial institutions — onboarding, verification and account surfaces. |
+| **AFIA Insurance L.L.C** | Lead Software Engineer | Frontend for InsuranceMarket.ae — quote journeys and policy management for a Central Bank–regulated UAE brokerage. |
+| **Independent** | Senior Full Stack Engineer | Upwork Top Rated Plus. Four concurrent engagements across e-commerce, SaaS, fintech and construction-tech, owning requirements through deployment. |
+| **Global Shopaholics LLC** | Senior Full Stack Engineer | Client applications from Figma to production for US and UK clients, working directly with non-technical stakeholders. |
+| **VisionX Technologies, Inc.** | Senior Full Stack Engineer | Halcyon, Ayshei and Morta — enterprise React, GraphQL and the first LLM features to reach production. |
+| **Taaruff** | Software Developer | Client delivery for an IT services firm in Downtown Dubai and Islamabad — websites, mobile apps and the brand work around them. |
+| **TechnDevs** | Software Developer | Website and mobile application delivery for the agency's US and Pakistan client base. |
+| **Dixeam Inc** | PHP / Laravel Developer | SnapDebt and Moonrock on React, Node and Laravel. Led a small team and cut page load times by 30%. |
 
 <br />
 
@@ -119,6 +123,6 @@ financial institutions** and **100,000+ users**.
 
 ## Elsewhere
 
-**[manshaqarib.com](https://manshaqarib.com)** · **[LinkedIn](https://linkedin.com/in/manshaqarib)** · **[manshaqarib@gmail.com](mailto:manshaqarib@gmail.com)** · Riyadh, Saudi Arabia
+**[manshaqarib.vercel.app](https://manshaqarib.vercel.app)** · **[LinkedIn](https://linkedin.com/in/manshaqarib)** · **[manshaqarib@gmail.com](mailto:manshaqarib@gmail.com)** · Riyadh, Saudi Arabia
 
 <sub>Building something that has to scale? Get in touch.</sub>

@@ -122,8 +122,18 @@ export const COVER_BAND = [
   "bg-[oklch(11%_0.012_260)]",
 ].join(" ");
 
+/**
+ * 16:10, because that is what the captures actually are.
+ *
+ * Every `1-desktop-hero.png` is 1440 × 900. The frame used to be `16/9` with a
+ * `4/3` step at the small tier, so `object-contain` fitted the shot by height
+ * and left a bar down each side on desktop, then fitted it by width and left
+ * bars above and below on a phone. Matching the frame to the capture ratio
+ * makes the image fill its box exactly, with nothing cropped and nothing empty.
+ * If a future capture is not 16:10, this is the number to revisit.
+ */
 export const COVER_FRAME = [
-  "relative w-full aspect-[16/9] to-sm:aspect-[4/3]",
+  "relative w-full aspect-[16/10]",
   "overflow-hidden rounded-[8px] border border-line bg-[oklch(8%_0.012_260)]",
 ].join(" ");
 
@@ -265,11 +275,32 @@ export const VIDEO_TITLE =
 export const VIDEO_BODY =
   "m-0 mt-[18px] max-w-[540px] leading-[1.5] text-[oklch(42%_0.018_260)]";
 
-/** A phone shell, tilted — how every walkthrough is framed. */
+/**
+ * A phone shell, tilted. Used only where a project carries a `mobileVideo`.
+ *
+ * `aspect-[9/19.5]` is 0.4615, and the mobile walkthroughs are 390 × 844, which
+ * is 0.462 — so `object-cover` here crops a rounding error rather than an image.
+ * Feeding this shell the 1440 × 810 desktop clip, which is what it used to get,
+ * discarded roughly three-quarters of every frame's width.
+ */
 export const VIDEO_FRAME = [
   "relative w-[min(315px,78vw)] aspect-[9/19.5] overflow-hidden",
   "rounded-[42px] border-[10px] border-[oklch(9%_0.012_260)] bg-[oklch(7%_0.012_260)]",
   "[transform:perspective(980px)_rotateX(2deg)_rotateY(-8deg)]",
+  "[box-shadow:0_28px_70px_#15140f47,inset_0_0_0_1px_#ffffff29]",
+].join(" ");
+
+/**
+ * The fallback shell, for the six projects with no mobile capture to pan.
+ *
+ * A browser-ish 16:9 slab at the clip's own aspect, so desktop footage plays
+ * whole. Framing desktop footage as a phone is a lie the crop then has to
+ * enforce; this says what the recording actually is.
+ */
+export const VIDEO_FRAME_DESKTOP = [
+  "relative w-[min(880px,100%)] aspect-[16/9] overflow-hidden",
+  "rounded-[14px] border-[8px] border-[oklch(9%_0.012_260)] bg-[oklch(7%_0.012_260)]",
+  "[transform:perspective(1400px)_rotateX(2deg)]",
   "[box-shadow:0_28px_70px_#15140f47,inset_0_0_0_1px_#ffffff29]",
 ].join(" ");
 

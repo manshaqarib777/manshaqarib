@@ -123,10 +123,10 @@ export const CAREER_SLIDES: readonly CareerSlide[] = [
     caseSlug: "neonbit",
   },
 
-  /* ------------------------------------ Carbonic IT, 2022 – February 2023 */
+  /* ------------------ Global Shopaholics LLC, Aug 2022 – February 2023 */
   {
     title: "JACOBS — 2022",
-    context: "CARBONIC IT · FULL-STACK",
+    context: "GLOBAL SHOPAHOLICS · FULL-STACK",
     video: `${SCREENSHOTS}/04-jacobs-drycleaners/4-walkthrough.mp4`,
     poster: `${SCREENSHOTS}/04-jacobs-drycleaners/1-desktop-hero.png`,
     stack: ["NUXT.JS", "VUE", "LARAVEL", "REST API"],
@@ -135,7 +135,7 @@ export const CAREER_SLIDES: readonly CareerSlide[] = [
   },
   {
     title: "SHOPAHOLIC — 2022",
-    context: "CARBONIC IT · FULL-STACK",
+    context: "GLOBAL SHOPAHOLICS · FULL-STACK",
     video: `${SCREENSHOTS}/03-global-shopaholic/4-walkthrough.mp4`,
     poster: `${SCREENSHOTS}/03-global-shopaholic/1-desktop-hero.png`,
     stack: ["VUE 3", "LARAVEL", "PHP", "PAYMENTS"],
@@ -143,7 +143,7 @@ export const CAREER_SLIDES: readonly CareerSlide[] = [
     caseSlug: "global-shopaholic",
   },
 
-  /* ------------------------------------------------------ VisionX, 2019 – 2022 */
+  /* -------------------- VisionX Technologies, Inc., Jul 2020 – Jul 2022 */
   {
     title: "MORTA",
     context: "VISIONX · FRONTEND",
@@ -172,7 +172,7 @@ export const CAREER_SLIDES: readonly CareerSlide[] = [
     caseSlug: "halcyon",
   },
 
-  /* ------------------------------------------------------- Dixeam, 2017 – 2019 */
+  /* ------------------------------------------ Dixeam, Sep 2017 – Aug 2018 */
   {
     title: "SNAPDEBT — 2017",
     context: "DIXEAM · TEAM LEAD",

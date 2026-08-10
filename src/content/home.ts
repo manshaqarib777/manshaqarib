@@ -19,6 +19,15 @@ import { RESUME_PDF } from "./assets";
  *   perspective    the single idea underneath all of it
  *
  * If a new claim belongs in more than one of those, it belongs in one.
+ *
+ * The argument itself was reframed to match the CV, which leads on
+ * AI-integrated full-stack delivery rather than frontend alone. The throughline
+ * is no longer "the second screen is where it breaks" (component reuse) but
+ * "the demo is not the hard part" (getting an LLM feature to survive production).
+ * Every AI claim below is backed by a shipped build recorded in `projects.ts`:
+ * the RAG assistant on Emakity/Salearis, the vision-to-listing generator and
+ * pgvector search on Ayshei, and the return summariser and text-to-SQL on
+ * Halcyon. Nothing here is a capability that has not gone live somewhere.
  */
 
 /** The wordmark. Read by both the header and the loader's banner tracks. */
@@ -32,10 +41,14 @@ export const NAV_LINKS = [
 ] as const;
 
 export const HERO = {
-  eyebrow: "Mansha Qarib / Senior React Developer",
-  /** One entry per rendered line, so the break is authored rather than left to wrapping. */
-  titleLines: ["Systems,", "not screens."],
-  text: "I build production frontends in React, TypeScript and Next.js — component libraries, data-heavy dashboards, and the rendering decisions that keep them fast once there are forty screens instead of four.",
+  eyebrow: "Mansha Qarib / Full-Stack & AI Engineer",
+  /**
+   * One entry per rendered line, so the break is authored rather than left to
+   * wrapping. Keep each line under about 13 characters: the h1 tops out at
+   * 132px in a 980px column, so a longer line re-wraps and the count is wrong.
+   */
+  titleLines: ["Systems that", "do the work."],
+  text: "I build production applications end to end — React and Next.js in front, Node.js and Laravel behind — and the AI inside them: retrieval assistants grounded in your own documents, structured extraction from images and PDFs, and plain-English queries against a real schema.",
   actions: {
     primary: { label: "See selected work", href: "#work" },
     secondary: { label: "Download resume", href: RESUME_PDF },
@@ -50,8 +63,8 @@ export const TILE_GRID = 40;
 
 export const INTRO = {
   kicker: "The throughline",
-  title: "The second screen is where it breaks.",
-  text: "One screen is easy. The tenth is where duplication, drift and retrofitted accessibility show up. That is the work.",
+  title: "The demo is not the hard part.",
+  text: "A model call in a notebook takes an afternoon. Making it answer from your data, fail where someone can see it, and hold up on the tenth edge case is the work.",
 } as const;
 
 /**
@@ -63,13 +76,17 @@ export const SIGNALS = [
   "React",
   "Next.js App Router",
   "TypeScript",
-  "Redux Toolkit",
-  "GraphQL",
+  "OpenAI API",
+  "Anthropic API",
+  "RAG",
+  "pgvector",
+  "LangChain",
   "Node.js",
+  "Laravel",
+  "GraphQL",
   "Prisma",
-  "Storybook",
+  "Redux Toolkit",
   "Tailwind",
-  "React Native",
 ] as const;
 
 /**
@@ -85,33 +102,33 @@ export const SIGNALS = [
 export const STORY_CARDS = [
   {
     size: "wide",
-    title: "Primitives first.",
-    text: "Build the component once, properly, then compose.",
+    title: "Retrieval first.",
+    text: "Ground the answer in your documents, not the model's memory.",
   },
   {
     size: "mid",
-    title: "Usable by default.",
-    text: "Specified with the component, not audited after it.",
+    title: "Fail out loud.",
+    text: "A silent automation is worse than no automation.",
   },
   {
     size: "small",
     title: "Measure it.",
-    text: "Core Web Vitals over opinions about speed.",
+    text: "Evals before trust, not opinions about output.",
   },
   {
     size: "long",
     title: "Type the boundary.",
-    text: "Validate at the edge so it fails loudly, not three components deep.",
+    text: "Structured output, validated at the edge, so a bad generation fails loudly rather than three steps later.",
   },
   {
     size: "tall",
     title: "Own the ambiguity.",
-    text: "No designer on the project? Then design it.",
+    text: "No spec on the project? Then write one.",
   },
 ] as const;
 
 export const SCRUB_LINE =
-  "A component is done when the next screen can be assembled from it instead of written again.";
+  "An automation is finished when nobody on the team remembers doing that job by hand.";
 
 export const WORK_HEADING = {
   kicker: "Selected work",
@@ -143,16 +160,16 @@ export const CAPABILITIES_HEADING = {
  */
 export const CAPABILITIES = [
   {
-    title: "Own the frontend",
-    text: "Architecture, rendering strategy and delivery — often as the only frontend engineer on the project.",
+    title: "Automate the manual work",
+    text: "Support queues, data entry, document review — the jobs someone repeats daily because nobody has modelled them yet.",
   },
   {
-    title: "Build the component system",
-    text: "One set of primitives, documented in Storybook, so the tenth screen is assembly rather than authoring.",
+    title: "Ship AI into production",
+    text: "RAG over your own documents, structured extraction from images and PDFs, semantic search, plain-English queries against a real schema.",
   },
   {
-    title: "Untangle what exists",
-    text: "Validation duplicated across modules, components that have drifted, one rendering mode picked for a whole site.",
+    title: "Own the whole stack",
+    text: "React and Next.js in front, Node.js or Laravel behind, deployment and CI/CD included — often as the only engineer on the project.",
   },
   {
     title: "Work without a spec",
@@ -177,29 +194,57 @@ export const EXPERIENCE_KICKER = "Experience";
  */
 export const EXPERIENCE_ROWS = [
   {
-    company: "Independent",
-    role: "Senior Frontend Engineer",
+    company: "GODO Services L.L.C",
+    role: "Lead Full Stack Engineer",
     detail:
-      "Upwork Top Rated Plus. Four concurrent engagements across e-commerce, SaaS, fintech and healthcare, owning frontend architecture end to end.",
+      "Frontend and platform work for a Business Bay fintech that introduces clients to regulated financial institutions — onboarding, verification and account surfaces.",
+    duration: "Aug 2024 – Present",
+    location: "Dubai, UAE · Remote",
+    items: [
+      "Client onboarding and verification flows for an SCA-licensed introducing entity",
+      "React and Next.js surfaces over a Node.js API",
+      "Regulated-product copy and disclosure handled as state rather than static markup",
+    ],
+    tech: ["Next.js", "React", "TypeScript", "Node.js"],
+  },
+  {
+    company: "AFIA Insurance L.L.C",
+    role: "Lead Software Engineer",
+    detail:
+      "Frontend for InsuranceMarket.ae, the brand AFIA trades under — quote journeys and policy management for a Central Bank–regulated UAE brokerage.",
+    duration: "Mar 2023 – Jul 2024",
+    location: "Dubai, UAE · Remote",
+    items: [
+      "Multi-step quote journeys across motor, health and home lines",
+      "Policy management and renewal surfaces on a React and TypeScript front end",
+      "Form state modelled once and reused across product lines rather than forked per line",
+    ],
+    tech: ["React", "TypeScript", "Node.js", "REST APIs"],
+  },
+  {
+    company: "Independent",
+    role: "Senior Full Stack Engineer",
+    detail:
+      "Upwork Top Rated Plus. Four concurrent engagements across e-commerce, SaaS, fintech and construction-tech, owning requirements, architecture and deployment end to end.",
     duration: "Feb 2023 – Present",
     location: "Remote",
     items: [
       "Top Rated Plus freelancer delivering production apps for global clients",
+      "RAG-based FAQ assistant over the marketplaces' own docs and policies, retrieval layer plus OpenAI and Anthropic APIs, to deflect repetitive support queries",
       "Scalable full-stack applications on the Next.js App Router with MongoDB and Prisma ORM",
-      "Redux slices for auth, dashboard filters, modals and notifications",
-      "NextAuth.js for secure login flows across credentials and OAuth",
+      "Authentication with NextAuth.js across credentials and OAuth, payments with Stripe subscriptions and split payouts",
       "Modular frontend architecture using layouts and middleware",
       "GitHub Actions for CI/CD and the Serverless Framework for AWS Lambda deploys",
     ],
-    tech: ["Next.js", "Redux Toolkit", "Node.js", "MongoDB", "Prisma", "NextAuth.js"],
+    tech: ["Next.js", "OpenAI API", "Anthropic API", "Node.js", "Prisma", "Stripe"],
   },
   {
-    company: "Carbonic IT Solutions",
-    role: "Web Developer",
+    company: "Global Shopaholics LLC",
+    role: "Senior Full Stack Engineer",
     detail:
       "Client work for US and UK businesses, taken from a Figma file to production with no technical intermediary in between.",
-    duration: "2022 – Feb 2023",
-    location: "Pakistan",
+    duration: "Aug 2022 – Feb 2023",
+    location: "Remote, USA",
     items: [
       "Built and maintained web applications with performance and scalability as the brief",
       "Applied modern development practices and a clean code architecture",
@@ -209,27 +254,56 @@ export const EXPERIENCE_ROWS = [
     tech: ["Laravel", "PHP", "JavaScript", "MySQL", "CSS", "HTML"],
   },
   {
-    company: "VisionX",
-    role: "Frontend Engineer",
+    company: "VisionX Technologies, Inc.",
+    role: "Senior Full Stack Engineer",
     detail:
-      "Three years across Halcyon, Ayshei and Morta — enterprise React, GraphQL, and the reusable form and table primitives underneath them.",
-    duration: "2019 – 2022",
+      "Halcyon, Ayshei and Morta — enterprise React and GraphQL, and the first LLM features to reach production on two of them.",
+    duration: "Jul 2020 – Jul 2022",
     location: "Pakistan",
     items: [
       "Enterprise React frontends for tax filing, marketplace and construction-tech products",
+      "AI listing assistant: a photo and a few words go to a vision LLM, which returns a polished title and description as structured JSON, fed straight to the GraphQL mutation",
+      "Semantic search over a pgvector store on the existing PostgreSQL, so \"cheap family SUV\" surfaces listings with no keyword overlap",
+      "LLM tax-document summariser over filed returns — OpenAI API, PDF parsing and prompt templates — producing plain-English summaries for non-technical stakeholders",
+      "Natural-language-to-SQL interface converting questions like \"show all filings over $50k from Q3\" against the MySQL and Prisma schema",
       "Reusable form and data-table primitives that removed duplicated UI across modules",
-      "GraphQL data layer, so cross-module reads cost one round trip instead of several",
-      "Normalised Redux Toolkit store as the single home for a record",
-      "Component library documented in Storybook, with Jest and Cypress coverage",
     ],
-    tech: ["React", "GraphQL", "Redux Toolkit", "Node.js", "Storybook", "TypeScript"],
+    tech: ["React", "OpenAI API", "pgvector", "GraphQL", "Node.js", "TypeScript"],
+  },
+  {
+    company: "Taaruff",
+    role: "Software Developer",
+    detail:
+      "Client delivery for an IT services firm running out of Downtown Dubai and Islamabad — websites, mobile applications and the brand work around them.",
+    duration: "Sep 2019 – Jun 2020",
+    location: "Islamabad, Pakistan",
+    items: [
+      "Client websites and mobile applications taken from brief to launch",
+      "Laravel and JavaScript builds against a shared agency stack",
+      "Worked directly with non-technical stakeholders on scope and delivery",
+    ],
+    tech: ["Laravel", "PHP", "JavaScript", "MySQL"],
+  },
+  {
+    company: "TechnDevs",
+    role: "Software Developer",
+    detail:
+      "Website and mobile application delivery for the agency's US and Pakistan client base, taken from brief through to launch.",
+    duration: "Sep 2018 – Aug 2019",
+    location: "Sargodha, Pakistan",
+    items: [
+      "Website and mobile application builds for international clients",
+      "Laravel and JavaScript delivery on an agency schedule",
+      "UI implementation from supplied design files",
+    ],
+    tech: ["Laravel", "PHP", "JavaScript", "MySQL"],
   },
   {
     company: "Dixeam Inc",
-    role: "Developer & Team Lead",
+    role: "PHP / Laravel Developer",
     detail:
       "SnapDebt and Moonrock on React, Node and Laravel. Led a small team, introduced CI/CD, and cut page load times by 30%.",
-    duration: "2017 – 2019",
+    duration: "Sep 2017 – Aug 2018",
     location: "Pakistan",
     items: [
       "Led a team building scalable web solutions on modern PHP frameworks",
@@ -244,8 +318,8 @@ export const EXPERIENCE_ROWS = [
 
 export const PERSPECTIVE = {
   kicker: "Engineering perspective",
-  title: "Decide the rendering before the layout.",
-  text: "Pick the data boundary. Name the accessibility contract. Set the performance budget. Then the component is obvious.",
+  title: "Model the process before you call the model.",
+  text: "Write down the steps a person actually takes. Decide which of them need judgement. Automate the rest outright, and spend the model only where the judgement was.",
 } as const;
 
 export const CONTACT = {
@@ -256,7 +330,7 @@ export const CONTACT = {
    * response-time promise: there is no evidence for one, and an invented SLA is
    * the fastest way to look like every other portfolio.
    */
-  note: "Contract and freelance frontend work, remote.",
+  note: "Contract and freelance work, remote. Full-stack builds and AI automation.",
   email: "manshaqarib@gmail.com",
   primary: "Email me",
   secondary: { label: "Download resume", href: RESUME_PDF },

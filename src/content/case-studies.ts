@@ -29,8 +29,27 @@ export interface CaseScreen {
   image: string;
   /** Alt text. The screens carry meaning, so this is never decorative. */
   alt: string;
+  /**
+   * Which capture this is, so the plate can be framed at the shot's own shape.
+   *
+   * The three captures have wildly different aspects — 1440 × 900, 1440 × 2600
+   * and a phone shot that is either 414 × 896 or, on the eight projects captured
+   * full-page, up to 390 × 9855. Bounding all of them by height alone rendered
+   * the tall ones as slivers 29–70px wide. `case-study.css` keys off this.
+   */
+  shot: "hero" | "mobile" | "full";
   caption: { title: string; detail: string };
 }
+
+/**
+ * What a study actually writes for a beat.
+ *
+ * `image`, `alt` and `shot` are supplied by `screens()` from the directory name,
+ * so a study never spells a capture path out. They used to be written as empty
+ * strings in all forty-two beats and immediately overwritten — placeholders that
+ * looked like missing data.
+ */
+type CaseScreenCopy = Omit<CaseScreen, "image" | "alt" | "shot">;
 
 export interface CaseStudyContent {
   /** The three ruled facts under the hero. */
@@ -66,26 +85,42 @@ export interface CaseStudyContent {
   reflection?: { kicker: string; statement: string };
 }
 
-/** The three captured states every project has, in narrative order. */
+/**
+ * The three captured states every project has.
+ *
+ * `copy` stays in the order each study writes it — landing, the middle beat,
+ * then the mobile beat — but the rendered order is landing, mobile, middle. The
+ * first beat is the lead and gets a full-width plate; the two after it are
+ * support beats in a narrow column, and a narrow column is the wrong home for a
+ * 1440 × 2600 full-page shot, which the layout squeezed to about 410px wide and
+ * called a design. The phone shot belongs in the first narrow slot.
+ *
+ * The swap happens here rather than in the fourteen studies so that each beat's
+ * words stay attached to the picture they were written about — moving the copy
+ * instead would have left mobile prose under a desktop screenshot.
+ */
 const screens = (
   dir: string,
   name: string,
-  copy: readonly [CaseScreen, CaseScreen, CaseScreen],
+  copy: readonly [CaseScreenCopy, CaseScreenCopy, CaseScreenCopy],
 ): readonly CaseScreen[] => [
   {
     ...copy[0],
     image: `${SCREENSHOTS}/${dir}/1-desktop-hero.png`,
     alt: `${name} — landing view`,
-  },
-  {
-    ...copy[1],
-    image: `${SCREENSHOTS}/${dir}/2-desktop-full.png`,
-    alt: `${name} — full page`,
+    shot: "hero",
   },
   {
     ...copy[2],
     image: `${SCREENSHOTS}/${dir}/3-mobile.png`,
     alt: `${name} — mobile view`,
+    shot: "mobile",
+  },
+  {
+    ...copy[1],
+    image: `${SCREENSHOTS}/${dir}/2-desktop-full.png`,
+    alt: `${name} — full page`,
+    shot: "full",
   },
 ];
 
@@ -141,8 +176,6 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "Server-rendered",
         heading: "The first paint is the whole pitch.",
         body: "The landing view ships from the server, so the product grid is content on arrival rather than a skeleton waiting on JavaScript.",
-        image: "",
-        alt: "",
         caption: {
           title: "Product cards arrive as HTML.",
           detail:
@@ -153,8 +186,6 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "Incrementally static",
         heading: "Fresh pages without a rebuild.",
         body: "ISR lets catalogue pages regenerate on their own schedule, so an edit publishes without redeploying the site.",
-        image: "",
-        alt: "",
         caption: {
           title: "The long page stays cheap.",
           detail:
@@ -165,8 +196,6 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "Mobile-first",
         heading: "Built at the narrow width first.",
         body: "Tailwind layouts start mobile and widen, verified across browsers and viewports against the Figma designs.",
-        image: "",
-        alt: "",
         caption: {
           title: "The same markup, reflowed.",
           detail:
@@ -221,7 +250,7 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         detail:
           "Halcyon — US tax management platform, 700+ financial institutions",
       },
-      { term: "Role", detail: "Frontend engineer, VisionX" },
+      { term: "Role", detail: "Frontend engineer, VisionX Technologies" },
       {
         term: "Scope",
         detail:
@@ -267,8 +296,6 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "The workspace",
         heading: "Filing work, front and centre.",
         body: "The enterprise React interface through which 700+ institutions process tax filings, built on Ant Design primitives with the composition owned in-house.",
-        image: "",
-        alt: "",
         caption: {
           title: "Ant Design as foundation, not as the design.",
           detail:
@@ -279,8 +306,6 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "The long form",
         heading: "Validation surfaced where the mistake is.",
         body: "Server-side validation appears inline against the offending field rather than in a summary banner at the top of a long field set.",
-        image: "",
-        alt: "",
         caption: {
           title: "Reusable form and data-table components.",
           detail:
@@ -291,8 +316,6 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "Narrow viewports",
         heading: "The same contracts at every width.",
         body: "Dense tabular work reflowed for narrow screens without forking the validation behaviour behind it.",
-        image: "",
-        alt: "",
         caption: {
           title: "One store, many surfaces.",
           detail:
@@ -347,7 +370,7 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         detail:
           "Ayshei — UAE classifieds and auctions marketplace, 100,000+ users",
       },
-      { term: "Role", detail: "Frontend engineer, VisionX" },
+      { term: "Role", detail: "Frontend engineer, VisionX Technologies" },
       {
         term: "Scope",
         detail:
@@ -392,8 +415,6 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "The marketplace",
         heading: "Browsing is the main event.",
         body: "The landing view is built around discovery across all four verticals rather than around any one of them.",
-        image: "",
-        alt: "",
         caption: {
           title: "Shared listing vocabulary.",
           detail:
@@ -404,8 +425,6 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "Search and listings",
         heading: "Read-heavy by design.",
         body: "Listing and search were optimised for repeated reads, with Redis caching at the API layer cutting duplicated database load.",
-        image: "",
-        alt: "",
         caption: {
           title: "Cache the popular path.",
           detail:
@@ -416,8 +435,6 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "Mobile",
         heading: "Most of a marketplace is browsed one-handed.",
         body: "The same listing components reflow to narrow widths, keeping search and filters reachable.",
-        image: "",
-        alt: "",
         caption: {
           title: "GraphQL-backed, per-view.",
           detail:
@@ -517,8 +534,6 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "The workspace",
         heading: "Where the recovery work happens.",
         body: "A React and Redux Toolkit interface built for daily operational use across thousands of business accounts.",
-        image: "",
-        alt: "",
         caption: {
           title: "Built to be lived in.",
           detail:
@@ -529,8 +544,6 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "Workflows",
         heading: "Automation that leaves a trail.",
         body: "Automated collection workflows are modelled in state so their history stays reportable rather than inferred after the fact.",
-        image: "",
-        alt: "",
         caption: {
           title: "Compliance reporting reads from the same state.",
           detail:
@@ -541,8 +554,6 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "Mobile",
         heading: "Reachable away from the desk.",
         body: "The account and workflow views reflow for narrow screens without losing the audit detail.",
-        image: "",
-        alt: "",
         caption: {
           title: "Node.js and Prisma behind it.",
           detail:
@@ -634,21 +645,18 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "Two audiences",
         heading: "The bridge has two ends.",
         body: "The landing view splits at the first interaction — I am a Brand, I am a Streamer — because the two sides arrive wanting opposite things from the same network.",
-        image: "", alt: "",
         caption: { title: "One toggle, two products.", detail: "Everything below the fold re-frames to the side that was chosen." },
       },
       {
         label: "The planner",
         heading: "A budget becomes a forecast.",
         body: "Choose a spend and a CPM and the planner projects impressions and clicks live, with the rate stepping down as budget rises. The calculation is shown rather than summarised, because the number is the thing being trusted.",
-        image: "", alt: "",
         caption: { title: "5000€ at 20€ CPM: 250,000 impressions.", detail: "Targeting by game, platform, language, region and interest narrows the same projection." },
       },
       {
         label: "Narrow first",
         heading: "Planned on a laptop, checked on a phone.",
         body: "The planner, the creator network and the campaign KPIs all reflow to one column while keeping the budget input and its projection on screen together.",
-        image: "", alt: "",
         caption: { title: "Input and result stay paired.", detail: "Separating them at narrow widths would break the one interaction the page exists for." },
       },
     ]),
@@ -690,7 +698,7 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
   "global-shopaholic": {
     summary: [
       { term: "Product", detail: "Global Shopaholics — US package forwarding and assisted purchase" },
-      { term: "Role", detail: "Full-stack developer, Carbonic IT" },
+      { term: "Role", detail: "Full-stack developer, Global Shopaholics LLC" },
       { term: "Scope", detail: "Bootstrap Vue 3 storefront on Laravel 8, payment gateways, order processing" },
     ],
     hook: {
@@ -726,21 +734,18 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "The promise",
         heading: "Say what the service is, immediately.",
         body: "The landing view leads with the offer — buy from US stores, ship worldwide — and puts claiming a free US address in front of everything else.",
-        image: "", alt: "",
         caption: { title: "One offer, one action.", detail: "The primary CTA is the address, because that is the account." },
       },
       {
         label: "The mechanism",
         heading: "Sign up, purchase, ship.",
         body: "The numbered walk sits above the benefits, because the benefits only mean anything once the mechanism is understood.",
-        image: "", alt: "",
         caption: { title: "Assisted purchase, consolidation, cashback.", detail: "Each benefit attaches to a step rather than floating as a feature list." },
       },
       {
         label: "Narrow first",
         heading: "Most of this traffic is on a phone.",
         body: "The storefront reflows to a single column with the same content order, so the explanation survives the width it is most often read at.",
-        image: "", alt: "",
         caption: { title: "The same three steps, stacked.", detail: "Bootstrap Vue components reflow rather than switching to a separate template." },
       },
     ]),
@@ -782,7 +787,7 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
   "jacobs-drycleaners": {
     summary: [
       { term: "Product", detail: "JACOBS Dry Cleaners — booking and customer management, UK" },
-      { term: "Role", detail: "Full-stack developer, Carbonic IT" },
+      { term: "Role", detail: "Full-stack developer, Global Shopaholics LLC" },
       { term: "Scope", detail: "Nuxt.js front end on a Laravel 8 API, booking flow, staff admin" },
     ],
     hook: {
@@ -818,21 +823,18 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "The offer",
         heading: "Professional cleaning, a few clicks away.",
         body: "The landing view states the service and puts booking in reach, with the service promise close enough to be read before committing.",
-        image: "", alt: "",
         caption: { title: "Booking is the primary action.", detail: "Everything above the fold serves the decision to book." },
       },
       {
         label: "The two blockers",
         heading: "Do you cover me, and what does it cost?",
         body: "Coverage area and price list are first-class pages rather than footer links, because they are the two questions that end a booking before it starts.",
-        image: "", alt: "",
         caption: { title: "How we work, coverage, prices, FAQ.", detail: "The nav is ordered by what a hesitant customer needs next." },
       },
       {
         label: "Narrow first",
         heading: "Booked from a phone, usually.",
         body: "The Nuxt layout reflows to one column and keeps the booking action reachable without scrolling back up.",
-        image: "", alt: "",
         caption: { title: "Same flow, one column.", detail: "Server-rendered so the first paint is content, not a spinner." },
       },
     ]),
@@ -875,7 +877,7 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
   morta: {
     summary: [
       { term: "Product", detail: "Morta — project management software for property developers" },
-      { term: "Role", detail: "Frontend engineer, VisionX" },
+      { term: "Role", detail: "Frontend engineer, VisionX Technologies" },
       { term: "Scope", detail: "Next.js front end on a Node GraphQL API, procurement flow, Stripe subscriptions" },
     ],
     hook: {
@@ -911,21 +913,18 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "The claim",
         heading: "Work less, earn more.",
         body: "The landing view names the audience — property developers — before it names a feature, because the product only makes sense to someone who runs developments.",
-        image: "", alt: "",
         caption: { title: "Audience first, then capability.", detail: "Start a trial or book a demo; both paths are one click from the claim." },
       },
       {
         label: "The three phases",
         heading: "Pre-construction, delivery, post-handover.",
         body: "The phases are the top-level structure of the product and of the page, so the thing being sold and the thing being used share a shape.",
-        image: "", alt: "",
         caption: { title: "Built to support every stage.", detail: "One workspace spanning phases, rather than a tool per phase." },
       },
       {
         label: "Narrow first",
         heading: "Read on site, not at a desk.",
         body: "The layout reflows to a single column and keeps the tender steps legible at the width they are actually checked on.",
-        image: "", alt: "",
         caption: { title: "The four tender steps, stacked.", detail: "Verified supplier, request, invite, submit — in order, at any width." },
       },
     ]),
@@ -1006,21 +1005,18 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "One promise",
         heading: "One board. Any session.",
         body: "The landing view leads on the range's single claim rather than on a product, so the first decision is whether this is for you, not which SKU.",
-        image: "", alt: "",
         caption: { title: "Full-bleed motion, one action.", detail: "Explore the flagship, or find the right model — two paths, no grid." },
       },
       {
         label: "Three, not thirty",
         heading: "Each model exists for a reason.",
         body: "LIFT5 F, LIFT5 and LIFTX are presented as answers to different riders rather than as tiers, with the setup-time comparison doing the arguing.",
-        image: "", alt: "",
         caption: { title: "Beginner, intermediate, advanced.", detail: "The guided path filters by rider level before it filters by price." },
       },
       {
         label: "Narrow first",
         heading: "Configured on a phone, by the water.",
         body: "The configurator and cart reflow to one column while keeping the level filter reachable, so the narrowing step survives the small screen.",
-        image: "", alt: "",
         caption: { title: "Same decision, one column.", detail: "Region pricing and currency resolve server-side, so the number is right on arrival." },
       },
     ]),
@@ -1100,21 +1096,18 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "The proposition",
         heading: "Guidance before products.",
         body: "The landing view leads with the decision a visitor is trying to make rather than the catalogue of products underneath it.",
-        image: "", alt: "",
         caption: { title: "Categories as entry points.", detail: "Credit cards, insurance, mortgages, loans — each a route into a comparison surface." },
       },
       {
         label: "The numbers",
         heading: "Rates are content, not decoration.",
         body: "Savings, CD, money market and mortgage rates sit in the page as first-class content, fetched per request so the figure is current when it is read.",
-        image: "", alt: "",
         caption: { title: "Server-rendered, request-fresh.", detail: "The indexable page and the read page carry the same numbers." },
       },
       {
         label: "Narrow first",
         heading: "Most of this arrives from a phone search.",
         body: "Comparison tables reflow to stacked cards without dropping columns, so the same comparison is possible at any width.",
-        image: "", alt: "",
         caption: { title: "Tables become cards.", detail: "Reflow rather than horizontal scroll, so nothing is hidden off-screen." },
       },
     ]),
@@ -1193,21 +1186,18 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "Presentation first",
         heading: "The product arrives as an image, not a spec.",
         body: "A full-bleed motion hero carries the current product story, with the wordmark and a single action over it and nothing competing.",
-        image: "", alt: "",
         caption: { title: "One product, one action.", detail: "The campaign surface is CMS content, so this changes without a release." },
       },
       {
         label: "Composed, not coded",
         heading: "Marketing owns the page.",
         body: "Sections are Contentful entries composed at render time, so a new campaign is an editorial change rather than an engineering ticket.",
-        image: "", alt: "",
         caption: { title: "Editorial blocks, rendered server-side.", detail: "ISR keeps them fresh without rebuilding the whole site." },
       },
       {
         label: "Narrow first",
         heading: "The same story, one column.",
         body: "The presentation holds at phone width, with store finder and account reachable and the imagery still doing the selling.",
-        image: "", alt: "",
         caption: { title: "Region resolves before paint.", detail: "Pricing, language and shipping are decided server-side per market." },
       },
     ]),
@@ -1286,21 +1276,18 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "The relationship",
         heading: "Simplifying the landlord-tenant relationship.",
         body: "The landing view frames the product as the relationship rather than as property software, because that is the problem both sides recognise.",
-        image: "", alt: "",
         caption: { title: "Both sides, one product.", detail: "Sign up leads into a role rather than into a separate app." },
       },
       {
         label: "The offer",
         heading: "One subscription, both platforms.",
         body: "Pricing is a single monthly plan, presented alongside the app availability so the commitment is legible before signup.",
-        image: "", alt: "",
         caption: { title: "Available on iOS and Android.", detail: "One React Native codebase serving both stores." },
       },
       {
         label: "Narrow first",
         heading: "This is a phone product.",
         body: "The marketing site reflows to the width the app itself is used at, keeping signup and pricing reachable throughout.",
-        image: "", alt: "",
         caption: { title: "Mobile-first by construction.", detail: "The site matches the product rather than a desktop-first template." },
       },
     ]),
@@ -1384,21 +1371,18 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "The gate",
         heading: "Everything depends on one postcode.",
         body: "The landing view asks for a postcode and nothing else, because until it is known there is no catalogue to show — availability is entirely a function of where the visitor is.",
-        image: "", alt: "",
         caption: { title: "One field, one action.", detail: "Saved addresses sit behind the same field, so returning users skip the step rather than meeting a second one." },
       },
       {
         label: "Four audiences",
         heading: "The same platform, from four sides.",
         body: "Below the storefront the page addresses restaurants, riders, workplaces and gift buyers in turn — each a separate funnel sharing one delivery network.",
-        image: "", alt: "",
         caption: { title: "Partner, ride, work, gift.", detail: "Tracking and app download sit above them, because the ordering audience is still the primary one." },
       },
       {
         label: "Narrow first",
         heading: "Ordered from a phone, on the move.",
         body: "The postcode field, the cuisine rail and the tracking prompt all reflow to one column, keeping the entry point reachable without scrolling back up.",
-        image: "", alt: "",
         caption: { title: "Same gate, one column.", detail: "Server-rendered so the first paint is the field, not a spinner over an empty page." },
       },
     ]),
@@ -1545,21 +1529,18 @@ const CASE_STUDIES: Record<string, CaseStudyContent> = {
         label: "German first",
         heading: "The market is addressed in its own language.",
         body: "The landing view is German by default with English as the alternate, and it splits immediately into the two audiences — für Unternehmen and für Freelancer — because they are not looking for the same thing.",
-        image: "", alt: "",
         caption: { title: "Two doors, one platform.", detail: "Hire talent, or apply as a freelancer. The choice is the first interaction." },
       },
       {
         label: "The ladder",
         heading: "Profile check, data validation, competence.",
         body: "Verification is presented as three named stages rather than a badge, because the claim the marketplace rests on is that a listed freelancer has actually been assessed.",
-        image: "", alt: "",
         caption: { title: "Verifiziert, nicht nur registriert.", detail: "Each stage is a distinct state on the profile, so the interface can say which one a candidate has reached." },
       },
       {
         label: "Narrow first",
         heading: "Read on a phone, decided at a desk.",
         body: "The verification ladder, the figures and the FAQ all reflow to one column while keeping both audience entry points reachable.",
-        image: "", alt: "",
         caption: { title: "Same ladder, one column.", detail: "Server-rendered from Laravel, so the German copy is in the first response." },
       },
     ]),
