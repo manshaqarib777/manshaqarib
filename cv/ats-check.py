@@ -72,9 +72,23 @@ dates = re.findall(r"(?:\w{3} )?\d{4} - (?:Present|(?:\w{3} )?\d{4})", raw)
 check("Date ranges parseable", len(dates) >= 5, f"{len(dates)}: {dates}")
 
 # The two-column failure mode: if positioning reordered the text stream, these
-# would not come out newest-first.
-order = [raw.index(x) for x in ["Independent", "Carbonic IT Solutions", "VisionX", "Dixeam Inc"]]
-check("Roles in reverse-chronological order", order == sorted(order))
+# would not come out newest-first. Ordered by start date, which is why AFIA
+# (Mar 2023) precedes Independent (Feb 2023) even though Independent is ongoing.
+employers = [
+    "GODO Services",
+    "AFIA Insurance",
+    "Independent",
+    "Global Shopaholics",
+    "VisionX Technologies",
+    "Taaruff",
+    "TechnDevs",
+    "Dixeam Inc",
+]
+absent = [e for e in employers if e not in raw]
+check("All employers present", not absent, f"missing {absent}" if absent else f"{len(employers)}/{len(employers)}")
+if not absent:
+    order = [raw.index(e) for e in employers]
+    check("Roles in reverse-chronological order", order == sorted(order))
 
 # Ligatures, en dashes and symbols that some extractors turn into replacement
 # characters mid-word. The bullet glyph is fine; it sits between tokens.
@@ -95,8 +109,11 @@ check("All 14 portfolio platforms present", not gone, f"missing {gone}" if gone 
 stale = [t for t in ["outdoor-gear", "security dashboard", "mansha.qarib777", "Emakity"] if t in raw]
 check("No superseded content", not stale, f"still present: {stale}" if stale else "")
 
+# Three, not two. Four more roles were added to the history and the page count
+# followed. Three is still inside what a recruiter will read for 8+ years of
+# experience; four is not, so this stays a ceiling rather than a note.
 pages = int(re.search(r"Pages:\s+(\d+)", info).group(1))
-check("Two pages", pages == 2, f"{pages}")
+check("Three pages or fewer", pages <= 3, f"{pages}")
 
 width = max(len(name) for _, name, _ in checks)
 for ok, name, detail in checks:

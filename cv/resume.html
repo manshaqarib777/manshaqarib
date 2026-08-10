@@ -163,38 +163,42 @@
 
   <body>
     <h1>Mansha Qarib</h1>
-    <p class="title">Senior React Developer | React.js | TypeScript | Next.js | Redux Toolkit</p>
+    <p class="title">Full-Stack Engineer | AI Integration | React | Next.js | Node.js | Laravel</p>
     <p class="contact">
       manshaqarib@gmail.com | +966 54 339 8604 | Riyadh, Saudi Arabia |
-      linkedin.com/in/manshaqarib | github.com/manshaqarib777 | manshaqarib.com
+      linkedin.com/in/manshaqarib | github.com/manshaqarib777 | manshaqarib.vercel.app
     </p>
 
     <h2>Professional Summary</h2>
     <p>
-      Senior React developer with 8+ years building production frontends in React, TypeScript and the
-      Next.js App Router with Server Components, SSR and ISR. Builds reusable component libraries and
-      data-heavy dashboards end to end, including the tax-filing interface used by 700+ US financial
-      institutions, a classifieds and auctions marketplace serving 100,000+ users, and a debt-recovery
-      platform used by 10,000+ businesses. Owns frontend architecture rather than screens: rendering
-      strategy chosen per route, component primitives built once and composed after, WCAG 2.1 AA
-      specified up front, and Core Web Vitals measured against a budget. HackerRank certified in Frontend
-      Developer (React), Software Engineer and Node.js. Based in Riyadh with a transferable Iqama,
-      available immediately.
+      Full-stack engineer with 8+ years shipping production applications end to end - React and Next.js
+      on the front, Node.js and Laravel behind - with hands-on production experience integrating AI and
+      LLM capabilities into live products: a RAG-based support assistant answering from a company's own
+      documents, an AI listing assistant generating structured listings from a photo, vector-based
+      semantic search over pgvector, and a natural-language-to-SQL query interface. Delivered on
+      platforms including the tax-filing interface used by 700+ US financial institutions, a classifieds
+      and auctions marketplace serving 100,000+ users, and a debt-recovery platform used by 10,000+
+      businesses. Owns architecture rather than screens: rendering strategy chosen per route, component
+      primitives built once and composed after, WCAG 2.1 AA specified up front, and Core Web Vitals
+      measured against a budget. HackerRank certified in Frontend Developer (React), Software Engineer
+      and Node.js. Based in Riyadh with a transferable Iqama, available immediately.
     </p>
 
     <h2>Key Achievements</h2>
     <ul>
       <li>
+        Shipped a natural-language-to-SQL query interface at a platform serving 700+ financial
+        institutions, so non-technical staff answer their own data questions instead of queueing
+        requests on an engineer.
+      </li>
+      <li>
+        Built an AI listing assistant for a marketplace serving 100,000+ users: a photo and a few words
+        go to a vision LLM, which returns a polished title and description as structured JSON fed
+        straight into the GraphQL mutation.
+      </li>
+      <li>
         Doubled site traffic post-launch by rebuilding a storefront's rendering architecture on the
         Next.js App Router, at roughly 95 Lighthouse performance on mobile.
-      </li>
-      <li>
-        Built the React and Redux Toolkit interface through which 700+ financial institutions process
-        millions of dollars in tax filings.
-      </li>
-      <li>
-        Delivered the React frontend for a UAE marketplace serving 100,000+ users across four verticals,
-        from one component set parameterised by vertical.
       </li>
       <li>
         Reduced page load times by 30% while leading a small development team, through query optimisation
@@ -205,7 +209,12 @@
     <h2>Technical Skills</h2>
     <div class="skills">
       <p>
-        <strong>Languages:</strong> TypeScript, JavaScript (ES6+), SQL, PHP, HTML5, CSS3
+        <strong>AI and LLM Integration:</strong> OpenAI API, Anthropic (Claude) API, RAG pipelines,
+        LangChain, vector databases (pgvector), semantic search, embeddings, text-to-SQL,
+        vision-to-structured-data, prompt engineering, structured output validation
+      </p>
+      <p>
+        <strong>Languages:</strong> TypeScript, JavaScript (ES6+), SQL, PHP, Python, HTML5, CSS3
       </p>
       <p>
         <strong>Frontend:</strong> React 18 and 19, Hooks, custom hooks, Context, Next.js (App Router,
@@ -244,7 +253,47 @@
     <h2>Professional Experience</h2>
 
     <div class="role">
-      <h3>Senior Frontend Engineer (Contract) - Independent</h3>
+      <h3>Lead Full Stack Engineer - GODO Services L.L.C</h3>
+      <p class="meta">Dubai, United Arab Emirates (Remote) | Aug 2024 - Present</p>
+      <ul>
+        <li>
+          Own the client onboarding and verification journey end to end for an SCA-licensed introducing
+          entity, from first form through to a verified account ready for introduction to a partner
+          financial institution.
+        </li>
+        <li>
+          Build the front end on Next.js and TypeScript over a Node.js API, modelling regulated
+          disclosure copy as state rather than hardcoded markup so compliance changes ship without a
+          release.
+        </li>
+        <li>
+          Work directly with compliance to translate regulatory constraints into interface rules, so what
+          the product is permitted to say is enforced by the application rather than by review.
+        </li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <h3>Lead Software Engineer - AFIA Insurance L.L.C</h3>
+      <p class="meta">Dubai, United Arab Emirates (Remote) | Mar 2023 - Jul 2024</p>
+      <ul>
+        <li>
+          Delivered the front end for InsuranceMarket.ae, the consumer brand of a Central Bank-regulated
+          UAE insurance brokerage, in React and TypeScript.
+        </li>
+        <li>
+          Built multi-step quote journeys across motor, health and home lines, modelling form state once
+          and reusing it per product rather than forking a separate flow for each line.
+        </li>
+        <li>
+          Shipped policy management and renewal surfaces, carrying the brokerage's regulatory
+          requirements in the interface itself rather than in a manual review step.
+        </li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <h3>Senior Full Stack Engineer (Contract) - Independent</h3>
       <p class="meta">Upwork Top Rated Plus | Remote | Feb 2023 - Present</p>
       <ul>
         <li>
@@ -308,14 +357,15 @@
           <strong>Salearis (salearis.com)</strong> - B2B sales-talent marketplace across Germany, Austria
           and Switzerland. One Laravel and Vue.js application serving both sides behind Sanctum sessions
           with two-factor authentication, Stripe subscription billing, German and English localisation,
-          and candidate sourcing, screening and interview scheduling.
+          and a RAG-based support assistant answering from the marketplace's own documentation and
+          policies over a retrieval layer with the OpenAI and Anthropic APIs.
         </li>
       </ul>
     </div>
 
     <div class="role">
-      <h3>Web Developer - Carbonic IT Solutions</h3>
-      <p class="meta">Pakistan | 2022 - Feb 2023</p>
+      <h3>Senior Full Stack Engineer - Global Shopaholics LLC</h3>
+      <p class="meta">Remote, United States | Aug 2022 - Feb 2023</p>
       <ul>
         <li>
           Delivered client web applications from Figma specification through to production deployment for
@@ -336,13 +386,13 @@
     </div>
 
     <div class="role">
-      <h3>Frontend Engineer - VisionX</h3>
-      <p class="meta">Pakistan | 2019 - 2022</p>
+      <h3>Senior Full Stack Engineer - VisionX Technologies, Inc.</h3>
+      <p class="meta">Pakistan | Jul 2020 - Jul 2022</p>
       <ul>
         <li>
-          Delivered frontend engineering across three enterprise platforms over a three-year tenure in an
-          Agile team, working with architects, designers and backend engineers and contributing to code
-          reviews and frontend standards.
+          Delivered engineering across three enterprise platforms in an Agile team, working with
+          architects, designers and backend engineers and contributing to code reviews and frontend
+          standards, and shipped the first LLM features to reach production on two of them.
         </li>
         <li>
           <strong>Halcyon (halcyonsolutions.ai)</strong> - US tax management platform used by 700+
@@ -351,14 +401,21 @@
           conditional sections, which removed validation logic duplicated across filing modules.
           Normalised the Redux store so every module read a filing from one place, surfaced server-side
           validation inline against the offending field, and integrated Node.js, MySQL and Prisma ORM
-          services including IRS Tax API data flows.
+          services including IRS Tax API data flows. Built an LLM tax-document summariser over filed
+          returns using the OpenAI API with PDF parsing and prompt templates, producing plain-English
+          summaries for non-technical stakeholders, and a natural-language-to-SQL query interface
+          converting questions such as "show all filings over $50k from Q3" into queries against the
+          MySQL and Prisma schema.
         </li>
         <li>
           <strong>Ayshei (ayshei.com)</strong> - UAE classifieds and auctions marketplace serving 100,000+
           users. Built the React frontend for four verticals from one component set parameterised by
           vertical, against GraphQL APIs over Golang and Node.js microservices with PostgreSQL, including
-          an AI listing assistant that turns a photo into a title and description, vector-based semantic
-          search, and live auction bidding. Shipped on AWS EC2 and S3 through Docker and Jenkins CI/CD.
+          an AI listing assistant where a photo and a few words go to a vision LLM that returns a title
+          and description as structured JSON feeding the GraphQL mutation, semantic search over a
+          pgvector store on the existing PostgreSQL so a query like "cheap family SUV" surfaces listings
+          with no keyword overlap, and live auction bidding. Shipped on AWS EC2 and S3 through Docker and
+          Jenkins CI/CD.
         </li>
         <li>
           <strong>Morta (morta.com)</strong> - construction-tech SaaS for property developers. Delivered
@@ -370,8 +427,39 @@
     </div>
 
     <div class="role">
-      <h3>Developer and Team Lead - Dixeam Inc</h3>
-      <p class="meta">Pakistan | 2017 - 2019</p>
+      <h3>Software Developer - Taaruff</h3>
+      <p class="meta">Islamabad, Pakistan | Sep 2019 - Jun 2020</p>
+      <ul>
+        <li>
+          Delivered client websites and mobile applications from brief through to launch for an IT
+          services firm operating out of Downtown Dubai and Islamabad, on a shared Laravel and JavaScript
+          stack.
+        </li>
+        <li>
+          Worked directly with non-technical stakeholders on scope, revisions and handover, with no
+          product or business-analyst layer in between.
+        </li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <h3>Software Developer - TechnDevs</h3>
+      <p class="meta">Sargodha, Pakistan | Sep 2018 - Aug 2019</p>
+      <ul>
+        <li>
+          Built and shipped client websites and mobile applications for the agency's US and Pakistan
+          client base, on an agency delivery schedule.
+        </li>
+        <li>
+          Implemented interfaces from supplied design files in Laravel and JavaScript, and presented
+          completed work directly to international clients.
+        </li>
+      </ul>
+    </div>
+
+    <div class="role">
+      <h3>PHP / Laravel Developer - Dixeam Inc</h3>
+      <p class="meta">Pakistan | Sep 2017 - Aug 2018</p>
       <ul>
         <li>
           Led a small development team, introduced CI/CD workflows to streamline delivery, and reduced
