@@ -87,8 +87,8 @@ financial institutions** and **100,000+ users**.
 
 | | | |
 | :--- | :--- | :--- |
-| **GODO Services L.L.C** | Lead Full Stack Engineer | Dubai fintech introducing clients to regulated financial institutions — onboarding, verification and account surfaces. |
-| **AFIA Insurance L.L.C** | Lead Software Engineer | Frontend for InsuranceMarket.ae — quote journeys and policy management for a Central Bank–regulated UAE brokerage. |
+| **Qualascend** | Senior Full Stack Engineer | Digital product studio out of Dubai Silicon Oasis — client web and mobile applications, plus cloud migration, from brief to production. |
+| **AFIA Insurance L.L.C** | Senior Software Engineer | Frontend for InsuranceMarket.ae — quote journeys and policy management for a Central Bank–regulated UAE brokerage. |
 | **Independent** | Senior Full Stack Engineer | Upwork Top Rated Plus. Four concurrent engagements across e-commerce, SaaS, fintech and construction-tech, owning requirements through deployment. |
 | **Global Shopaholics LLC** | Senior Full Stack Engineer | Client applications from Figma to production for US and UK clients, working directly with non-technical stakeholders. |
 | **VisionX Technologies, Inc.** | Senior Full Stack Engineer | Halcyon, Ayshei and Morta — enterprise React, GraphQL and the first LLM features to reach production. |

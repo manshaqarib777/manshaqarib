@@ -75,7 +75,7 @@ check("Date ranges parseable", len(dates) >= 5, f"{len(dates)}: {dates}")
 # would not come out newest-first. Ordered by start date, which is why AFIA
 # (Mar 2023) precedes Independent (Feb 2023) even though Independent is ongoing.
 employers = [
-    "GODO Services",
+    "Qualascend",
     "AFIA Insurance",
     "Independent",
     "Global Shopaholics",

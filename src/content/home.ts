@@ -194,22 +194,22 @@ export const EXPERIENCE_KICKER = "Experience";
  */
 export const EXPERIENCE_ROWS = [
   {
-    company: "GODO Services L.L.C",
-    role: "Lead Full Stack Engineer",
+    company: "Qualascend",
+    role: "Senior Full Stack Engineer",
     detail:
-      "Frontend and platform work for a Business Bay fintech that introduces clients to regulated financial institutions — onboarding, verification and account surfaces.",
+      "Full-stack delivery for a product studio out of Dubai Silicon Oasis — client web and mobile applications, plus cloud migration work, taken from a brief to production for clients in the Middle East, US and Europe.",
     duration: "Aug 2024 – Present",
     location: "Dubai, UAE · Remote",
     items: [
-      "Client onboarding and verification flows for an SCA-licensed introducing entity",
-      "React and Next.js surfaces over a Node.js API",
-      "Regulated-product copy and disclosure handled as state rather than static markup",
+      "React and Next.js applications over Node.js APIs, deployed on AWS and Azure",
+      "Cloud migration and maintenance engagements, starting from readiness assessment and TCO",
+      "Client projects owned end to end, from the first scope conversation to launch",
     ],
-    tech: ["Next.js", "React", "TypeScript", "Node.js"],
+    tech: ["Next.js", "React", "TypeScript", "Node.js", "AWS", "Azure"],
   },
   {
     company: "AFIA Insurance L.L.C",
-    role: "Lead Software Engineer",
+    role: "Senior Software Engineer",
     detail:
       "Frontend for InsuranceMarket.ae, the brand AFIA trades under — quote journeys and policy management for a Central Bank–regulated UAE brokerage.",
     duration: "Mar 2023 – Jul 2024",
